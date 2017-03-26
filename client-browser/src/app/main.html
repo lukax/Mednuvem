@@ -3,40 +3,72 @@
   <main class="main">
 
     <form class="example-form">
+      <md-card>
         <md-input-container class="example-full-width">
-            <input mdInput name="search" placeholder="Pesquisar..." ngModel>
+            <input mdInput name="search" placeholder="Pesquisar pacientes..." ngModel>
         </md-input-container>
+      </md-card>
     </form>
 
     <form class="example-form">
       <md-card>
-          <h2><md-icon>face</md-icon> Ficha do cliente</h2>
+          <h2>Ficha do Paciente</h2>
+          <div class="card-item-menu">
+            <button md-icon-button [mdMenuTriggerFor]="menu">
+              <md-icon>more_vert</md-icon>
+            </button>
+            <md-menu #menu="mdMenu">
+              <button md-menu-item>
+                <md-icon>close</md-icon>
+                <span>Descartar ficha</span>
+              </button>
+            </md-menu>
+          </div>  
+
+          <md-grid-list cols="4" rowHeight="70px">
+            <md-grid-tile colspan="3">
+              <md-input-container class="example-full-width">
+                  <input mdInput name="name" placeholder="Nome" ngModel>
+              </md-input-container>
+            </md-grid-tile>
+            <md-grid-tile colspan="1">
+              <md-select class="example-full-width select-padding" placeholder="Convênio" [(ngModel)]="convenio" name="convenio">
+                <md-option *ngFor="let c of convenios" [value]="c.value">
+                  {{c.name}}
+                </md-option>
+              </md-select>
+            </md-grid-tile>
+            <md-grid-tile colspan="4">
+              <md-input-container class="example-full-width">
+                  <input mdInput name="address" placeholder="Endereço" ngModel>
+              </md-input-container>
+            </md-grid-tile>
+            <md-grid-tile colspan="3">
+              <md-input-container class="example-full-width">
+                  <input mdInput name="email" type="email" placeholder="Email" ngModel>
+              </md-input-container>
+            </md-grid-tile>
+            <md-grid-tile colspan="1">
+              <md-input-container class="example-full-width col-padding">
+                  <input mdInput name="lastAccess" type="date" placeholder="Última Consulta" ngModel>
+              </md-input-container>
+            </md-grid-tile>            
+            <md-grid-tile colspan="3">
+              <md-input-container class="example-full-width">
+                  <input mdInput name="phone" type="tel" placeholder="Telefone/Celular" ngModel>
+              </md-input-container>
+            </md-grid-tile>
+            <md-grid-tile colspan="1">
+              <md-input-container class="example-full-width col-padding">
+                  <input mdInput name="birthday" type="date" placeholder="Data de Nascimento" ngModel>
+              </md-input-container>
+            </md-grid-tile>
+          </md-grid-list>
           <md-input-container class="example-full-width">
-              <input mdInput name="name" placeholder="Nome" ngModel>
-          </md-input-container>
-          <md-input-container class="example-full-width">
-              <input mdInput name="convenio" placeholder="Convênio" ngModel>
-          </md-input-container>
-          <md-input-container class="example-full-width">
-              <input mdInput name="lastAccess" type="date" placeholder="Última Consulta" ngModel>
-          </md-input-container>
-          <md-input-container class="example-full-width">
-              <input mdInput name="birthday" type="date" placeholder="Data de Nascimento" ngModel>
-          </md-input-container>
-          <md-input-container class="example-full-width">
-              <input mdInput name="phone" type="number" placeholder="Telefone/Celular" ngModel>
-          </md-input-container>
-          <md-input-container class="example-full-width">
-              <input mdInput name="address" placeholder="Endereço" ngModel>
-          </md-input-container>
-          <md-input-container class="example-full-width">
-              <input mdInput name="email" type="email" placeholder="Email" ngModel>
-          </md-input-container>
-          <md-input-container class="example-full-width">
-              <input mdInput name="responsible" placeholder="Responsável'" ngModel>
+              <input mdInput name="responsible" placeholder="Responsável" ngModel>
           </md-input-container>
           <div class="example-button-row">
-              <button md-fab><md-icon>save</md-icon></button>
+              <button md-mini-fab color="primary"><md-icon>check</md-icon></button>
           </div>
       </md-card>
     </form>
