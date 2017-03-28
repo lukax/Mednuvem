@@ -1,5 +1,7 @@
 
 using System;
+using Newtonsoft.Json;
+using server;
 
 namespace Server.Core.Models
 {
@@ -8,11 +10,26 @@ namespace Server.Core.Models
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string UserId { get; set; }
         public string Name { get; set; }
+        public string Email { get; set; }
         public string Address { get; set; }
         public string MedicalInsurance { get; set; }
         public string PhoneNumber { get; set; }
         public string AccountablePerson { get; set; }
-        public DateTime BirthDate { get; set; }
-        public DateTime LastAppointment { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public DateTime? LastAppointment { get; set; }
     }
+
+    public class PatientViewModel
+    {
+        public string Name { get; set; }
+        public string MedicalInsurance { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Address { get; set; }
+        public string Email { get; set; }
+        public string AccountablePerson { get; set; }
+        public string BirthDate { get; set; }
+        public string LastAppointment { get; set; }
+    }
+
+    
 }

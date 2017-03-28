@@ -27,9 +27,9 @@ namespace IdSvrHost.Services
             var claims = new List<Claim>
             {
                 new Claim(JwtClaimTypes.Subject, user.Id),
-                new Claim(JwtClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-                new Claim(JwtClaimTypes.GivenName, user.FirstName),
-                new Claim(JwtClaimTypes.FamilyName, user.LastName),
+                new Claim(JwtClaimTypes.Name, $"{user.GetFirstName()} {user.GetLastName()}"),
+                new Claim(JwtClaimTypes.GivenName, user.GetFirstName()),
+                new Claim(JwtClaimTypes.FamilyName, user.GetLastName()),
                 new Claim(JwtClaimTypes.Email, user.Email),
                 new Claim(Config.CompanyClaimType, user.Company),
                 new Claim(JwtClaimTypes.EmailVerified, user.EmailVerified.ToString().ToLower(), ClaimValueTypes.Boolean)

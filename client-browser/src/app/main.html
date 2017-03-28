@@ -5,8 +5,16 @@
     <form class="example-form">
       <md-card>
         <md-input-container class="example-full-width">
-            <input mdInput name="search" placeholder="Pesquisar pacientes..." ngModel>
+            <input mdInput name="search" placeholder="Pesquisar pacientes..." [(ngModel)]="searchPatient" [mdAutocomplete]="auto">
         </md-input-container>
+        <md-autocomplete #auto="mdAutocomplete">
+          <md-option *ngFor="let p of patients" [value]="p.name">
+              {{ p.name }}
+          </md-option>
+        </md-autocomplete>
+        <div class="example-button-row">
+            <button md-mini-fab color="primary" (click)="selectPatient()"><md-icon>search</md-icon></button>
+        </div>
       </md-card>
     </form>
 
@@ -25,47 +33,50 @@
             </md-menu>
           </div>  
 
-          <md-grid-list cols="4" rowHeight="70px">
-            <md-grid-tile colspan="3">
+          <div class="row">
+            <div class="col-md-9">
               <md-input-container class="example-full-width">
-                  <input mdInput name="name" placeholder="Nome" ngModel>
+                  <input mdInput name="name" placeholder="Nome" [(ngModel)]="patient.name">
               </md-input-container>
-            </md-grid-tile>
-            <md-grid-tile colspan="1">
-              <md-select class="example-full-width select-padding" placeholder="Convênio" [(ngModel)]="convenio" name="convenio">
-                <md-option *ngFor="let c of convenios" [value]="c.value">
+            </div>
+            <div class="col-md-3">
+              <!--<md-select class="example-full-width select-padding" placeholder="Convênio" [(ngModel)]="patient.medicalInsurance" name="medicalInsurance">
+                <md-option *ngFor="let c of medicalInsurances" [value]="c.value">
                   {{c.name}}
                 </md-option>
-              </md-select>
-            </md-grid-tile>
-            <md-grid-tile colspan="4">
+              </md-select>-->
               <md-input-container class="example-full-width">
-                  <input mdInput name="address" placeholder="Endereço" ngModel>
+                  <input mdInput name="medicalInsurance" placeholder="Convênio" [(ngModel)]="patient.medicalInsurance">
               </md-input-container>
-            </md-grid-tile>
-            <md-grid-tile colspan="3">
+            </div>
+            <div class="col-md-12">
               <md-input-container class="example-full-width">
-                  <input mdInput name="email" type="email" placeholder="Email" ngModel>
+                  <input mdInput name="address" placeholder="Endereço" [(ngModel)]="patient.address">
               </md-input-container>
-            </md-grid-tile>
-            <md-grid-tile colspan="1">
+            </div>
+            <div class="col-md-9">
+              <md-input-container class="example-full-width">
+                  <input mdInput name="email" type="email" placeholder="Email" [(ngModel)]="patient.email">
+              </md-input-container>
+            </div>
+            <div class="col-md-3">
               <md-input-container class="example-full-width col-padding">
-                  <input mdInput name="lastAccess" type="date" placeholder="Última Consulta" ngModel>
+                  <input mdInput name="lastAccess" placeholder="Última Consulta" [(ngModel)]="patient.lastAppointment" ngui-datetime-picker>
               </md-input-container>
-            </md-grid-tile>            
-            <md-grid-tile colspan="3">
+            </div>            
+            <div class="col-md-9">
               <md-input-container class="example-full-width">
-                  <input mdInput name="phone" type="tel" placeholder="Telefone/Celular" ngModel>
+                  <input mdInput name="phone" type="tel" placeholder="Telefone/Celular" [(ngModel)]="patient.phoneNumber">
               </md-input-container>
-            </md-grid-tile>
-            <md-grid-tile colspan="1">
+            </div>
+            <div class="col-md-3">
               <md-input-container class="example-full-width col-padding">
-                  <input mdInput name="birthday" type="date" placeholder="Data de Nascimento" ngModel>
+                  <input mdInput name="birthday" placeholder="D.N." [(ngModel)]="patient.birthDate" ngui-datetime-picker date-only="true">
               </md-input-container>
-            </md-grid-tile>
-          </md-grid-list>
+            </div>
+          </div>
           <md-input-container class="example-full-width">
-              <input mdInput name="responsible" placeholder="Responsável" ngModel>
+              <input mdInput name="responsible" placeholder="Responsável" [(ngModel)]="patient.accountablePerson">
           </md-input-container>
           <div class="example-button-row">
               <button md-mini-fab color="primary"><md-icon>check</md-icon></button>
@@ -73,7 +84,15 @@
       </md-card>
     </form>
         
-        
+    <form class="example-form">
+        <div class="form-group">
+            <div class="col-md-10">
+                <p>Importar pacientes com arquivo .csv</p>
+                <input type="file" name="files" (change)="onUploadPatientsSubmit($event)" multiple accept=".csv"/>
+            </div>
+        </div>
+    </form>
+
   </main>
   <fountain-footer></fountain-footer>
 </div>

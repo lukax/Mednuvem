@@ -42,18 +42,6 @@ namespace Server.Core
             };
         }
 
-        public static List<TestUser> GetUsers()
-        {
-            return new List<TestUser>
-            {
-                new TestUser
-                {
-                    Username = "admin",
-                    Password = "admin"
-                }
-            };
-        }
-
         public static IEnumerable<Client> GetClients()
         {
             return new List<Client>

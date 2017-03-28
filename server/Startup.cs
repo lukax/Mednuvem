@@ -14,6 +14,7 @@ using IdentityServer4.Services;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
 using IdSvrHost.Models;
+using IdentityServer4.Quickstart.UI;
 
 namespace server
 {
@@ -44,7 +45,7 @@ namespace server
                     .AddInMemoryIdentityResources(Config.GetIdentityResources())
                     .AddInMemoryApiResources(Config.GetApiResources())
                     .AddInMemoryClients(Config.GetClients())
-                    .AddTestUsers(Config.GetUsers());
+                    .AddTestUsers(TestUsers.Users);
 
 
             builder.Services.AddTransient<PatientRepository>();
@@ -59,10 +60,7 @@ namespace server
             services.AddCors(options=>
                 {
                     // this defines a CORS policy called "default"
-                    options.AddPolicy("default", policy =>
-                    {
-                        policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials();
-                    });
+                    options.AddPolicy("default", policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
                 });
 
             // Add framework services.
@@ -86,8 +84,6 @@ namespace server
             }
 
             app.UseCors("default");
-
-            app.UseIdentityServer();
 
             app.UseIdentityServer();
 

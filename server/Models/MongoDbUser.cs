@@ -2,6 +2,7 @@
 using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 
 namespace IdSvrHost.Models
 {
@@ -10,8 +11,6 @@ namespace IdSvrHost.Models
         public string Id { get; set; }
         public string Username { get; set; }
         public string Name { get; set; }
-        public string FirstName => Name?.Split(' ')[0];
-        public string LastName => Name?.Split(' ').Skip(1).Aggregate("", (a, s) => a + ' ' + s);
         public string Email { get; set; }
         public bool EmailVerified { get; set; }
         public bool IsActive { get; set; }
@@ -23,5 +22,13 @@ namespace IdSvrHost.Models
 
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }
+
+        public string GetFirstName() {
+            return Name?.Split(' ')[0];
+        }
+
+        public string GetLastName() {
+            return Name?.Split(' ').Skip(1).Aggregate("", (a, s) => a + ' ' + s);
+        }
     }
 }
