@@ -1,24 +1,28 @@
 <div class="main-container">
   <fountain-header></fountain-header>
-  <main class="main">
+  <main class="main container">
 
-    <form class="example-form">
-      <md-card>
-        <md-input-container class="example-full-width">
-            <input mdInput name="search" placeholder="Pesquisar pacientes..." [(ngModel)]="searchPatient" [mdAutocomplete]="auto">
-        </md-input-container>
-        <md-autocomplete #auto="mdAutocomplete">
-          <md-option *ngFor="let p of patients" [value]="p.name">
-              {{ p.name }}
-          </md-option>
-        </md-autocomplete>
-        <div class="example-button-row">
-            <button md-mini-fab color="primary" (click)="selectPatient()"><md-icon>search</md-icon></button>
-        </div>
-      </md-card>
-    </form>
+    <br>
+    <md-card class="row">
+      <h2>Pacientes</h2>
+      <md-input-container class="example-full-width">
+          <input mdInput [(ngModel)]="searchPatient" placeholder="Pesquisar pacientes..."
+                 auto-complete [source]="getPatients.bind(this)"
+                 [list-formatter]="patientAutocompleteListFormatter"
+                 value-property-name="id"
+                 display-property-name="name"
+                 no-match-found-text="Nenhum paciente encontrado."
+                 accept-user-input="false"
+                 loading-text="Carregando..."
+                 max-num-list="10">
+      </md-input-container>
+      <div class="example-button-row">
+          <button md-mini-fab color="primary" (click)="selectPatient()"><md-icon>search</md-icon></button>
+      </div>
+    </md-card>
 
-    <form class="example-form">
+    <br>
+    <form class="row">
       <md-card>
           <h2>Ficha do Paciente</h2>
           <div class="card-item-menu">
@@ -31,7 +35,7 @@
                 <span>Descartar ficha</span>
               </button>
             </md-menu>
-          </div>  
+          </div>
 
           <div class="row">
             <div class="col-md-9">
@@ -49,9 +53,14 @@
                   <input mdInput name="medicalInsurance" placeholder="Convênio" [(ngModel)]="patient.medicalInsurance">
               </md-input-container>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-9">
               <md-input-container class="example-full-width">
-                  <input mdInput name="address" placeholder="Endereço" [(ngModel)]="patient.address">
+                <input mdInput name="address" placeholder="Endereço" [(ngModel)]="patient.address">
+              </md-input-container>
+            </div>
+            <div class="col-md-3">
+              <md-input-container class="example-full-width">
+                <input mdInput name="taxIdNumber" placeholder="CPF" [(ngModel)]="patient.taxIdNumber">
               </md-input-container>
             </div>
             <div class="col-md-9">
@@ -63,7 +72,7 @@
               <md-input-container class="example-full-width col-padding">
                   <input mdInput name="lastAccess" placeholder="Última Consulta" [(ngModel)]="patient.lastAppointment" ngui-datetime-picker>
               </md-input-container>
-            </div>            
+            </div>
             <div class="col-md-9">
               <md-input-container class="example-full-width">
                   <input mdInput name="phone" type="tel" placeholder="Telefone/Celular" [(ngModel)]="patient.phoneNumber">
@@ -83,15 +92,18 @@
           </div>
       </md-card>
     </form>
-        
-    <form class="example-form">
-        <div class="form-group">
-            <div class="col-md-10">
-                <p>Importar pacientes com arquivo .csv</p>
+
+    <br>
+    <form class="row">
+      <md-card>
+            <div class="col-md-12">
+                <h2>Importar pacientes</h2>
                 <input type="file" name="files" (change)="onUploadPatientsSubmit($event)" multiple accept=".csv"/>
             </div>
-        </div>
+      </md-card>
     </form>
+
+    <br>
 
   </main>
   <fountain-footer></fountain-footer>

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Server.Core.Models;
 
@@ -12,6 +13,28 @@ namespace IdSvrHost.Services
         public IEnumerable<T> Result { get; set; }
         public long TotalCount { get; set; }
         public long TotalPages { get; set; }
+    }
+
+    public abstract class OperationResult 
+    {
+        public bool IsError { get; }
+        public string Message { get; }
+
+        public OperationResult(bool isError, string message)
+        {
+            IsError = isError;
+            Message = message;
+        }
+    }
+    public class SuccessOperationResult : OperationResult {
+        public SuccessOperationResult(string message = "Ação concluída com sucesso."): base(false, message)
+        {
+        }
+    }
+    public class FailOperationResult : OperationResult {
+        public FailOperationResult(string message = "Não foi possível completar ação."): base(true, message)
+        {
+        }
     }
 
     public class PatientRepository 
@@ -36,7 +59,7 @@ namespace IdSvrHost.Services
             var filter = FilterBuilder.Eq(u => u.UserId, userId);
             if(!string.IsNullOrWhiteSpace(search)){
                 filter = FilterBuilder.And(filter, 
-                    FilterBuilder.Text(search, new TextSearchOptions{CaseSensitive = false, DiacriticSensitive = false}));
+                FilterBuilder.Regex(u => u.Name, new BsonRegularExpression($@"/{search}/i")));
             }
             var sort = SortBuilder.Descending(x => x.LastAppointment);
             if(!string.IsNullOrWhiteSpace(orderBy)){
@@ -68,10 +91,62 @@ namespace IdSvrHost.Services
             return await Collection.Find(filter).ToListAsync();
         }
 
-        public async Task InsertOne(Patient patient){
-            await Collection.InsertOneAsync(patient);
+        public async Task<OperationResult> DeleteOne(string userId, string patientId)
+        {
+            var filter = FilterBuilder.And(
+                FilterBuilder.Eq(u => u.UserId, userId),
+                FilterBuilder.Eq(u => u.Id, patientId)
+            );
+            var res = await Collection.DeleteOneAsync(filter);
+            if(res.DeletedCount > 0){
+                return new SuccessOperationResult();
+            }
+            return new FailOperationResult("Nenhum paciente encontrado");
         }
 
+        public async Task<IList<Patient>> FindByName(string userId, string patientName)
+        {
+            var filter = FilterBuilder.And(
+                FilterBuilder.Eq(u => u.UserId, userId),
+                FilterBuilder.Regex(u => u.Name, new BsonRegularExpression($@"/^{patientName}$/i"))
+            );
+            return await Collection.Find(filter).ToListAsync();
+        }
 
+        public async Task<OperationResult> InsertOne(Patient patient){
+            var filter = FilterBuilder.Or(
+                FilterBuilder.And(
+                    FilterBuilder.Eq(u => u.Id, patient.Id),
+                    FilterBuilder.Eq(u => u.UserId, patient.UserId)
+                ),
+                FilterBuilder.Eq(u => u.TaxIdNumber, patient.TaxIdNumber));
+            if(await Collection.CountAsync(filter) > 0)
+            {
+                return new FailOperationResult("Já existe um paciente com essas informações.");
+            }
+            else
+            {
+                await Collection.InsertOneAsync(patient);
+                return new SuccessOperationResult();
+            }
+        }
+
+        public async Task<OperationResult> UpdateOne(Patient patient){
+            var filter = FilterBuilder.Or(
+                FilterBuilder.And(
+                    FilterBuilder.Eq(u => u.Id, patient.Id),
+                    FilterBuilder.Eq(u => u.UserId, patient.UserId)
+                ),
+                FilterBuilder.Eq(u => u.TaxIdNumber, patient.TaxIdNumber));
+            if(await Collection.CountAsync(filter) == 0)
+            {
+                return new FailOperationResult("Nenhum paciente encontrado.");
+            }
+            else
+            {
+                var result = await Collection.ReplaceOneAsync(filter, patient);
+                return result.ModifiedCount > 0 ? new SuccessOperationResult() as OperationResult : new FailOperationResult() as OperationResult;
+            }
+        }
     }
 }

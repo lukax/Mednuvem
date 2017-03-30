@@ -1,46 +1,35 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {Http} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {UploadService} from './services/upload.service';
+
 
 @Component({
   selector: 'fountain-app',
   template: require('./main.html')
 })
-export class MainComponent {
-  medicalInsurances = [
-    {name: 'Particular', value: 'particular'},
-    {name: 'Unimed', value: 'unimed'},
-    {name: 'Amil', value: 'amil'},
-    {name: 'Golden', value: 'golden'},
-    {name: 'Bradesco', value: 'bradesco'},
-    {name: 'Ipalerj', value: 'ipalerj'},
-    {name: 'Dix', value: 'dix'},
-    {name: 'Miller', value: 'miller'},
-    {name: 'Marítima', value: 'maritma'},
-  ];
-  patients: {name: string, address: string, email: string, phoneNumber: string, medicalInsurance: string, birthDate: Date, lastAppointment: Date, accountablePerson: string}[];
+export class MainComponent implements OnInit {
+  patients: Patient[];
   pageCount: number;
   pageNumber: number;
-  patient: any = {};
-  searchPatient: string = null;
+  patient: Patient;
+  searchPatient: any;
 
   constructor(private http: Http,
-              private uploadService: UploadService) {
+              private uploadService: UploadService,
+              private _sanitizer: DomSanitizer) {
 
-    this.getPacients();
+
+  }
+
+  ngOnInit() {
+    this.patient = new Patient();
+    this.searchPatient = null;
     this.uploadService.progressObservable.subscribe(data => {
       console.log('progress ' + data);
     });
-  }
-
-  getPacients() {
-    this.http.get('http://localhost:5000/api/patients').subscribe(data => {
-      let json = data.json();
-      this.patients = json.result;
-      this.pageCount = json.pageCount;
-      this.pageNumber = json.pageNumber;
-    }, err => console.log(err));
   }
 
   onUploadPatientsSubmit(event: any) {
@@ -52,11 +41,43 @@ export class MainComponent {
     });
   }
 
-  selectPatient(){
-    if(this.searchPatient){
-      this.patient = this.patients.filter(x => x.name == this.searchPatient)[0] || {};
+  selectPatient() {
+    console.log(this.searchPatient);
+    if (this.searchPatient instanceof Object) {
+      this.patient = this.searchPatient;
+      this.searchPatient = null;
+    } else {
+      this.getPatients(this.searchPatient).subscribe(p => this.patient = (p || this.patient));
       this.searchPatient = null;
     }
   }
+
+  patientAutocompleteListFormatter(data: Patient): string {
+    let str = data.name;
+    if (data.medicalInsurance) { str += ` (${data.medicalInsurance})`; };
+    return str;
+  }
+
+
+  getPatients(search: any): Observable<Patient> {
+    return this.http.get('http://localhost:5000/api/patients?search=' + search).map(data => {
+      return data.json().result;
+    }, err => console.log(err));
+  }
+
+}
+
+
+export class Patient {
+  id: string;
+  name: string;
+  taxIdNumber: string;
+  address: string;
+  email: string;
+  phoneNumber: string;
+  medicalInsurance: string;
+  birthDate: Date;
+  lastAppointment: Date;
+  accountablePerson: string;
 
 }

@@ -3,7 +3,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {MaterialModule} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NguiDatetimePickerModule} from '@ngui/datetime-picker';
-
+import {NguiAutoCompleteModule} from '@ngui/auto-complete';
 import {routing, RootComponent} from './routes';
 
 import {TechsModule} from './techs';
@@ -23,7 +23,8 @@ import {UploadService} from './services/upload.service';
     ReactiveFormsModule,
     MaterialModule,
     TechsModule,
-    NguiDatetimePickerModule
+    NguiDatetimePickerModule,
+    NguiAutoCompleteModule
   ],
   declarations: [
     RootComponent,

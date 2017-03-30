@@ -1,37 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Server.Core.Models;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using IdSvrHost.Services;
-using IdentityServer4.Extensions;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Http.Internal;
 using System.IO;
 using CsvHelper;
 using Microsoft.AspNetCore.Http;
 
 namespace Server.Core.Controllers
 {
-    // public class CreateMeetingViewModel
-    // {
-    //     [Required(ErrorMessage = "A data da reunião é necessário")]
-    //     public DateTime RequestDate { get; set; }
-
-    //     [Required(ErrorMessage = "O horário da reunião é necessário")]
-    //     public TimeSpan RequestHour { get; set; }
-
-    //     [Required(ErrorMessage = "O tipo de reunião é necessário")]
-    //     public string MeetingName { get; set; }
-
-    //     [Required(AllowEmptyStrings = false, ErrorMessage = "O nome da empresa é necessário")]
-    //     public string Company { get; set; }
-
-    //     public string Details { get; set; }
-    // }
-
     //[Authorize]
     [Route("api/[controller]")]
     public class PatientsController : Controller
@@ -44,46 +23,63 @@ namespace Server.Core.Controllers
             _patientRepository = patientRepository;
         }
 
-        // [HttpPost]
-        // public async Task<IActionResult> CreateMeeting([FromBody] CreateMeetingViewModel viewModel)
-        // {
-        //     if(viewModel == null || !ModelState.IsValid)
-        //     {
-        //         ModelState.AddModelError("", "Reunião inválida");
-        //         return BadRequest(ModelState);
-        //     }
-        //     if(viewModel.RequestDate <= DateTime.UtcNow)
-        //     {
-        //         ModelState.AddModelError("date", "Por favor, especifique uma data para a reunião");
-        //     }
-        //     if(viewModel.RequestDate >= DateTime.UtcNow.AddDays(30))
-        //     {
-        //         ModelState.AddModelError("date", "Reuniões só podem ser marcadas com um mês de antecedência.");
-        //     }
-        //     if (viewModel.RequestHour < new TimeSpan(9, 0, 0) || viewModel.RequestHour > new TimeSpan(16, 0, 0))
-        //     {
-        //         ModelState.AddModelError("date", "O horário deve ser entre 9h-16h");
-        //     }
-        //     var alreadyTakenMeetings = await _meetingRepository.GetMeetings(User.GetSubjectId());
-        //     if(alreadyTakenMeetings.Any(x => x.MeetingName == viewModel.MeetingName))
-        //     {
-        //         ModelState.AddModelError("meeting", "Reunião já foi agendada");
-        //         return BadRequest(ModelState);
-        //     }
-        //     var meeting = new Meeting {
-        //         Id = Guid.NewGuid().ToString(),
-        //         UserId = User.GetSubjectId(),
-        //         CreatedAt = DateTime.UtcNow,
-        //         MeetingName = viewModel.MeetingName,
-        //         Company = viewModel.Company,
-        //         Details = viewModel.Details,
-        //         RequestDate = viewModel.RequestDate.Date.AddHours(viewModel.RequestHour.Hours),
-        //         ScheduleDate = viewModel.RequestDate.Date.AddHours(viewModel.RequestHour.Hours),
-        //         Status = "Reunião marcada"
-        //     };
-        //     await _meetingRepository.CreateMeeting(meeting);
-        //     return Ok();
-        // }
+        [HttpPost]
+        public async Task<IActionResult> Insert([FromBody] PatientViewModel viewModel)
+        {
+            if(viewModel == null || !ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Paciente inválido");
+                return BadRequest(ModelState);
+            }
+            if(Convert.ToDateTime(viewModel.BirthDate) > DateTime.UtcNow)
+            {
+                ModelState.AddModelError("date", "Data de nascimento inválida");
+            }
+            if(Convert.ToDateTime(viewModel.LastAppointment) > DateTime.UtcNow)
+            {
+                ModelState.AddModelError("date", "Última consulta inválida");
+            }
+            var alreadyTakenMeetings = await _patientRepository.FindByName(UserId, viewModel.Name);
+            if(alreadyTakenMeetings.Any())
+            {
+                ModelState.AddModelError("meeting", "Já existe um paciente com o mesmo nome");
+                return BadRequest(ModelState);
+            }
+            var result = await _patientRepository.InsertOne(viewModel.ToPatient());
+            if(result.IsError){
+                return BadRequest(result.Message);
+            }
+            return Ok(result.Message);
+        }
+
+        [HttpPut("{patientId}")]
+        public async Task<IActionResult> Update(string patientId, [FromBody] PatientViewModel viewModel)
+        {
+            if(viewModel == null || !ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Paciente inválido");
+                return BadRequest(ModelState);
+            }
+            if(Convert.ToDateTime(viewModel.BirthDate) > DateTime.UtcNow)
+            {
+                ModelState.AddModelError("date", "Data de nascimento inválida");
+            }
+            if(Convert.ToDateTime(viewModel.LastAppointment) > DateTime.UtcNow)
+            {
+                ModelState.AddModelError("date", "Última consulta inválida");
+            }
+            var alreadyTakenMeetings = await _patientRepository.FindByName(UserId, viewModel.Name);
+            if(alreadyTakenMeetings.Any())
+            {
+                ModelState.AddModelError("meeting", "Já existe um paciente com o mesmo nome");
+                return BadRequest(ModelState);
+            }
+            var result = await _patientRepository.UpdateOne(viewModel.ToPatient(patientId));
+            if(result.IsError){
+                return BadRequest(result.Message);
+            }
+            return Ok(result.Message);
+        }
 
         [HttpGet]
         [Route("")]
@@ -92,9 +88,18 @@ namespace Server.Core.Controllers
             return Ok(await _patientRepository.GetAll(UserId, pageSize, pageNumber, orderBy, search));
         }
 
-        [HttpGet("{patientId}")]
+        [HttpDelete("{patientId}")]
         public async Task<IActionResult> FindOne(string patientId){
             return Ok(await _patientRepository.FindOne(UserId, patientId));
+        }
+
+        [HttpGet("{patientId}")]
+        public async Task<IActionResult> DeleteOne(string patientId){
+            var result = await _patientRepository.DeleteOne(UserId, patientId);
+            if(result.IsError){
+                return BadRequest(result.Message);
+            }
+            return Ok(result.Message);
         }
 
         [HttpPost("upload")]
@@ -105,9 +110,9 @@ namespace Server.Core.Controllers
 
             // full path to file in temp location
             //var filePath = Path.GetTempFileName();
+            IList<Patient> records = null;
             if (formFile.Length > 0)
             {
-                IList<Patient> records = null;
                 try {
                     var stream = new MemoryStream();
                     await formFile.CopyToAsync(stream);
@@ -117,21 +122,7 @@ namespace Server.Core.Controllers
                     records = csv.GetRecords<PatientViewModel>().Select(x =>
                         {
                             if(x.Name == null) return null;
-                            DateTime birthDate;
-                            DateTime lastAppointment;
-                            bool birthDateOk = DateTime.TryParse(x.BirthDate, out birthDate);
-                            bool lastAppointmentOk = DateTime.TryParse(x.LastAppointment, out lastAppointment);
-                            return new Patient{
-                                Name = x.Name,
-                                Email = x.Email,
-                                Address = x.Address,
-                                MedicalInsurance = x.MedicalInsurance,
-                                PhoneNumber = x.PhoneNumber,
-                                AccountablePerson = x.AccountablePerson,
-                                BirthDate = birthDateOk ? birthDate : default(DateTime?),
-                                LastAppointment = lastAppointmentOk ? lastAppointment : default(DateTime?)
-                            };
-
+                            return x.ToPatient();
                         }).Where(x => x != null).ToList();
                 } 
                 catch(Exception ex)
@@ -148,17 +139,8 @@ namespace Server.Core.Controllers
                 {
                     return BadRequest("Could not save patient record. " + ex.Message);
                 }
-                
-                // using (var stream = new FileStream(filePath, FileMode.Create))
-                // {
-                //     await formFile.CopyToAsync(stream);
-                // }
             }
-
-            // process uploaded files
-            // Don't rely on or trust the FileName property without validation.
-
-            return Ok(new { count = 1/*, size, filePath*/});
+            return Ok(new { count = records?.Count });
         }
         
     }
