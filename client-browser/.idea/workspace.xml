@@ -21,10 +21,22 @@
       <file leaf-file-name="main.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/app/main.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="61" column="13" lean-forward="false" selection-start-line="61" selection-start-column="2" selection-end-line="61" selection-end-column="13" />
+            <state relative-caret-position="90">
+              <caret line="45" column="0" lean-forward="false" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="36" />
               <folding>
                 <element signature="e#0#48#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="server.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/app/services/server.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="54">
+              <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#43#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -33,24 +45,33 @@
       <file leaf-file-name="main.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/app/main.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="14" column="42" lean-forward="false" selection-start-line="14" selection-start-column="42" selection-end-line="14" selection-end-column="42" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="11" column="37" lean-forward="true" selection-start-line="11" selection-start-column="37" selection-end-line="11" selection-end-column="37" />
-              <folding />
+            <state relative-caret-position="292">
+              <caret line="129" column="73" lean-forward="false" selection-start-line="129" selection-start-column="73" selection-end-line="129" selection-end-column="73" />
+              <folding>
+                <element signature="n#div#0;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+                <element signature="n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+                <element signature="n#div#0;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+                <element signature="n#div#1;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+                <element signature="n#div#2;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+                <element signature="n#div#3;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+                <element signature="n#div#4;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+                <element signature="n#div#5;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+                <element signature="n#div#6;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+                <element signature="n#div#7;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+                <element signature="n#div#8;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -63,7 +84,11 @@
         <option value="$PROJECT_DIR$/src/app/index.ts" />
         <option value="$PROJECT_DIR$/tslint.json" />
         <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/src/app/services/server.ts" />
         <option value="$PROJECT_DIR$/src/app/main.ts" />
+        <option value="$PROJECT_DIR$/src/index.html" />
+        <option value="$PROJECT_DIR$/src/app/header.html" />
+        <option value="$PROJECT_DIR$/src/index.less" />
         <option value="$PROJECT_DIR$/src/app/main.html" />
       </list>
     </option>
@@ -201,7 +226,64 @@
     </option>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+      <method />
+    </configuration>
+    <configuration default="true" type="DartTestRunConfigurationType" factoryName="Dart Test">
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerJest" factoryName="Jest">
+      <node-interpreter value="project" />
+      <working-dir value="" />
+      <envs />
+      <scope-kind value="ALL" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma">
+      <config-file value="" />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerProtractor" factoryName="Protractor">
+      <config-file value="" />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
     <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="project" working-dir="">
+      <method />
+    </configuration>
+    <configuration default="true" type="cucumber.js" factoryName="Cucumber.js">
+      <option name="cucumberJsArguments" value="" />
+      <option name="executablePath" />
+      <option name="filePath" />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run" />
+      <scripts />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="mocha-javascript-test-runner" factoryName="Mocha">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <working-directory />
+      <pass-parent-env>true</pass-parent-env>
+      <envs />
+      <ui />
+      <extra-mocha-options />
+      <test-kind>DIRECTORY</test-kind>
+      <test-directory />
+      <recursive>false</recursive>
       <method />
     </configuration>
   </component>
@@ -215,12 +297,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1490874009255</updated>
-      <workItem from="1490874011448" duration="5288000" />
+      <workItem from="1490874011448" duration="9746000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5288000" />
+    <option name="totallyTimeSpent" value="9746000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -305,19 +387,68 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/app/main.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="61" column="13" lean-forward="false" selection-start-line="61" selection-start-column="2" selection-end-line="61" selection-end-column="13" />
+        <state relative-caret-position="90">
+          <caret line="45" column="0" lean-forward="false" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="36" />
           <folding>
             <element signature="e#0#48#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/header.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="16" lean-forward="false" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
+          <folding>
+            <element signature="e#68#74#0" expanded="true" />
+            <element signature="e#74#80#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="5" column="11" lean-forward="true" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/app/services/server.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#43#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="314">
+          <caret line="155" column="31" lean-forward="false" selection-start-line="155" selection-start-column="31" selection-end-line="155" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/app/main.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="14" column="42" lean-forward="false" selection-start-line="14" selection-start-column="42" selection-end-line="14" selection-end-column="42" />
-          <folding />
+        <state relative-caret-position="292">
+          <caret line="129" column="73" lean-forward="false" selection-start-line="129" selection-start-column="73" selection-end-line="129" selection-end-column="73" />
+          <folding>
+            <element signature="n#div#0;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+            <element signature="n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+            <element signature="n#div#0;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+            <element signature="n#div#1;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+            <element signature="n#div#2;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+            <element signature="n#div#3;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+            <element signature="n#div#4;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+            <element signature="n#div#5;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+            <element signature="n#div#6;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+            <element signature="n#div#7;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+            <element signature="n#div#8;n#div#1;n#md-card#0;n#form#0;n#main#0;n#div#0;n#!!top" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

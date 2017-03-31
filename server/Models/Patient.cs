@@ -18,6 +18,8 @@ namespace Server.Core.Models
         public string AccountablePerson { get; set; }
         public DateTime? BirthDate { get; set; }
         public DateTime? LastAppointment { get; set; }
+        public string Observations { get; set; }
+        public string MedicalReceipt { get; set; }
     }
 
     public class PatientViewModel
@@ -33,6 +35,8 @@ namespace Server.Core.Models
         public string AccountablePerson { get; set; }
         public string BirthDate { get; set; }
         public string LastAppointment { get; set; }
+        public string Observations { get; set; }
+        public string MedicalReceipt { get; set; }
 
         public Patient ToPatient(string patientId = null) {
             DateTime birthDate;
@@ -49,7 +53,9 @@ namespace Server.Core.Models
                     Name = this.Name,
                     PhoneNumber = this.PhoneNumber,
                     Email = this.Email,
-                    MedicalInsurance = this.MedicalInsurance
+                    MedicalInsurance = this.MedicalInsurance,
+                    Observations = this.Observations,
+                    MedicalReceipt = this.MedicalReceipt
                 };
         }
     }

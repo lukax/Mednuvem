@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
@@ -129,6 +130,11 @@ namespace IdSvrHost.Services
                 await Collection.InsertOneAsync(patient);
                 return new SuccessOperationResult();
             }
+        }
+
+        public async Task<OperationResult> InsertMany(IList<Patient> patients){
+            await Collection.InsertManyAsync(patients);
+            return new SuccessOperationResult();
         }
 
         public async Task<OperationResult> UpdateOne(Patient patient){

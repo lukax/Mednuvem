@@ -131,9 +131,7 @@ namespace Server.Core.Controllers
                 }
 
                 try {
-                    foreach(var r in records){
-                        await _patientRepository.InsertOne(r);
-                    }
+                    await _patientRepository.InsertMany(records);
                 }
                 catch(Exception ex) 
                 {

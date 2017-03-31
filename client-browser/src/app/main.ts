@@ -4,7 +4,7 @@ import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {Http} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {UploadService} from './services/upload.service';
-
+import {API_URL} from './services/server';
 
 @Component({
   selector: 'fountain-app',
@@ -16,6 +16,7 @@ export class MainComponent implements OnInit {
   pageNumber: number;
   patient: Patient;
   searchPatient: any;
+  isLoading: boolean;
 
   constructor(private http: Http,
               private uploadService: UploadService,
@@ -36,12 +37,12 @@ export class MainComponent implements OnInit {
     console.log('onChange');
     var files = event.srcElement.files;
     console.log(files);
-    this.uploadService.makeFileRequest('http://localhost:5000/api/patients/upload', [], files).subscribe(() => {
+    this.uploadService.makeFileRequest(API_URL + '/upload', [], files).subscribe(() => {
       console.log('sent');
     });
   }
 
-  selectPatient() {
+  selectPatient($event: any) {
     console.log(this.searchPatient);
     if (this.searchPatient instanceof Object) {
       this.patient = this.searchPatient;
@@ -60,9 +61,18 @@ export class MainComponent implements OnInit {
 
 
   getPatients(search: any): Observable<Patient> {
-    return this.http.get('http://localhost:5000/api/patients?search=' + search).map(data => {
+    return this.http.get(API_URL + '/patients?search=' + search).map(data => {
       return data.json().result;
     }, err => console.log(err));
+  }
+
+  savePatient() {
+    this.isLoading = true;
+    if (this.patient.id == null) {
+      this.http.post(API_URL + '/patients', this.patient).subscribe(p => console.log(p), err => console.log(err), () => this.isLoading = false);
+    } else {
+      this.http.put(API_URL + '/patients/' + this.patient.id, this.patient).subscribe(p => console.log(p), err => console.log(err), () => this.isLoading = false);
+    }
   }
 
 }
@@ -79,5 +89,6 @@ export class Patient {
   birthDate: Date;
   lastAppointment: Date;
   accountablePerson: string;
-
+  observations: string;
+  medicalReceipt: string;
 }
