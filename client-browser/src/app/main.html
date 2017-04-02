@@ -30,20 +30,20 @@
             <md-spinner class="card-spinner" mode="indeterminate" *ngIf="isLoading"></md-spinner>
           </h2>
           <div class="card-item-menu">
-            <button md-icon-button [mdMenuTriggerFor]="menu">
+            <button type="button" md-icon-button [mdMenuTriggerFor]="menu">
               <md-icon>more_vert</md-icon>
             </button>
             <md-menu #menu="mdMenu">
-              <button md-menu-item>
+              <button type="button" md-menu-item (click)="removePatient()">
                 <md-icon>close</md-icon>
-                <span>Descartar ficha</span>
+                <span>Remover Ficha</span>
               </button>
             </md-menu>
           </div>
           <div class="row">
             <div class="col-md-9">
               <md-input-container class="example-full-width">
-                  <input mdInput name="name" placeholder="Nome" [(ngModel)]="patient.name">
+                  <input mdInput name="name" placeholder="Nome" [(ngModel)]="patient.name" required>
               </md-input-container>
             </div>
             <div class="col-md-3">
@@ -53,7 +53,7 @@
                 </md-option>
               </md-select>-->
               <md-input-container class="example-full-width">
-                  <input mdInput name="medicalInsurance" placeholder="Convênio" [(ngModel)]="patient.medicalInsurance">
+                  <input mdInput name="medicalInsurance" placeholder="Convênio" [(ngModel)]="patient.medicalInsurance" required>
               </md-input-container>
             </div>
             <div class="col-md-9">

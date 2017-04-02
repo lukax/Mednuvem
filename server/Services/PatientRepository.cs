@@ -138,12 +138,10 @@ namespace IdSvrHost.Services
         }
 
         public async Task<OperationResult> UpdateOne(Patient patient){
-            var filter = FilterBuilder.Or(
-                FilterBuilder.And(
+            var filter = FilterBuilder.And(
                     FilterBuilder.Eq(u => u.Id, patient.Id),
                     FilterBuilder.Eq(u => u.UserId, patient.UserId)
-                ),
-                FilterBuilder.Eq(u => u.TaxIdNumber, patient.TaxIdNumber));
+                );
             if(await Collection.CountAsync(filter) == 0)
             {
                 return new FailOperationResult("Nenhum paciente encontrado.");
@@ -151,7 +149,7 @@ namespace IdSvrHost.Services
             else
             {
                 var result = await Collection.ReplaceOneAsync(filter, patient);
-                return result.ModifiedCount > 0 ? new SuccessOperationResult() as OperationResult : new FailOperationResult() as OperationResult;
+                return result.ModifiedCount > 0 ? new SuccessOperationResult() as OperationResult : new FailOperationResult("Nenhuma modificação") as OperationResult;
             }
         }
     }

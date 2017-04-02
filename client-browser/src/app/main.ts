@@ -5,6 +5,7 @@ import {Http} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import {UploadService} from './services/upload.service';
 import {API_URL} from './services/server';
+import {MdDialog, MdDialogRef} from '@angular/material';
 
 @Component({
   selector: 'fountain-app',
@@ -20,7 +21,7 @@ export class MainComponent implements OnInit {
 
   constructor(private http: Http,
               private uploadService: UploadService,
-              private _sanitizer: DomSanitizer) {
+              private dialog: MdDialog) {
 
 
   }
@@ -69,14 +70,57 @@ export class MainComponent implements OnInit {
   savePatient() {
     this.isLoading = true;
     if (this.patient.id == null) {
-      this.http.post(API_URL + '/patients', this.patient).subscribe(p => console.log(p), err => console.log(err), () => this.isLoading = false);
+      this.http.post(API_URL + '/patients', this.patient)
+        .subscribe(
+            p => { /* */ },
+            err => { this.showError(err); this.isLoading = false; },
+            () => { this.isLoading = false; });
     } else {
-      this.http.put(API_URL + '/patients/' + this.patient.id, this.patient).subscribe(p => console.log(p), err => console.log(err), () => this.isLoading = false);
+      this.http.put(API_URL + '/patients/' + this.patient.id, this.patient)
+        .subscribe(
+            p => { /* */ },
+            err => { this.showError(err); this.isLoading = false; },
+            () => { this.isLoading = false; });
+    }
+  }
+
+  removePatient() {
+    if (this.patient.id != null) {
+      this.isLoading = true;
+      this.http.delete(API_URL + '/patients/' + this.patient.id)
+        .subscribe(
+            p => { /* */ },
+            err => { this.showError(err); this.isLoading = false; },
+            () => { this.isLoading = false; });
+    }
+  }
+
+  showError(res: Response) {
+    try {
+      let json = res.json();
+      let dialogRef = this.dialog.open(DialogResultExampleDialog, { data: json });
+    } catch (ex) {
+      let dialogRef = this.dialog.open(DialogResultExampleDialog, { data: 'Erro desconhecido.' });
+
     }
   }
 
 }
 
+@Component({
+  selector: 'dialog-result-example-dialog',
+  template: `<h1 md-dialog-title>Oops... erro inesperado</h1>
+              <div md-dialog-content>{{err.errorMessage || err.message || err || 'Erro desconhecido.'}}</div>
+              <div md-dialog-actions>
+                <button md-button (click)="dialogRef.close()">OK</button>
+              </div>`,
+})
+export class DialogResultExampleDialog {
+  err: any;
+  constructor(public dialogRef: MdDialogRef<DialogResultExampleDialog>) {
+    this.err = dialogRef.config.data;
+  }
+}
 
 export class Patient {
   id: string;

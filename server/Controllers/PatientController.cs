@@ -28,28 +28,18 @@ namespace Server.Core.Controllers
         {
             if(viewModel == null || !ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Paciente inválido");
+                ModelState.AddModelError("", "Paciente inválido.");
                 return BadRequest(ModelState);
             }
             if(Convert.ToDateTime(viewModel.BirthDate) > DateTime.UtcNow)
             {
-                ModelState.AddModelError("date", "Data de nascimento inválida");
-            }
-            if(Convert.ToDateTime(viewModel.LastAppointment) > DateTime.UtcNow)
-            {
-                ModelState.AddModelError("date", "Última consulta inválida");
-            }
-            var alreadyTakenMeetings = await _patientRepository.FindByName(UserId, viewModel.Name);
-            if(alreadyTakenMeetings.Any())
-            {
-                ModelState.AddModelError("meeting", "Já existe um paciente com o mesmo nome");
-                return BadRequest(ModelState);
+                ModelState.AddModelError("date", "Data de nascimento inválida.");
             }
             var result = await _patientRepository.InsertOne(viewModel.ToPatient());
             if(result.IsError){
-                return BadRequest(result.Message);
+                return BadRequest(result);
             }
-            return Ok(result.Message);
+            return Ok(result);
         }
 
         [HttpPut("{patientId}")]
@@ -57,28 +47,18 @@ namespace Server.Core.Controllers
         {
             if(viewModel == null || !ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Paciente inválido");
+                ModelState.AddModelError("", "Paciente inválido.");
                 return BadRequest(ModelState);
             }
             if(Convert.ToDateTime(viewModel.BirthDate) > DateTime.UtcNow)
             {
-                ModelState.AddModelError("date", "Data de nascimento inválida");
-            }
-            if(Convert.ToDateTime(viewModel.LastAppointment) > DateTime.UtcNow)
-            {
-                ModelState.AddModelError("date", "Última consulta inválida");
-            }
-            var alreadyTakenMeetings = await _patientRepository.FindByName(UserId, viewModel.Name);
-            if(alreadyTakenMeetings.Any())
-            {
-                ModelState.AddModelError("meeting", "Já existe um paciente com o mesmo nome");
-                return BadRequest(ModelState);
+                ModelState.AddModelError("date", "Data de nascimento inválida.");
             }
             var result = await _patientRepository.UpdateOne(viewModel.ToPatient(patientId));
             if(result.IsError){
-                return BadRequest(result.Message);
+                return BadRequest(result);
             }
-            return Ok(result.Message);
+            return Ok(result);
         }
 
         [HttpGet]
@@ -97,9 +77,9 @@ namespace Server.Core.Controllers
         public async Task<IActionResult> DeleteOne(string patientId){
             var result = await _patientRepository.DeleteOne(UserId, patientId);
             if(result.IsError){
-                return BadRequest(result.Message);
+                return BadRequest(result);
             }
-            return Ok(result.Message);
+            return Ok(result);
         }
 
         [HttpPost("upload")]
