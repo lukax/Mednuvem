@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <ion-icon name="person" *ngIf="isEditable()"></ion-icon>
+      <ion-icon name="person-add" *ngIf="!isEditable()"></ion-icon>
+      Paciente - {{patient.id != null ? patient.name : 'Novo paciente'}}
+      <ion-spinner class="loading-toolbar" *ngIf="isLoading"></ion-spinner>
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only color="royal" (click)="presentPatientOptions()" *ngIf="isEditable()">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <form id="savePatientForm" (ngSubmit)="savePatient()">
+          <ion-grid>
+            <ion-row>
+              <ion-item col-9>
+                <ion-label floating>Nome completo</ion-label>
+                <ion-input type="text" name="name" [(ngModel)]="patient.name" required></ion-input>
+              </ion-item>
+              <ion-item col-3>
+                <ion-label floating>Convênio</ion-label>
+                <ion-input type="text" name="medicalInsurance" [(ngModel)]="patient.medicalInsurance" required></ion-input>
+              </ion-item>
+            </ion-row>
+            <ion-row>
+                <ion-item col-9>
+                  <ion-label floating>Endereço</ion-label>
+                  <ion-input type="text" name="address" [(ngModel)]="patient.address"></ion-input>
+                </ion-item>
+                <ion-item col-3>
+                  <ion-label floating>CPF</ion-label>
+                  <ion-input type="text" name="taxIdNumber" [(ngModel)]="patient.taxIdNumber"></ion-input>
+                </ion-item>
+            </ion-row>
+            <ion-row>
+                <ion-item col-8>
+                  <ion-label floating>Email</ion-label>
+                  <ion-input type="e" name="email" [(ngModel)]="patient.email"></ion-input>
+                </ion-item>
+                <ion-item col-4>
+                  <ion-label stacked>Última Consulta</ion-label>
+                  <ion-input type="datetime-local" name="lastAppointment" [(ngModel)]="patient.lastAppointment"></ion-input>
+                </ion-item>
+            </ion-row>
+            <ion-row>
+                <ion-item col-8>
+                  <ion-label floating>Telefone/Celular</ion-label>
+                  <ion-input type="text" name="phoneNumber" [(ngModel)]="patient.phoneNumber"></ion-input>
+                </ion-item>
+                <ion-item col-4>
+                  <ion-label stacked>D.N.</ion-label>
+                  <ion-input type="date" name="birthDate" [(ngModel)]="patient.birthDate"></ion-input>
+                </ion-item>
+            </ion-row>
+            <ion-row>
+                <ion-item>
+                  <ion-label floating>Responsável</ion-label>
+                  <ion-input type="text" name="accountablePerson" [(ngModel)]="patient.accountablePerson"></ion-input>
+                </ion-item>
+            </ion-row>
+            <ion-row>
+              <ion-item>
+                <ion-label floating>Observações</ion-label>
+                <ion-textarea rows="4" name="observations" [(ngModel)]="patient.observations"></ion-textarea>
+              </ion-item>
+            </ion-row>
+            <ion-row>
+              <ion-item>
+                <ion-label floating>Receita Médica</ion-label>
+                <ion-textarea rows="4" name="medicalReceipt" [(ngModel)]="patient.medicalReceipt"></ion-textarea>
+              </ion-item>
+            </ion-row>
+          </ion-grid>
+    </form>
+
+
+
+</ion-content>
+
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons end>
+      <button ion-button type="submit" form="savePatientForm">
+        <ion-icon name="checkmark"></ion-icon>&nbsp;&nbsp;Salvar alterações
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

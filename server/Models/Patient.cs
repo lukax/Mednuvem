@@ -22,6 +22,14 @@ namespace Server.Core.Models
         public string MedicalReceipt { get; set; }
     }
 
+    public class PatientListViewModel 
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string TaxIdNumber { get; set; }
+        public string MedicalInsurance { get; set; }
+    }
+
     public class PatientViewModel
     {
         public string Id { get; set; }
@@ -38,6 +46,21 @@ namespace Server.Core.Models
         public string Observations { get; set; }
         public string MedicalReceipt { get; set; }
 
+        public static PatientViewModel FromPatient(Patient p) {
+            return new PatientViewModel {
+                Id = p.Id,
+                UserId = p.UserId,
+                AccountablePerson = p.AccountablePerson,
+                BirthDate = p.BirthDate != null ? new DateTime(p.BirthDate.Value.Ticks).ToString("yyyy-MM-dd") : null,
+                LastAppointment = p.LastAppointment != null ? new DateTime(p.LastAppointment.Value.Ticks).ToString("yyyy-MM-ddThh:mm") : null,
+                Name = p.Name,
+                PhoneNumber = p.PhoneNumber,
+                Email = p.Email,
+                MedicalInsurance = p.MedicalInsurance,
+                Observations = p.Observations,
+                MedicalReceipt = p.MedicalReceipt
+            };
+        }
         public Patient ToPatient(string patientId = null) {
             DateTime birthDate;
             var birthDateOk = DateTime.TryParse(this.BirthDate, out birthDate);

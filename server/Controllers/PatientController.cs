@@ -68,12 +68,16 @@ namespace Server.Core.Controllers
             return Ok(await _patientRepository.GetAll(UserId, pageSize, pageNumber, orderBy, search));
         }
 
-        [HttpDelete("{patientId}")]
+        [HttpGet("{patientId}")]
         public async Task<IActionResult> FindOne(string patientId){
-            return Ok(await _patientRepository.FindOne(UserId, patientId));
+            var p = await _patientRepository.FindOne(UserId, patientId);
+            if(p == null) {
+                return NotFound();
+            }
+            return Ok(PatientViewModel.FromPatient(p));
         }
 
-        [HttpGet("{patientId}")]
+        [HttpDeleteAttribute("{patientId}")]
         public async Task<IActionResult> DeleteOne(string patientId){
             var result = await _patientRepository.DeleteOne(UserId, patientId);
             if(result.IsError){

@@ -42,8 +42,10 @@ namespace IdSvrHost.Services
     {
         private const string PatientsCollectionName = "Patients";
         private readonly IMongoDatabase _db;
+        private static bool _indexKeysCreated = false;
         private FilterDefinitionBuilder<Patient> FilterBuilder => Builders<Patient>.Filter;
         private SortDefinitionBuilder<Patient> SortBuilder => Builders<Patient>.Sort;
+        private ProjectionDefinitionBuilder<Patient> ProjectionBuilder => Builders<Patient>.Projection;
         private IMongoCollection<Patient> Collection => _db.GetCollection<Patient>(PatientsCollectionName);
             
         public PatientRepository(IOptions<MongoDbRepositoryConfiguration> config)
@@ -52,7 +54,15 @@ namespace IdSvrHost.Services
             _db = client.GetDatabase(config.Value.DatabaseName);
         }
 
-        public async Task<PagedListResult<Patient>> GetAll(string userId, int pageSize = 50, int pageNumber = 1, string orderBy = "", string search = "")
+        public async Task CreateIndexes()
+        {
+            if (_indexKeysCreated) return;
+            _indexKeysCreated = true;
+            await Collection.Indexes.CreateOneAsync(Builders<Patient>.IndexKeys.Combine(Builders<Patient>.IndexKeys.Ascending(x => x.UserId), Builders<Patient>.IndexKeys.Ascending(x => x.Id)));
+            await Collection.Indexes.CreateOneAsync(Builders<Patient>.IndexKeys.Combine(Builders<Patient>.IndexKeys.Ascending(x => x.UserId), Builders<Patient>.IndexKeys.Descending(x => x.LastAppointment)));
+        }
+        
+        public async Task<PagedListResult<PatientListViewModel>> GetAll(string userId, int pageSize = 50, int pageNumber = 1, string orderBy = "", string search = "")
         {
             var totalCount = await this.Count(userId); 
             var totalPages = (long) Math.Ceiling((double)totalCount / pageSize); 
@@ -60,18 +70,25 @@ namespace IdSvrHost.Services
             var filter = FilterBuilder.Eq(u => u.UserId, userId);
             if(!string.IsNullOrWhiteSpace(search)){
                 filter = FilterBuilder.And(filter, 
-                FilterBuilder.Regex(u => u.Name, new BsonRegularExpression($@"/{search}/i")));
+                    FilterBuilder.Regex(u => u.Name, new BsonRegularExpression($@"/{search}/i")));
             }
             var sort = SortBuilder.Descending(x => x.LastAppointment);
             if(!string.IsNullOrWhiteSpace(orderBy)){
                 sort = SortBuilder.Ascending(orderBy);
             }
-            return new PagedListResult<Patient> {
+            ProjectionDefinition<Patient, PatientListViewModel> projection = ProjectionBuilder
+                                            .Include(x => x.Id)
+                                            .Include(x => x.Name)
+                                            .Include(x => x.TaxIdNumber)
+                                            .Include(x => x.MedicalInsurance);
+            return new PagedListResult<PatientListViewModel> {
                 TotalCount = totalCount,
                 TotalPages = totalPages,
-                Result = await Collection.Find(filter)
+                Result = await Collection
+                    .Find(filter)
                     .Skip((pageNumber - 1) * pageSize)
                     .Limit(pageSize)
+                    .Project(projection)
                     .Sort(sort)
                     .ToListAsync()
             };
@@ -83,13 +100,13 @@ namespace IdSvrHost.Services
             return await Collection.CountAsync(filter);
         }
 
-        public async Task<IList<Patient>> FindOne(string userId, string patientId)
+        public async Task<Patient> FindOne(string userId, string patientId)
         {
             var filter = FilterBuilder.And(
                 FilterBuilder.Eq(u => u.UserId, userId),
                 FilterBuilder.Eq(u => u.Id, patientId)
             );
-            return await Collection.Find(filter).ToListAsync();
+            return await Collection.Find(filter).FirstOrDefaultAsync();
         }
 
         public async Task<OperationResult> DeleteOne(string userId, string patientId)
@@ -103,15 +120,6 @@ namespace IdSvrHost.Services
                 return new SuccessOperationResult();
             }
             return new FailOperationResult("Nenhum paciente encontrado");
-        }
-
-        public async Task<IList<Patient>> FindByName(string userId, string patientName)
-        {
-            var filter = FilterBuilder.And(
-                FilterBuilder.Eq(u => u.UserId, userId),
-                FilterBuilder.Regex(u => u.Name, new BsonRegularExpression($@"/^{patientName}$/i"))
-            );
-            return await Collection.Find(filter).ToListAsync();
         }
 
         public async Task<OperationResult> InsertOne(Patient patient){

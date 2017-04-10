@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <ion-icon name="search"></ion-icon>
+      Buscar
+      <ion-spinner class="loading-toolbar" *ngIf="isLoading"></ion-spinner>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+    <ion-searchbar 
+        (ionInput)="searchPatients($event)" 
+        showCancelButton="true"
+        placeholder="Comece a escrever..."
+        debounce="500" autofocus>
+    </ion-searchbar>
+
+
+    <ion-list>
+        <button ion-item *ngFor="let patient of patients" (click)="getPatient(patient)">
+            {{ patient.name }} ({{patient.medicalInsurance || '-'}}) {{patient.taxIdNumber}}
+        </button>  
+    </ion-list>
+
+
+</ion-content>
+
