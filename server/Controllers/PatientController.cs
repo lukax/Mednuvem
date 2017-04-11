@@ -35,11 +35,12 @@ namespace Server.Core.Controllers
             {
                 ModelState.AddModelError("date", "Data de nascimento inválida.");
             }
-            var result = await _patientRepository.InsertOne(viewModel.ToPatient());
+            var patient = viewModel.ToPatient();
+            var result = await _patientRepository.InsertOne(patient);
             if(result.IsError){
                 return BadRequest(result);
             }
-            return Ok(result);
+            return Json(patient.Id);
         }
 
         [HttpPut("{patientId}")]

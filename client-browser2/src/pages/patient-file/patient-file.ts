@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Http} from '@angular/http';
-import {ToastController, LoadingController, ActionSheetController, NavParams} from 'ionic-angular';
+import {ToastController, LoadingController, ActionSheetController, NavParams, NavController} from 'ionic-angular';
 import {Observable} from 'rxjs/Observable';
 import {API_URL} from '../../providers/server';
 import {Patient} from '../../providers/patient.service';
@@ -14,6 +14,7 @@ export class PatientFilePage implements OnInit {
   isLoading: boolean;
 
   constructor(private navParams: NavParams,
+              private navCtrl: NavController,
               private http: Http,
               private toastCtrl: ToastController,
               private actionSheetCtrl: ActionSheetController,
@@ -30,7 +31,7 @@ export class PatientFilePage implements OnInit {
   searchPatients(search: any): Observable<Patient> {
     return this.http.get(API_URL + '/patients?search=' + search).map(data => {
       return data.json().result;
-    }, err => console.log(err));
+    }, err => this.showError(err));
   }
 
   getPatient(patientId: string) {
@@ -41,8 +42,8 @@ export class PatientFilePage implements OnInit {
           this.isLoading = false;
           this.patient = p.json();
         }, err => {
-          this.isLoading = false;
-          this.toastCtrl.create({message: err.json().message || 'Oops... erro desconhecido.' }).present();
+          this.showError(err);
+          this.isLoading = false; 
         });
     }
   }
@@ -51,16 +52,22 @@ export class PatientFilePage implements OnInit {
     this.isLoading = true;
     if (this.patient.id == null) {
       this.http.post(API_URL + '/patients', this.patient)
-        .subscribe(
-            p => { /* */ },
-            err => { this.showError(err); this.isLoading = false; },
-            () => { this.isLoading = false; });
+        .subscribe(p => { 
+          this.navCtrl.push(PatientFilePage, { patientId: p.json() }); 
+        }, err => { 
+          this.showError(err); this.isLoading = false; 
+        }, () => { 
+          this.isLoading = false; 
+        });
     } else {
       this.http.put(API_URL + '/patients/' + this.patient.id, this.patient)
-        .subscribe(
-            p => { /* */ },
-            err => { this.showError(err); this.isLoading = false; },
-            () => { this.isLoading = false; });
+        .subscribe((p) => { 
+          
+        }, err => { 
+          this.showError(err); this.isLoading = false; 
+        }, () => { 
+          this.isLoading = false; 
+        });
     }
   }
 
@@ -68,10 +75,13 @@ export class PatientFilePage implements OnInit {
     if (this.patient.id != null) {
       this.isLoading = true;
       this.http.delete(API_URL + '/patients/' + this.patient.id)
-        .subscribe(
-            p => { /* */ },
-            err => { this.showError(err); this.isLoading = false; },
-            () => { this.isLoading = false; });
+        .subscribe((p) => { 
+          /* */ 
+        }, err => { 
+          this.showError(err); this.isLoading = false; 
+        }, () => { 
+          this.isLoading = false; 
+        });
     }
   }
 
@@ -114,11 +124,9 @@ export class PatientFilePage implements OnInit {
 
   showError(res) {
     try {
-      //let message = res.json();
-
+      this.toastCtrl.create({message: res.json().message || 'Oops... erro desconhecido.' }).present();
     } catch (ex) {
-      //let message = 'Erro desconhecido';
-
+      this.toastCtrl.create({message: 'Oops... erro desconhecido.' }).present();
     }
   }
 

@@ -21,6 +21,11 @@
     <form id="savePatientForm" (ngSubmit)="savePatient()">
           <ion-grid>
             <ion-row>
+              <ion-item col-12>
+                <ion-avatar>
+                    <img src="https://www.gravatar.com/avatar/7a4e4b4ff62d7420c4fd414e6d910f5d?s=40&amp;f=y&amp;d=mm">
+                </ion-avatar>
+              </ion-item>
               <ion-item col-9>
                 <ion-label floating>Nome completo</ion-label>
                 <ion-input type="text" name="name" [(ngModel)]="patient.name" required></ion-input>
@@ -37,7 +42,7 @@
                 </ion-item>
                 <ion-item col-3>
                   <ion-label floating>CPF</ion-label>
-                  <ion-input type="text" name="taxIdNumber" [(ngModel)]="patient.taxIdNumber"></ion-input>
+                  <ion-input type="text" name="taxIdNumber" [(ngModel)]="patient.taxIdNumber" required></ion-input>
                 </ion-item>
             </ion-row>
             <ion-row>

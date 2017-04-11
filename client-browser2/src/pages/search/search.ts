@@ -31,8 +31,12 @@ export class SearchPage implements OnInit {
 
   searchPatients($event: any): void {
     let val = $event.target.value || '';
+    this.isLoading = true;
     this.http.get(API_URL + '/patients?search=' + val).subscribe(data => {
+      this.isLoading = false;
       this.patients = data.json().result;
+    }, err => {
+      this.isLoading = false;
     });
   }
 
@@ -54,6 +58,9 @@ export class SearchPage implements OnInit {
     return str;
   }
 
+  isEmptyPatients() {
+    return this.patients != null && this.patients.length == 0;
+  }
 
 }
 

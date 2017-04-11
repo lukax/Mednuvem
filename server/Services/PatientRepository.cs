@@ -80,7 +80,8 @@ namespace IdSvrHost.Services
                                             .Include(x => x.Id)
                                             .Include(x => x.Name)
                                             .Include(x => x.TaxIdNumber)
-                                            .Include(x => x.MedicalInsurance);
+                                            .Include(x => x.MedicalInsurance)
+                                            .Include(x => x.LastAppointment);
             return new PagedListResult<PatientListViewModel> {
                 TotalCount = totalCount,
                 TotalPages = totalPages,
@@ -125,10 +126,13 @@ namespace IdSvrHost.Services
         public async Task<OperationResult> InsertOne(Patient patient){
             var filter = FilterBuilder.Or(
                 FilterBuilder.And(
-                    FilterBuilder.Eq(u => u.Id, patient.Id),
-                    FilterBuilder.Eq(u => u.UserId, patient.UserId)
+                    FilterBuilder.Eq(u => u.UserId, patient.UserId),
+                    FilterBuilder.Eq(u => u.Id, patient.Id)
                 ),
-                FilterBuilder.Eq(u => u.TaxIdNumber, patient.TaxIdNumber));
+                FilterBuilder.And(
+                    FilterBuilder.Eq(u => u.UserId, patient.UserId),
+                    FilterBuilder.Eq(u => u.TaxIdNumber, patient.TaxIdNumber)
+                ));
             if(await Collection.CountAsync(filter) > 0)
             {
                 return new FailOperationResult("Já existe um paciente com essas informações.");
@@ -147,8 +151,8 @@ namespace IdSvrHost.Services
 
         public async Task<OperationResult> UpdateOne(Patient patient){
             var filter = FilterBuilder.And(
-                    FilterBuilder.Eq(u => u.Id, patient.Id),
-                    FilterBuilder.Eq(u => u.UserId, patient.UserId)
+                    FilterBuilder.Eq(u => u.UserId, patient.UserId),
+                    FilterBuilder.Eq(u => u.Id, patient.Id)
                 );
             if(await Collection.CountAsync(filter) == 0)
             {

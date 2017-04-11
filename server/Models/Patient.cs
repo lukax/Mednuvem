@@ -28,6 +28,7 @@ namespace Server.Core.Models
         public string Name { get; set; }
         public string TaxIdNumber { get; set; }
         public string MedicalInsurance { get; set; }
+        public DateTime LastAppointment { get; set; }
     }
 
     public class PatientViewModel
@@ -77,6 +78,7 @@ namespace Server.Core.Models
                     PhoneNumber = this.PhoneNumber,
                     Email = this.Email,
                     MedicalInsurance = this.MedicalInsurance,
+                    TaxIdNumber = this.TaxIdNumber,
                     Observations = this.Observations,
                     MedicalReceipt = this.MedicalReceipt
                 };
