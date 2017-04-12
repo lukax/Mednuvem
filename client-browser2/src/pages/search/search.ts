@@ -11,10 +11,11 @@ import {PatientFilePage} from '../patient-file/patient-file';
 })
 export class SearchPage implements OnInit {
   patients: Patient[];
-  pageCount: number;
-  pageNumber: number;
+  pageSize: number = 25;
+  pageNumber: number = 1;
   isLoading: boolean;
   searchPatientsObservable: Observable<void>;
+  searchEvent: any;
 
   constructor(private http: Http,
               private toastCtrl: ToastController,
@@ -29,15 +30,38 @@ export class SearchPage implements OnInit {
     this.searchPatients({ target: { value: '' }});
   }
 
-  searchPatients($event: any): void {
-    let val = $event.target.value || '';
+  searchPatients($searchEvent: any, $infinteScrollEvent?: any): void {
+    this.searchEvent = $searchEvent;
+    let search = $searchEvent.target.value || '';
+    if($infinteScrollEvent){
+      this.pageNumber++;
+    } else {
+      this.pageNumber = 1;
+    }
     this.isLoading = true;
-    this.http.get(API_URL + '/patients?search=' + val).subscribe(data => {
-      this.isLoading = false;
-      this.patients = data.json().result;
-    }, err => {
-      this.isLoading = false;
-    });
+    this.http.get(API_URL +  `/patients?pageNumber=${this.pageNumber}&pageSize=${this.pageSize}&search=${search}`)
+      .subscribe((data) => {
+        let result = data.json().result;
+        if($infinteScrollEvent){
+          if(result.length > 0){
+            this.patients.push(...result);
+          } else {
+            this.pageNumber --;
+          }
+        } else {
+          this.patients = result;
+        }
+      }, (err) => {
+        if($infinteScrollEvent){
+          this.pageNumber--;
+        }
+        this.toastCtrl.create({message: 'Oops... erro ao se comunicar com servidor', duration: 5000, showCloseButton: true}).present();
+      }, () => {
+        this.isLoading = false;
+        if($infinteScrollEvent) {
+          $infinteScrollEvent.complete();
+        }
+      });
   }
 
   getPatient(patient: Patient) {
@@ -62,5 +86,8 @@ export class SearchPage implements OnInit {
     return this.patients != null && this.patients.length == 0;
   }
 
+  doInfinite(infiniteScroll) {
+    this.searchPatients(this.searchEvent, infiniteScroll);
+  }
 }
 

@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Http} from '@angular/http';
-import {ToastController, LoadingController, ActionSheetController, NavParams, NavController} from 'ionic-angular';
-import {Observable} from 'rxjs/Observable';
+import {ToastController, LoadingController, ActionSheetController, NavParams, NavController, AlertController} from 'ionic-angular';
 import {API_URL} from '../../providers/server';
 import {Patient} from '../../providers/patient.service';
 
@@ -12,9 +11,11 @@ export class PatientFilePage implements OnInit {
   patientId: string;
   patient: Patient = new Patient();
   isLoading: boolean;
+  page = 'contact';
 
   constructor(private navParams: NavParams,
               private navCtrl: NavController,
+              private alertCtrl: AlertController,
               private http: Http,
               private toastCtrl: ToastController,
               private actionSheetCtrl: ActionSheetController,
@@ -26,12 +27,6 @@ export class PatientFilePage implements OnInit {
 
   ngOnInit() {
     this.getPatient(this.patientId);
-  }
-
-  searchPatients(search: any): Observable<Patient> {
-    return this.http.get(API_URL + '/patients?search=' + search).map(data => {
-      return data.json().result;
-    }, err => this.showError(err));
   }
 
   getPatient(patientId: string) {
@@ -49,39 +44,91 @@ export class PatientFilePage implements OnInit {
   }
 
   savePatient() {
-    this.isLoading = true;
     if (this.patient.id == null) {
-      this.http.post(API_URL + '/patients', this.patient)
-        .subscribe(p => { 
-          this.navCtrl.push(PatientFilePage, { patientId: p.json() }); 
-        }, err => { 
-          this.showError(err); this.isLoading = false; 
-        }, () => { 
-          this.isLoading = false; 
-        });
+      let confirm = this.alertCtrl.create({
+        title: 'Novo paciente',
+        message: 'Inserir novo paciente '+ this.patient.name + '?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            handler: () => {
+            }
+          },
+          {
+            text: 'OK',
+            handler: () => {
+              this.isLoading = true;
+              this.http.post(API_URL + '/patients', this.patient)
+                .subscribe(p => { 
+                  this.navCtrl.push(PatientFilePage, { patientId: p.json() }); 
+                }, err => { 
+                  this.showError(err); this.isLoading = false; 
+                }, () => { 
+                  this.isLoading = false; 
+                });
+            }
+          }
+        ]
+      });
+      confirm.present();
     } else {
-      this.http.put(API_URL + '/patients/' + this.patient.id, this.patient)
-        .subscribe((p) => { 
-          
-        }, err => { 
-          this.showError(err); this.isLoading = false; 
-        }, () => { 
-          this.isLoading = false; 
-        });
+      let confirm = this.alertCtrl.create({
+        title: 'Atualizar paciente',
+        message: 'Atualizar informações de '+ this.patient.name + '?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            handler: () => {
+            }
+          },
+          {
+            text: 'OK',
+            handler: () => {
+              this.isLoading = true;
+              this.http.put(API_URL + '/patients/' + this.patient.id, this.patient)
+                .subscribe((p) => { 
+                  
+                }, err => { 
+                  this.showError(err); this.isLoading = false; 
+                }, () => { 
+                  this.isLoading = false; 
+                });
+            }
+          }
+        ]
+      });
+      confirm.present();
     }
   }
 
   removePatient() {
     if (this.patient.id != null) {
-      this.isLoading = true;
-      this.http.delete(API_URL + '/patients/' + this.patient.id)
-        .subscribe((p) => { 
-          /* */ 
-        }, err => { 
-          this.showError(err); this.isLoading = false; 
-        }, () => { 
-          this.isLoading = false; 
-        });
+      let confirm = this.alertCtrl.create({
+        title: 'Remover paciente',
+        message: 'Remover informações de '+ this.patient.name + '?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            handler: () => {
+            }
+          },
+          {
+            text: 'OK',
+            handler: () => {
+              this.isLoading = true;
+              this.http.delete(API_URL + '/patients/' + this.patient.id)
+                .subscribe((p) => { 
+                  /* */ 
+                }, err => { 
+                  this.showError(err); this.isLoading = false; 
+                }, () => { 
+                  this.isLoading = false; 
+                });
+            }
+          }
+        ]
+      });
+      confirm.present();
     }
   }
 
@@ -110,7 +157,7 @@ export class PatientFilePage implements OnInit {
 
   presentLoading() {
     let loader = this.loadingCtrl.create({
-      content: "Please wait...",
+      content: "Aguarde...",
       duration: 3000
     });
     loader.present();
@@ -133,6 +180,7 @@ export class PatientFilePage implements OnInit {
   isEditable() {
     return this.patient && this.patient.id != null;
   }
+
 
 }
 

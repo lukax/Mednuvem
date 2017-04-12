@@ -13,6 +13,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import {NguiDatetimePickerModule} from '@ngui/datetime-picker';
 import {NguiAutoCompleteModule} from '@ngui/auto-complete';
+import {MomentModule} from 'angular2-moment';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {NguiAutoCompleteModule} from '@ngui/auto-complete';
     IonicModule.forRoot(MyApp),
     FormsModule,
     NguiAutoCompleteModule,
-    NguiDatetimePickerModule
+    NguiDatetimePickerModule,
+    MomentModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

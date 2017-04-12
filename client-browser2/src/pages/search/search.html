@@ -22,19 +22,35 @@
 
 
     <ion-list>
+        <button ion-item style="opacity: 0.4" disabled>
+            <ion-avatar item-left>
+                <img src="https://www.gravatar.com/avatar/7a4e4b4ff62d7420c4fd414e6d910f5d?s=40&amp;f=y&amp;d=mm">
+            </ion-avatar>
+            <h2>Nome</h2>
+            <p>(Convênio)</p>
+            <button ion-button clear item-right>
+                Última consulta
+            </button>
+        </button>
         <button ion-item *ngFor="let patient of patients" (click)="getPatient(patient)">
             <ion-avatar item-left>
                 <img src="https://www.gravatar.com/avatar/7a4e4b4ff62d7420c4fd414e6d910f5d?s=40&amp;f=y&amp;d=mm">
             </ion-avatar>
             <h2>{{patient.name}}</h2>
             <p>{{patient.medicalInsurance}} {{patient.taxIdNumber}}</p>
-            <button ion-button clear item-right>{{patient.lastAppointment | date:'short'}}</button>
+            <button ion-button clear item-right>
+                {{patient.lastAppointment | amTimeAgo}}
+            </button>
         </button>
         <button ion-item *ngIf="!isLoading && isEmptyPatients()">
             <h2>Nenhum paciente encontrado :(</h2>
         </button>  
     </ion-list>
 
-
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content 
+      loadingText="Carregando pacientes..."></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+    
 </ion-content>
 

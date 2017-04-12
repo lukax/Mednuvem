@@ -25,6 +25,7 @@
     "@ionic/storage": "2.0.0",
     "@ngui/auto-complete": "^0.13.1",
     "@ngui/datetime-picker": "^0.16.0",
+    "angular2-moment": "^1.3.3",
     "bootstrap": "^4.0.0-alpha.6",
     "ionic-angular": "2.3.0",
     "ionicons": "3.0.0",

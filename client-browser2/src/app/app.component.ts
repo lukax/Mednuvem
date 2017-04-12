@@ -24,7 +24,7 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Buscar', component: SearchPage, icon: 'search' },
-      { title: 'Consultas', component: PatientSchedulePage, icon: 'list' },
+      //{ title: 'Consultas', component: PatientSchedulePage, icon: 'list' },
       //{ title: 'Nova consulta', component: PatientFilePage, icon: 'time' },
       { title: 'Novo paciente', component: PatientFilePage, icon: 'person-add' },
       { title: 'Importar', component: ImportPatientsPage, icon: 'folder' },

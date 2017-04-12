@@ -15,11 +15,22 @@
       </button>
     </ion-buttons>
   </ion-navbar>
+  <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="page">
+      <ion-segment-button value="contact">
+        Contato
+      </ion-segment-button>
+      <ion-segment-button value="observations">
+        Observações
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
 </ion-header>
 
-<ion-content padding>
+<ion-content padding [ngSwitch]="page">
     <form id="savePatientForm" (ngSubmit)="savePatient()">
-          <ion-grid>
+          <ion-grid *ngSwitchCase="'contact'">
             <ion-row>
               <ion-item col-12>
                 <ion-avatar>
@@ -73,6 +84,14 @@
             </ion-row>
             <ion-row>
               <ion-item>
+                <ion-label floating>Notas</ion-label>
+                <ion-textarea rows="4" name="observations" [(ngModel)]="patient.observations"></ion-textarea>
+              </ion-item>
+            </ion-row>
+          </ion-grid>
+          <ion-grid *ngSwitchCase="'observations'">
+            <ion-row>
+              <ion-item>
                 <ion-label floating>Observações</ion-label>
                 <ion-textarea rows="4" name="observations" [(ngModel)]="patient.observations"></ion-textarea>
               </ion-item>
@@ -80,13 +99,11 @@
             <ion-row>
               <ion-item>
                 <ion-label floating>Receita Médica</ion-label>
-                <ion-textarea rows="4" name="medicalReceipt" [(ngModel)]="patient.medicalReceipt"></ion-textarea>
+                <ion-textarea rows="8" name="medicalReceipt" [(ngModel)]="patient.medicalReceipt"></ion-textarea>
               </ion-item>
             </ion-row>
           </ion-grid>
     </form>
-
-
 
 </ion-content>
 
@@ -95,7 +112,7 @@
   <ion-toolbar>
     <ion-buttons end>
       <button ion-button type="submit" form="savePatientForm">
-        <ion-icon name="checkmark"></ion-icon>&nbsp;&nbsp;Salvar alterações
+        <ion-icon name="checkmark"></ion-icon>&nbsp;&nbsp;Salvar
       </button>
     </ion-buttons>
   </ion-toolbar>
