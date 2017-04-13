@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Http} from '@angular/http';
 import {ToastController} from 'ionic-angular';
 import {UploadService} from '../../providers/upload.service';
-import {API_URL} from '../../providers/server';
+import * as Constants from '../../providers/constants';
 import {Patient} from '../../providers/patient.service';
 
 @Component({
@@ -33,7 +33,7 @@ export class ImportPatientsPage implements OnInit {
     console.log('onChange');
     var files = event.srcElement.files;
     console.log(files);
-    this.uploadService.makeFileRequest(API_URL + '/upload', [], files).subscribe(() => {
+    this.uploadService.makeFileRequest(Constants.API_URL + '/upload', [], files).subscribe(() => {
       console.log('sent');
     });
   }

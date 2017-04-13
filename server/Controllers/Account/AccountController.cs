@@ -18,8 +18,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using IdSvrHost.Services;
 using IdSvrHost.Models;
-using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
 
 namespace IdentityServer4.Quickstart.UI
 {
@@ -28,6 +26,7 @@ namespace IdentityServer4.Quickstart.UI
     /// The login service encapsulates the interactions with the user data store. This data store is in-memory only and cannot be used for production!
     /// The interaction service provides a way for the UI to communicate with identityserver for validation and context retrieval
     /// </summary>
+    [Route("api/[controller]")]
     [SecurityHeaders]
     public class AccountController : Controller
     {
@@ -50,7 +49,7 @@ namespace IdentityServer4.Quickstart.UI
             _repository = repository;
         }
 
-        [HttpPost]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterInputModel model){
             if(model == null || !ModelState.IsValid) 
             {
@@ -68,7 +67,7 @@ namespace IdentityServer4.Quickstart.UI
                 return BadRequest(ModelState);
             }
 
-            if(model.InvitationCode != "incubadorauff"){
+            if(model.InvitationCode != "mednuvemapp"){
                 ModelState.AddModelError("invitationCode", "Código de convite inválido");
                 return BadRequest(ModelState);
             }
@@ -90,7 +89,7 @@ namespace IdentityServer4.Quickstart.UI
         /// <summary>
         /// Show login page
         /// </summary>
-        [HttpGet]
+        [HttpGet("Login")]
         public async Task<IActionResult> Login(string returnUrl)
         {
             var vm = await _account.BuildLoginViewModelAsync(returnUrl);
@@ -107,7 +106,7 @@ namespace IdentityServer4.Quickstart.UI
         /// <summary>
         /// Handle postback from username/password login
         /// </summary>
-        [HttpPost]
+        [HttpPost("Login")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginInputModel model)
         {
@@ -152,7 +151,7 @@ namespace IdentityServer4.Quickstart.UI
         /// <summary>
         /// Show logout page
         /// </summary>
-        [HttpGet]
+        [HttpGet("Logout")]
         public async Task<IActionResult> Logout(string logoutId)
         {
             var vm = await _account.BuildLogoutViewModelAsync(logoutId);
@@ -169,7 +168,7 @@ namespace IdentityServer4.Quickstart.UI
         /// <summary>
         /// Handle logout page postback
         /// </summary>
-        [HttpPost]
+        [HttpPost("Logout")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout(LogoutInputModel model)
         {
@@ -200,7 +199,7 @@ namespace IdentityServer4.Quickstart.UI
         /// <summary>
         /// initiate roundtrip to external authentication provider
         /// </summary>
-        [HttpGet]
+        [HttpGet("ExternalLogin")]
         public async Task<IActionResult> ExternalLogin(string provider, string returnUrl)
         {
             returnUrl = Url.Action("ExternalLoginCallback", new { returnUrl = returnUrl });
@@ -242,7 +241,7 @@ namespace IdentityServer4.Quickstart.UI
         /// <summary>
         /// Post processing of external authentication
         /// </summary>
-        [HttpGet]
+        [HttpGet("ExternalLoginCallback")]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl)
         {
             // read external identity from the temporary cookie

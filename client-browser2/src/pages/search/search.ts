@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Http} from '@angular/http';
 import {ToastController, LoadingController, ActionSheetController, NavController} from 'ionic-angular';
 import {Observable} from 'rxjs/Observable';
-import {API_URL} from '../../providers/server';
+import * as Constants from '../../providers/constants';
 import {Patient} from '../../providers/patient.service';
 import {PatientFilePage} from '../patient-file/patient-file';
 
@@ -39,7 +39,7 @@ export class SearchPage implements OnInit {
       this.pageNumber = 1;
     }
     this.isLoading = true;
-    this.http.get(API_URL +  `/patients?pageNumber=${this.pageNumber}&pageSize=${this.pageSize}&search=${search}`)
+    this.http.get(Constants.API_URL +  `/patients?pageNumber=${this.pageNumber}&pageSize=${this.pageSize}&search=${search}`)
       .subscribe((data) => {
         let result = data.json().result;
         if($infinteScrollEvent){

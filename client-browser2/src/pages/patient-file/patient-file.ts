@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Http} from '@angular/http';
 import {ToastController, LoadingController, ActionSheetController, NavParams, NavController, AlertController} from 'ionic-angular';
-import {API_URL} from '../../providers/server';
+import * as Constants from '../../providers/constants';
 import {Patient} from '../../providers/patient.service';
 
 @Component({
@@ -32,7 +32,7 @@ export class PatientFilePage implements OnInit {
   getPatient(patientId: string) {
     if (patientId) {
       this.isLoading = true;
-      this.http.get(API_URL + '/patients/' + patientId)
+      this.http.get(Constants.API_URL + '/patients/' + patientId)
         .subscribe(p => {
           this.isLoading = false;
           this.patient = p.json();
@@ -58,7 +58,7 @@ export class PatientFilePage implements OnInit {
             text: 'OK',
             handler: () => {
               this.isLoading = true;
-              this.http.post(API_URL + '/patients', this.patient)
+              this.http.post(Constants.API_URL + '/patients', this.patient)
                 .subscribe(p => { 
                   this.navCtrl.push(PatientFilePage, { patientId: p.json() }); 
                 }, err => { 
@@ -85,7 +85,7 @@ export class PatientFilePage implements OnInit {
             text: 'OK',
             handler: () => {
               this.isLoading = true;
-              this.http.put(API_URL + '/patients/' + this.patient.id, this.patient)
+              this.http.put(Constants.API_URL + '/patients/' + this.patient.id, this.patient)
                 .subscribe((p) => { 
                   
                 }, err => { 
@@ -116,7 +116,7 @@ export class PatientFilePage implements OnInit {
             text: 'OK',
             handler: () => {
               this.isLoading = true;
-              this.http.delete(API_URL + '/patients/' + this.patient.id)
+              this.http.delete(Constants.API_URL + '/patients/' + this.patient.id)
                 .subscribe((p) => { 
                   /* */ 
                 }, err => { 

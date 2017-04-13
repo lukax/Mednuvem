@@ -4,10 +4,11 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      <ion-icon name="person" *ngIf="isEditable()"></ion-icon>
-      <ion-icon name="person-add" *ngIf="!isEditable()"></ion-icon>
-      Paciente - {{patient.id != null ? patient.name : 'Novo paciente'}}
-      <ion-spinner class="loading-toolbar" *ngIf="isLoading"></ion-spinner>
+      <div>
+        <img class="img-avatar" src="https://www.gravatar.com/avatar/7a4e4b4ff62d7420c4fd414e6d910f5d?s=40&amp;f=y&amp;d=mm">
+        <span>Paciente - {{patient.id != null ? patient.name : 'Novo paciente'}}</span>
+        <ion-spinner class="loading-toolbar" *ngIf="isLoading"></ion-spinner>
+      </div>
     </ion-title>
     <ion-buttons end>
       <button ion-button icon-only color="royal" (click)="presentPatientOptions()" *ngIf="isEditable()">
@@ -32,11 +33,6 @@
     <form id="savePatientForm" (ngSubmit)="savePatient()">
           <ion-grid *ngSwitchCase="'contact'">
             <ion-row>
-              <ion-item col-12>
-                <ion-avatar>
-                    <img src="https://www.gravatar.com/avatar/7a4e4b4ff62d7420c4fd414e6d910f5d?s=40&amp;f=y&amp;d=mm">
-                </ion-avatar>
-              </ion-item>
               <ion-item col-9>
                 <ion-label floating>Nome completo</ion-label>
                 <ion-input type="text" name="name" [(ngModel)]="patient.name" required></ion-input>

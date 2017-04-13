@@ -1,12 +1,14 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { SearchPage } from '../pages/search/search';
 import { PatientFilePage } from '../pages/patient-file/patient-file';
-import { PatientSchedulePage } from '../pages/patient-schedule/patient-schedule';
+//import { PatientSchedulePage } from '../pages/patient-schedule/patient-schedule';
 import { ImportPatientsPage } from '../pages/import-patients/import-patients';
+import { LoginPage } from '../pages/login/login';
+import { LoginService } from '../providers/login.service';
 
 @Component({
   templateUrl: 'app.html'
@@ -14,11 +16,16 @@ import { ImportPatientsPage } from '../pages/import-patients/import-patients';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = SearchPage;
+  rootPage: any = LoginPage;
 
   pages: Array<{title: string, component: any, icon: string}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(
+      public platform: Platform, 
+      public statusBar: StatusBar, 
+      public menu: MenuController,
+      public splashScreen: SplashScreen,
+      public loginService: LoginService) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -28,12 +35,24 @@ export class MyApp {
       //{ title: 'Nova consulta', component: PatientFilePage, icon: 'time' },
       { title: 'Novo paciente', component: PatientFilePage, icon: 'person-add' },
       { title: 'Importar', component: ImportPatientsPage, icon: 'folder' },
-
     ];
 
   }
 
   initializeApp() {
+    this.loginService.isLoggedIn().then(
+      (ok) => {
+        if(ok) {
+          this.rootPage = SearchPage;
+        } else {
+        }
+        console.log("[AUTH] ", this.loginService.getUser());
+      });
+    this.loginService.userLoadedEvent.subscribe((obj) => {
+      if(obj == null){
+        this.openLogin();
+      }
+    });
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -47,4 +66,14 @@ export class MyApp {
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
+
+  openLogin() {
+    this.menu.close();
+    this.nav.setRoot(LoginPage);
+  }
+
+  logout() {
+    this.loginService.logout();
+  }
+
 }

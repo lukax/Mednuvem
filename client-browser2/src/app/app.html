@@ -1,5 +1,5 @@
 <ion-split-pane>
-  <ion-menu [content]="content">
+  <ion-menu [content]="content" *ngIf="loginService.getUser() != null">
     <ion-header>
       <ion-toolbar>
         <ion-title><ion-icon name="cloud"></ion-icon> Mednuvem</ion-title>
@@ -17,9 +17,13 @@
     <ion-footer>
           <ion-item>
             <ion-avatar item-left>
-              <img src="https://www.gravatar.com/avatar/7a4e4b4ff62d7420c4fd414e6d910f5d?s=40&amp;&amp;d=mm">
+              <img src="https://www.gravatar.com/avatar/{{loginService.getUser().email_hash}}?s=40&amp;&amp;d=mm">
             </ion-avatar>
-            <h2>Lucas Espindola</h2>
+            <h2>{{loginService.getUser().name}}</h2>
+
+            <button menuClose ion-button icon-only clear (click)="logout()" item-right>
+              <ion-icon name="log-out"></ion-icon>
+            </button>
           </ion-item>
     </ion-footer>
   </ion-menu>

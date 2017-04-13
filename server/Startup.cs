@@ -46,8 +46,7 @@ namespace server
                     .AddInMemoryApiResources(Config.GetApiResources())
                     .AddInMemoryClients(Config.GetClients())
                     .AddTestUsers(TestUsers.Users);
-
-
+            
             builder.Services.AddTransient<PatientRepository>();
             builder.Services.AddTransient<IRepository, MongoDbRepository>();
             builder.Services.AddTransient<MongoDbRepository>();

@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title><ion-icon name="cloud"></ion-icon> Mednuvem - Entrar</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+
+  <div class="login-container">
+
+    <h1 class="sign-in-header" style="text-align: center; font-size: 100px;"><ion-icon name="cloud"></ion-icon> </h1>
+
+    <form (ngSubmit)="login()">
+        <ion-list>
+          <ion-item>
+            <ion-label stacked>Nome de usuário</ion-label>
+            <ion-input name="username" type="text" [(ngModel)]="username" placeholder="Nome de usuário do Mednuvem" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label stacked>Senha</ion-label>
+            <ion-input name="password" type="password" [(ngModel)]="password" placeholder="Senha" required></ion-input>
+          </ion-item>
+        </ion-list>
+        <button ion-button block type="submit">Entrar</button>
+    </form>
+
+    <p>
+      Não tem uma conta? <a (click)="register()">Increva-se aqui.</a>
+    </p>
+  </div>
+  
+    
+</ion-content>

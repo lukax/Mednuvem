@@ -6,13 +6,15 @@ import { SearchPage } from '../pages/search/search';
 import { PatientFilePage } from '../pages/patient-file/patient-file';
 import { PatientSchedulePage } from '../pages/patient-schedule/patient-schedule';
 import { ImportPatientsPage } from '../pages/import-patients/import-patients';
+import { LoginPage } from '../pages/login/login';
+import { RegisterPage } from '../pages/register/register';
 
+import { LoginService } from '../providers/login.service';
 import { UploadService } from '../providers/upload.service';
 
+import { IonicStorageModule } from '@ionic/storage';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import {NguiDatetimePickerModule} from '@ngui/datetime-picker';
-import {NguiAutoCompleteModule} from '@ngui/auto-complete';
 import {MomentModule} from 'angular2-moment';
 
 @NgModule({
@@ -21,13 +23,18 @@ import {MomentModule} from 'angular2-moment';
     SearchPage,
     PatientFilePage,
     PatientSchedulePage,
-    ImportPatientsPage
+    ImportPatientsPage,
+    LoginPage,
+    RegisterPage
   ],
   imports: [
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {
+      monthShortNames: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez' ],
+      dayShortNames: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab' ],
+      //mode: 'ios'
+    }),
+    IonicStorageModule.forRoot(),
     FormsModule,
-    NguiAutoCompleteModule,
-    NguiDatetimePickerModule,
     MomentModule
   ],
   bootstrap: [IonicApp],
@@ -36,12 +43,15 @@ import {MomentModule} from 'angular2-moment';
     SearchPage,
     PatientFilePage,
     PatientSchedulePage,
-    ImportPatientsPage
+    ImportPatientsPage,
+    LoginPage,
+    RegisterPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
+    LoginService, 
     UploadService
   ]
 })
