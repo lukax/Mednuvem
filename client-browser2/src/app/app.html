@@ -1,4 +1,3 @@
-<ion-split-pane>
   <ion-menu [content]="content" *ngIf="loginService.getUser() != null">
     <ion-header>
       <ion-toolbar>
@@ -21,7 +20,7 @@
             </ion-avatar>
             <h2>{{loginService.getUser().name}}</h2>
 
-            <button menuClose ion-button icon-only clear (click)="logout()" item-right>
+            <button ion-button icon-only clear (click)="logout()" item-right>
               <ion-icon name="log-out"></ion-icon>
             </button>
           </ion-item>
@@ -30,4 +29,3 @@
 
   <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
   <ion-nav [root]="rootPage" main #content swipeBackEnabled="false"></ion-nav>
-</ion-split-pane>

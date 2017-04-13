@@ -68,12 +68,13 @@ export class MyApp {
   }
 
   openLogin() {
-    this.menu.close();
     this.nav.setRoot(LoginPage);
   }
 
   logout() {
-    this.loginService.logout();
+    this.menu.close().then(() => {
+      this.loginService.logout();
+    });
   }
 
 }
