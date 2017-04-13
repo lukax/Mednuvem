@@ -1,19 +1,20 @@
-  <ion-menu [content]="content" *ngIf="loginService.getUser() != null">
+<ion-split-pane [when]="isLoggedIn()">
+  <ion-menu [content]="content">
     <ion-header>
       <ion-toolbar>
         <ion-title><ion-icon name="cloud"></ion-icon> Mednuvem</ion-title>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content>
+    <ion-content >
       <ion-list>
-        <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
+        <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)" [hidden]="p.auth && !isLoggedIn() || !p.auth && isLoggedIn()">
           <ion-icon item-right name="{{p.icon}}"></ion-icon>&nbsp;&nbsp;{{p.title}}
         </button>
       </ion-list>
     </ion-content>
 
-    <ion-footer>
+    <ion-footer *ngIf="isLoggedIn()">
           <ion-item>
             <ion-avatar item-left>
               <img src="https://www.gravatar.com/avatar/{{loginService.getUser().email_hash}}?s=40&amp;&amp;d=mm">
@@ -29,3 +30,4 @@
 
   <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
   <ion-nav [root]="rootPage" main #content swipeBackEnabled="false"></ion-nav>
+</ion-split-pane>

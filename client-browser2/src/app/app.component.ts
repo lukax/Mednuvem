@@ -18,7 +18,7 @@ export class MyApp {
 
   rootPage: any = LoginPage;
 
-  pages: Array<{title: string, component: any, icon: string}>;
+  pages: Array<{title: string, component: any, icon: string, auth: boolean}>;
 
   constructor(
       public platform: Platform, 
@@ -30,11 +30,13 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Buscar', component: SearchPage, icon: 'search' },
-      //{ title: 'Consultas', component: PatientSchedulePage, icon: 'list' },
-      //{ title: 'Nova consulta', component: PatientFilePage, icon: 'time' },
-      { title: 'Novo paciente', component: PatientFilePage, icon: 'person-add' },
-      { title: 'Importar', component: ImportPatientsPage, icon: 'folder' },
+      { title: 'Buscar', component: SearchPage, icon: 'search', auth: true },
+      //{ title: 'Consultas', component: PatientSchedulePage, icon: 'list', auth: true },
+      //{ title: 'Nova consulta', component: PatientFilePage, icon: 'time', auth: true },
+      { title: 'Novo paciente', component: PatientFilePage, icon: 'person-add', auth: true },
+      { title: 'Importar', component: ImportPatientsPage, icon: 'folder', auth: true },
+
+      { title: 'Login', component: LoginPage, icon: 'log-in', auth: false },
     ];
 
   }
@@ -75,6 +77,10 @@ export class MyApp {
     this.menu.close().then(() => {
       this.loginService.logout();
     });
+  }
+
+  isLoggedIn() {
+    return this.loginService.getUser() != null;
   }
 
 }
