@@ -188,7 +188,9 @@ export class PatientFilePage implements OnInit {
   }
 
   close() {
-    this.navCtrl.pop();
+    if(this.navCtrl.canGoBack()){
+      this.navCtrl.pop();
+    }
   }
 
 }
