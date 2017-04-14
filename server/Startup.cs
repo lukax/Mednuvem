@@ -15,6 +15,8 @@ using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
 using IdSvrHost.Models;
 using IdentityServer4.Quickstart.UI;
+using Newtonsoft.Json;
+using Server.Core.Models;
 
 namespace server
 {
@@ -40,6 +42,10 @@ namespace server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            AutoMapper.Mapper.Initialize(cfg => {
+                cfg.CreateMap<Patient, PatientDetailViewModel>();
+            });
+
             var builder = services.AddIdentityServer()
                     .AddTemporarySigningCredential()
                     .AddInMemoryIdentityResources(Config.GetIdentityResources())

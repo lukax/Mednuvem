@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {NgForm} from '@angular/forms';
 import {Http} from '@angular/http';
 import {ToastController, LoadingController, ActionSheetController, NavParams, NavController, AlertController} from 'ionic-angular';
 import * as Constants from '../../providers/constants';
@@ -43,7 +44,12 @@ export class PatientFilePage implements OnInit {
     }
   }
 
-  savePatient() {
+  savePatient(form: NgForm) {
+    if(form && !form.valid) {
+      console.log(form);
+      this.alertCtrl.create({title: 'Dados inválidos', subTitle: 'Dados marcados com (*) são necessários.'}).present();
+      return;
+    }
     if (this.patient.id == null) {
       let confirm = this.alertCtrl.create({
         title: 'Novo paciente',
@@ -181,6 +187,9 @@ export class PatientFilePage implements OnInit {
     return this.patient && this.patient.id != null;
   }
 
+  close() {
+    this.navCtrl.pop();
+  }
 
 }
 

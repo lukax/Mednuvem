@@ -24,7 +24,7 @@ namespace Server.Core.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Insert([FromBody] PatientViewModel viewModel)
+        public async Task<IActionResult> Insert([FromBody] Patient viewModel)
         {
             if(viewModel == null || !ModelState.IsValid)
             {
@@ -35,7 +35,10 @@ namespace Server.Core.Controllers
             {
                 ModelState.AddModelError("date", "Data de nascimento inválida.");
             }
-            var patient = viewModel.ToPatient();
+            var patient = viewModel;
+            patient.Id = Guid.NewGuid().ToString();
+            patient.CreatedAt = DateTime.UtcNow;
+
             var result = await _patientRepository.InsertOne(patient);
             if(result.IsError){
                 return BadRequest(result);
@@ -44,7 +47,7 @@ namespace Server.Core.Controllers
         }
 
         [HttpPut("{patientId}")]
-        public async Task<IActionResult> Update(string patientId, [FromBody] PatientViewModel viewModel)
+        public async Task<IActionResult> Update(string patientId, [FromBody] Patient viewModel)
         {
             if(viewModel == null || !ModelState.IsValid)
             {
@@ -55,7 +58,11 @@ namespace Server.Core.Controllers
             {
                 ModelState.AddModelError("date", "Data de nascimento inválida.");
             }
-            var result = await _patientRepository.UpdateOne(viewModel.ToPatient(patientId));
+            var patient = viewModel;
+            patient.Id = patientId;
+            patient.UpdatedAt = DateTime.UtcNow;
+
+            var result = await _patientRepository.UpdateOne(patient);
             if(result.IsError){
                 return BadRequest(result);
             }
@@ -75,7 +82,7 @@ namespace Server.Core.Controllers
             if(p == null) {
                 return NotFound();
             }
-            return Ok(PatientViewModel.FromPatient(p));
+            return Ok(p);
         }
 
         [HttpDeleteAttribute("{patientId}")]
@@ -104,7 +111,7 @@ namespace Server.Core.Controllers
                     stream.Position = 0;
                     var textReader = new StreamReader(stream);
                     var csv = new CsvReader( textReader );
-                    records = csv.GetRecords<PatientViewModel>().Select(x =>
+                    records = csv.GetRecords<PatientDetailViewModel>().Select(x =>
                         {
                             if(x.Name == null) return null;
                             return x.ToPatient();

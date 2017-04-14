@@ -45,6 +45,7 @@ export class Patient {
   birthDate: Date;
   lastAppointment: Date;
   accountablePerson: string;
+  notes: string;
   observations: string;
   medicalReceipt: string;
 }
