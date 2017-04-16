@@ -45,9 +45,9 @@ namespace Server.Core.Models
         public string Spouse { get; set; }
 
         public string PhoneNumber { get; set; }
-        public string PhoneNumberOperator { get; set; }
-        public string ResidentialPhoneNumberOperator { get; set; }
         public string ResidentialPhoneNumber { get; set; }
+        public string CommercialPhoneNumber { get; set; }
+        public string ContactPhoneNumber { get; set; }
 
         public string SocialMediaType { get; set; }
         public string SocialMediaAddress { get; set; }

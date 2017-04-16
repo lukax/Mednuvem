@@ -109,51 +109,22 @@
                   <ion-input type="email" name="email" [(ngModel)]="patient.email"></ion-input>
                 </ion-item>
             </ion-row>
-            <ion-row>     
-              <ion-item col-4>
-                <ion-label floating>Celular</ion-label>
-                <ion-select name="phoneNumberOperator" [(ngModel)]="patient.phoneNumberOperator">
-                  <ion-option>VIVO</ion-option>
-                  <ion-option>TIM</ion-option>
-                  <ion-option>CLARO</ion-option>
-                  <ion-option>NEXTEL</ion-option>
-                  <ion-option>OI</ion-option>
-                  <ion-option>Outro</ion-option>
-                </ion-select>
-              </ion-item>
-              <ion-item col-8>
+            <ion-row>    
+              <ion-item col-6>
                 <ion-label floating>Celular</ion-label>
                 <ion-input type="text" name="phoneNumber" [(ngModel)]="patient.phoneNumber"></ion-input>
-              </ion-item>            
-              <ion-item col-4>
-                  <ion-label floating>Residencial</ion-label>
-                  <ion-select name="residentialPhoneNumberOperator" [(ngModel)]="patient.residentialPhoneNumberOperator">
-                    <ion-option>VIVO</ion-option>
-                    <ion-option>TIM</ion-option>
-                    <ion-option>CLARO</ion-option>
-                    <ion-option>NEXTEL</ion-option>
-                    <ion-option>OI</ion-option>
-                    <ion-option>Outro</ion-option>
-                  </ion-select>
-                </ion-item>
-                <ion-item col-8>
+              </ion-item>
+                <ion-item col-6>
                   <ion-label floating>Residencial</ion-label>
                   <ion-input type="text" name="residentialPhoneNumber" [(ngModel)]="patient.residentialPhoneNumber"></ion-input>
-                </ion-item>              
-                <ion-item col-4>
-                  <ion-label floating>Comercial</ion-label>
-                  <ion-select name="commercialPhoneNumberOperator" [(ngModel)]="patient.commercialPhoneNumberOperator">
-                    <ion-option>VIVO</ion-option>
-                    <ion-option>TIM</ion-option>
-                    <ion-option>CLARO</ion-option>
-                    <ion-option>NEXTEL</ion-option>
-                    <ion-option>OI</ion-option>
-                    <ion-option>Outro</ion-option>
-                  </ion-select>
                 </ion-item>
-                <ion-item col-8>
+                <ion-item col-6>
                   <ion-label floating>Comercial</ion-label>
                   <ion-input type="text" name="commercialPhoneNumber" [(ngModel)]="patient.commercialPhoneNumber"></ion-input>
+                </ion-item>
+                <ion-item col-6>
+                  <ion-label floating>Contato</ion-label>
+                  <ion-input type="text" name="contactPhoneNumber" [(ngModel)]="patient.contactPhoneNumber"></ion-input>
                 </ion-item>
             </ion-row>
             <br>
