@@ -177,9 +177,9 @@ export class PatientFilePage implements OnInit {
 
   showError(res) {
     try {
-      this.toastCtrl.create({message: res.json().message || 'Oops... erro desconhecido.' }).present();
+      this.toastCtrl.create({message: res.json().message || 'Oops... erro desconhecido.', showCloseButton: true }).present();
     } catch (ex) {
-      this.toastCtrl.create({message: 'Oops... erro desconhecido.' }).present();
+      this.toastCtrl.create({message: 'Oops... erro desconhecido. ' + res, showCloseButton: true }).present();
     }
   }
 

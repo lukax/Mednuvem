@@ -2,11 +2,13 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using AutoMapper;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using server;
 
 namespace Server.Core.Models
 {
+    [BsonIgnoreExtraElementsAttribute]
     public class Patient 
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
@@ -58,7 +60,6 @@ namespace Server.Core.Models
         public string Address { get; set; }
         public string AddressComplement { get; set; }
         public string Neighborhood { get; set; }
-
     }
 
     public class PatientListViewModel 
