@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Http} from '@angular/http';
-import {ToastController} from 'ionic-angular';
+import {LoadingController, AlertController} from 'ionic-angular';
 import {UploadService} from '../../providers/upload.service';
 import * as Constants from '../../providers/constants';
 import {Patient} from '../../providers/patient.service';
@@ -9,16 +9,11 @@ import {Patient} from '../../providers/patient.service';
   templateUrl: 'import-patients.html'
 })
 export class ImportPatientsPage implements OnInit {
-  patients: Patient[];
-  pageCount: number;
-  pageNumber: number;
-  patient: Patient;
-  searchPatient: any;
-  isLoading: boolean;
 
   constructor(private http: Http,
               private uploadService: UploadService,
-              private toastCtrl: ToastController) {
+              private loadingCtrl: LoadingController,
+              private alertCtrl: AlertController) {
 
 
   }
@@ -30,12 +25,18 @@ export class ImportPatientsPage implements OnInit {
   }
 
   onUploadPatientsSubmit(event: any) {
-    console.log('onChange');
-    var files = event.srcElement.files;
-    console.log(files);
-    this.uploadService.makeFileRequest(Constants.API_URL + '/upload', [], files).subscribe(() => {
-      console.log('sent');
-    });
+    let files = event.srcElement.files;
+    let loading = this.loadingCtrl.create({});
+    loading.present();
+    this.uploadService.makeFileRequest(Constants.API_URL + '/patients/upload', [], files).subscribe(
+      () => {
+        loading.dismiss();
+      },
+      (err) => {
+        loading.dismiss().then(() => {
+          this.alertCtrl.create({message: 'Oops... erro ao fazer upload. ' + (err.message || err.errorMessage || err) }).present();
+        });
+      });
   }
 
 }

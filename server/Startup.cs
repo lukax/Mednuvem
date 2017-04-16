@@ -43,7 +43,7 @@ namespace server
         public void ConfigureServices(IServiceCollection services)
         {
             AutoMapper.Mapper.Initialize(cfg => {
-                cfg.CreateMap<Patient, PatientDetailViewModel>();
+                cfg.CreateMap<Patient, PatientImportViewModel>();
             });
 
             var builder = services.AddIdentityServer()

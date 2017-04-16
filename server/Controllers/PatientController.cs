@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using CsvHelper;
 using Microsoft.AspNetCore.Http;
+using AutoMapper;
 
 namespace Server.Core.Controllers
 {
@@ -102,7 +103,7 @@ namespace Server.Core.Controllers
 
             // full path to file in temp location
             //var filePath = Path.GetTempFileName();
-            IList<Patient> records = null;
+            IList<PatientImportViewModel> records = null;
             if (formFile.Length > 0)
             {
                 try {
@@ -111,11 +112,7 @@ namespace Server.Core.Controllers
                     stream.Position = 0;
                     var textReader = new StreamReader(stream);
                     var csv = new CsvReader( textReader );
-                    records = csv.GetRecords<PatientDetailViewModel>().Select(x =>
-                        {
-                            if(x.Name == null) return null;
-                            return x.ToPatient();
-                        }).Where(x => x != null).ToList();
+                    records = csv.GetRecords<PatientImportViewModel>().ToList();
                 } 
                 catch(Exception ex)
                 {
@@ -123,7 +120,10 @@ namespace Server.Core.Controllers
                 }
 
                 try {
-                    await _patientRepository.InsertMany(records);
+                    var patients = records.Where(x => x.Name != null)
+                                          .Select(x => x.ToPatient())
+                                          .ToList();
+                    await _patientRepository.InsertMany(patients);
                 }
                 catch(Exception ex) 
                 {

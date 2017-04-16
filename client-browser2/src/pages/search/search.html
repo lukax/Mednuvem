@@ -34,7 +34,7 @@
         </button>
         <button ion-item *ngFor="let patient of patients" (click)="getPatient(patient)">
             <ion-avatar item-left>
-                <img src="https://www.gravatar.com/avatar/7a4e4b4ff62d7420c4fd414e6d910f5d?s=40&amp;f=y&amp;d=mm">
+                <img src="https://www.gravatar.com/avatar/{{patient.emailHash}}?s=40&amp;d=mm">
             </ion-avatar>
             <h2>{{patient.name}}</h2>
             <p>{{patient.medicalInsurance}} {{patient.taxIdNumber}}</p>

@@ -79,6 +79,7 @@ namespace IdSvrHost.Services
             ProjectionDefinition<Patient, PatientListViewModel> projection = ProjectionBuilder
                                             .Include(x => x.Id)
                                             .Include(x => x.Name)
+                                            .Include(x => x.Email)
                                             .Include(x => x.TaxIdNumber)
                                             .Include(x => x.MedicalInsurance)
                                             .Include(x => x.LastAppointment);
