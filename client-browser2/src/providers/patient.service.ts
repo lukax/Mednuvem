@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Response } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { LoginService } from './login.service';
@@ -8,8 +8,7 @@ import * as Constants from './constants';
 @Injectable()
 export class PatientService {
 
-	constructor(public http: Http,
-				public loginService: LoginService) {
+	constructor(public loginService: LoginService) {
 
 	}
 
@@ -19,22 +18,22 @@ export class PatientService {
 	}
 
 	findOne(id: string): Observable<Patient> {
-		return this.http.get(Constants.API_URL + '/patients/' + id)
+		return this.loginService.AuthGet(Constants.API_URL + '/patients/' + id)
 			.map(this.extractData);
 	}
 
 	saveOrUpdate(patient: Patient): Observable<string> {
 		if(patient.id !== null){
-			return this.http.put(Constants.API_URL + '/patients/' + patient.id, patient)
+			return this.loginService.AuthPut(Constants.API_URL + '/patients/' + patient.id, patient)
 				.map(this.extractData);
 		} else {
-			return this.http.post(Constants.API_URL + '/patients', patient)
+			return this.loginService.AuthPost(Constants.API_URL + '/patients', patient)
 				.map(this.extractData);
 		}
 	}
 
 	delete(id: string): Observable<void> {
-		return this.http.delete(Constants.API_URL + '/patients/' + id)
+		return this.loginService.AuthDelete(Constants.API_URL + '/patients/' + id)
 			.map(this.extractData);
 	}
 

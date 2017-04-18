@@ -7,6 +7,7 @@ import * as Constants from '../../providers/constants';
   templateUrl: 'import-patients.html'
 })
 export class ImportPatientsPage implements OnInit {
+  files: any;
 
   constructor(private navCtrl: NavController,
               private uploadService: UploadService,
@@ -22,14 +23,23 @@ export class ImportPatientsPage implements OnInit {
     });
   }
 
-  onUploadPatientsSubmit(event: any) {
-    let files = event.srcElement.files;
+  onPatientFileChange($event: any) {
+    this.files = $event.srcElement.files;
+  }
+
+  importPatients() {
+    if(!this.files){
+      this.alertCtrl.create({title: 'Oops...', message: 'Nenhum arquivo selecionado'}).present();
+      return;
+    }
     let loading = this.loadingCtrl.create({});
     loading.present();
-    this.uploadService.makeFileRequest(Constants.API_URL + '/patients/upload', [], files).subscribe(
+    this.uploadService.makeFileRequest(Constants.API_URL + '/patients/upload', [], this.files).subscribe(
       (data) => {
-        loading.dismiss();
-        this.alertCtrl.create({title: 'OK', message: data.count + ' registros importados. '}).present();
+        loading.dismiss().then(() => {
+          this.alertCtrl.create({title: 'OK', message: 'Registros importados. '}).present();
+        });
+        console.log('importPatients', data);
       },
       (err) => {
         loading.dismiss().then(() => {

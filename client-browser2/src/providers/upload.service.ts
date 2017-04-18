@@ -25,7 +25,6 @@ export class UploadService {
                 formData.append('files', files[i], files[i].name);
             }
 
-            xhr.setRequestHeader('AUTHORIZATION', 'Bearer' + this.loginService.getAccessToken())
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
@@ -44,6 +43,7 @@ export class UploadService {
             };
 
             xhr.open('POST', url, true);
+            xhr.setRequestHeader('Authorization', 'Bearer ' + this.loginService.getAccessToken());
             xhr.send(formData);
         });
     }

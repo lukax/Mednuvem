@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Http} from '@angular/http';
-import {ToastController, LoadingController, ActionSheetController, NavController} from 'ionic-angular';
+import {LoadingController, ActionSheetController, NavController} from 'ionic-angular';
 import {Observable} from 'rxjs/Observable';
-import * as Constants from '../../providers/constants';
 import {Patient} from '../../providers/patient.service';
 import {PatientFilePage} from '../patient-file/patient-file';
 import {PatientService} from '../../providers/patient.service';
@@ -14,12 +13,12 @@ export class SearchPage implements OnInit {
   patients: Patient[];
   pageSize: number = 25;
   pageNumber: number = 1;
-  isLoading: boolean;
+  isLoading: boolean = false;
+  isError: boolean = false;
   searchPatientsObservable: Observable<void>;
-  searchEvent: any;
+  searchText: string = '';
 
   constructor(private http: Http,
-              private toastCtrl: ToastController,
               private actionSheetCtrl: ActionSheetController,
               private loadingCtrl: LoadingController,
               private navCtrl: NavController,
@@ -29,21 +28,20 @@ export class SearchPage implements OnInit {
   }
 
   ngOnInit() {
-    this.searchPatients({ target: { value: '' }});
+    this.searchPatients();
   }
 
-  searchPatients($searchEvent: any, $infinteScrollEvent?: any): void {
-    this.searchEvent = $searchEvent;
-    let searchText = $searchEvent.target.value || '';
+  searchPatients($infinteScrollEvent?: any): void {
     if($infinteScrollEvent){
       this.pageNumber++;
     } else {
       this.pageNumber = 1;
     }
     this.isLoading = true;
-    this.patientSvc.search(searchText, this.pageNumber, this.pageSize)
+    this.patientSvc.search(this.searchText, this.pageNumber, this.pageSize)
       .subscribe((data) => {
         this.isLoading = false;
+        this.isError = false;
         let result = data.result;
         if($infinteScrollEvent){
           if(result.length > 0){
@@ -56,10 +54,10 @@ export class SearchPage implements OnInit {
         }
       }, (err) => {
         this.isLoading = false;
+        this.isError = true;
         if($infinteScrollEvent){
           this.pageNumber--;
         }
-        this.toastCtrl.create({message: 'Oops... erro ao se comunicar com servidor', duration: 5000, showCloseButton: true, dismissOnPageChange: true, closeButtonText: 'OK'}).present();
       }, () => {
         if($infinteScrollEvent) {
           $infinteScrollEvent.complete();
@@ -89,8 +87,5 @@ export class SearchPage implements OnInit {
     return this.patients != null && this.patients.length == 0;
   }
 
-  doInfinite(infiniteScroll) {
-    this.searchPatients(this.searchEvent, infiniteScroll);
-  }
 }
 

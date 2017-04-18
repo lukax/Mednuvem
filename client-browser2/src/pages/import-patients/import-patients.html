@@ -10,23 +10,20 @@
 <ion-content padding>
 
 
-
-    <form id="uploadPatientsForm" (ngSubmit)="savePatient(uploadPatientsForm)" #uploadPatientsForm="ngForm">
-        <h3>Importar pacientes com arquivo (.csv)</h3>
-        <ion-grid>
-          <input type="file" name="files" multiple accept=".csv"/>
-        </ion-grid>
-    </form>
+      <h3>Importar pacientes com arquivo (.csv)</h3>
+      <ion-grid>
+        <input type="file" name="files" multiple accept=".csv" (change)="onPatientFileChange($event)"/>
+      </ion-grid>
 
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
     <ion-buttons end>
-      <button ion-button type="submit" form="uploadPatientsForm">
+      <button ion-button type="button" (click)="importPatients()">
         <ion-icon name="checkmark"></ion-icon>&nbsp;&nbsp;Importar pacientes
       </button>
-      <button ion-button (click)="close()">
+      <button ion-button type="button" (click)="close()">
         <ion-icon name="close"></ion-icon>&nbsp;&nbsp;Cancelar
       </button>
     </ion-buttons>
