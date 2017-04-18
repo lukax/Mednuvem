@@ -19,6 +19,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import {MomentModule} from 'angular2-moment';
 import { BrowserModule } from '@angular/platform-browser';
+import { CKEditorModule } from 'ng2-ckeditor';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { BrowserModule } from '@angular/platform-browser';
     }),
     IonicStorageModule.forRoot(),
     FormsModule,
-    MomentModule
+    MomentModule,
+    CKEditorModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

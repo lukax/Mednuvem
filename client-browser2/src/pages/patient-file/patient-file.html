@@ -22,7 +22,7 @@
         Dados principais
       </ion-segment-button>
       <ion-segment-button value="indication">
-        Indicação e motivo de consulta
+        Motivo de consulta e Indicação
       </ion-segment-button>
       <ion-segment-button value="additional">
         Informações adicionais
@@ -38,7 +38,6 @@
 <ion-content padding [ngSwitch]="page">
     <form id="savePatientForm" (ngSubmit)="savePatient(patientForm)" #patientForm="ngForm">
           <ion-grid *ngSwitchCase="'contact'">
-            <h5>Prontuário</h5>
             <ion-row>
               <ion-item col-8>
                 <ion-label floating>Nome do paciente(*)</ion-label>
@@ -344,33 +343,37 @@
                 <ion-input type="text" name="fatherPhoneNumber" [(ngModel)]="patient.fatherPhoneNumber"></ion-input>
               </ion-item>
             </ion-row>
-            <br>
-            <br>
-            <h5>Observações</h5>
             <ion-row>
               <ion-item>
                 <ion-label floating>Informações adicionais</ion-label>
                 <ion-textarea rows="4" name="observations" [(ngModel)]="patient.observations"></ion-textarea>
               </ion-item>
             </ion-row>
-            
           </ion-grid>
           <ion-grid *ngSwitchCase="'observations'">
             <ion-row>
               <ion-item>
                 <ion-label floating>Observações do paciente</ion-label>
-                <ion-textarea rows="4" name="medicalObservations" [(ngModel)]="patient.medicalObservations"></ion-textarea>
+                <ion-textarea rows="3" name="medicalObservations" [(ngModel)]="patient.medicalObservations"></ion-textarea>
               </ion-item>
             </ion-row>
             <ion-row>
+              <h5>
+                <br>
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;Receita
+              </h5>
               <ion-item>
-                <ion-label floating>Receita médica</ion-label>
-                <ion-textarea rows="8" name="medicalReceipt" [(ngModel)]="patient.medicalReceipt"></ion-textarea>
+                <ckeditor name="medicalReceipt"
+                  [(ngModel)]="patient.medicalReceipt"
+                  [config]="{language: 'pt', toolbar : 'Basic'}">
+                </ckeditor>
               </ion-item>
             </ion-row>
           </ion-grid>
     </form>
 
+
+                
 </ion-content>
 
 
