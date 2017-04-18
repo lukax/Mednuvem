@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Rx';
+import {Observable, Observer} from 'rxjs/Rx';
+import {LoginService} from './login.service';
 
 @Injectable()
 export class UploadService {
@@ -7,14 +8,16 @@ export class UploadService {
     private progress: number;
     private progressObserver: any;
 
-    constructor () {
+    constructor (
+        private loginService: LoginService
+    ) {
         this.progressObservable = Observable.create(observer => {
             this.progressObserver = observer;
         }).share();
     }
 
-    public makeFileRequest (url: string, params: string[], files: File[]): Observable<string> {
-        return Observable.create(observer => {
+    public makeFileRequest (url: string, params: string[], files: File[]): Observable<{count: number}> {
+        return Observable.create((observer: Observer<string>) => {
             let formData: FormData = new FormData(),
                 xhr: XMLHttpRequest = new XMLHttpRequest();
 
@@ -22,6 +25,7 @@ export class UploadService {
                 formData.append('files', files[i], files[i].name);
             }
 
+            xhr.setRequestHeader('AUTHORIZATION', 'Bearer' + this.loginService.getAccessToken())
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {

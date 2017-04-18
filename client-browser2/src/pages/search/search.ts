@@ -5,6 +5,7 @@ import {Observable} from 'rxjs/Observable';
 import * as Constants from '../../providers/constants';
 import {Patient} from '../../providers/patient.service';
 import {PatientFilePage} from '../patient-file/patient-file';
+import {PatientService} from '../../providers/patient.service';
 
 @Component({
   templateUrl: 'search.html'
@@ -21,7 +22,8 @@ export class SearchPage implements OnInit {
               private toastCtrl: ToastController,
               private actionSheetCtrl: ActionSheetController,
               private loadingCtrl: LoadingController,
-              private navCtrl: NavController) {
+              private navCtrl: NavController,
+              private patientSvc: PatientService) {
 
 
   }
@@ -32,16 +34,17 @@ export class SearchPage implements OnInit {
 
   searchPatients($searchEvent: any, $infinteScrollEvent?: any): void {
     this.searchEvent = $searchEvent;
-    let search = $searchEvent.target.value || '';
+    let searchText = $searchEvent.target.value || '';
     if($infinteScrollEvent){
       this.pageNumber++;
     } else {
       this.pageNumber = 1;
     }
     this.isLoading = true;
-    this.http.get(Constants.API_URL +  `/patients?pageNumber=${this.pageNumber}&pageSize=${this.pageSize}&search=${search}`)
+    this.patientSvc.search(searchText, this.pageNumber, this.pageSize)
       .subscribe((data) => {
-        let result = data.json().result;
+        this.isLoading = false;
+        let result = data.result;
         if($infinteScrollEvent){
           if(result.length > 0){
             this.patients.push(...result);
@@ -52,12 +55,12 @@ export class SearchPage implements OnInit {
           this.patients = result;
         }
       }, (err) => {
+        this.isLoading = false;
         if($infinteScrollEvent){
           this.pageNumber--;
         }
-        this.toastCtrl.create({message: 'Oops... erro ao se comunicar com servidor', duration: 5000, showCloseButton: true}).present();
+        this.toastCtrl.create({message: 'Oops... erro ao se comunicar com servidor', duration: 5000, showCloseButton: true, dismissOnPageChange: true, closeButtonText: 'OK'}).present();
       }, () => {
-        this.isLoading = false;
         if($infinteScrollEvent) {
           $infinteScrollEvent.complete();
         }
@@ -70,7 +73,7 @@ export class SearchPage implements OnInit {
 
   presentLoading() {
     let loader = this.loadingCtrl.create({
-      content: "Please wait...",
+      content: "Aguarde...",
       duration: 3000
     });
     loader.present();

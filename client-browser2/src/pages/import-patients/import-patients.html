@@ -11,12 +11,24 @@
 
 
 
-    <form>
+    <form id="uploadPatientsForm" (ngSubmit)="savePatient(uploadPatientsForm)" #uploadPatientsForm="ngForm">
         <h3>Importar pacientes com arquivo (.csv)</h3>
         <ion-grid>
-          <input type="file" name="files" (change)="onUploadPatientsSubmit($event)" multiple accept=".csv"/>
-
+          <input type="file" name="files" multiple accept=".csv"/>
         </ion-grid>
     </form>
 
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons end>
+      <button ion-button type="submit" form="uploadPatientsForm">
+        <ion-icon name="checkmark"></ion-icon>&nbsp;&nbsp;Importar pacientes
+      </button>
+      <button ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>&nbsp;&nbsp;Cancelar
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

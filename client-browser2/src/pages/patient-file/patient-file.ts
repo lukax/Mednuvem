@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForm} from '@angular/forms';
-import {Http} from '@angular/http';
 import {ToastController, LoadingController, ActionSheetController, NavParams, NavController, AlertController} from 'ionic-angular';
 import * as Constants from '../../providers/constants';
-import {Patient} from '../../providers/patient.service';
+import {Patient, PatientService} from '../../providers/patient.service';
 
 @Component({
   templateUrl: 'patient-file.html'
@@ -17,10 +16,10 @@ export class PatientFilePage implements OnInit {
   constructor(private navParams: NavParams,
               private navCtrl: NavController,
               private alertCtrl: AlertController,
-              private http: Http,
               private toastCtrl: ToastController,
               private actionSheetCtrl: ActionSheetController,
-              private loadingCtrl: LoadingController) {
+              private loadingCtrl: LoadingController,
+              private patientSvc: PatientService) {
 
     this.patientId = this.navParams.get('patientId');
 
@@ -33,10 +32,10 @@ export class PatientFilePage implements OnInit {
   getPatient(patientId: string) {
     if (patientId) {
       this.isLoading = true;
-      this.http.get(Constants.API_URL + '/patients/' + patientId)
+      this.patientSvc.findOne(patientId)
         .subscribe(p => {
           this.isLoading = false;
-          this.patient = p.json();
+          this.patient = p;
         }, err => {
           this.showError(err);
           this.isLoading = false; 
@@ -64,13 +63,12 @@ export class PatientFilePage implements OnInit {
             text: 'OK',
             handler: () => {
               this.isLoading = true;
-              this.http.post(Constants.API_URL + '/patients', this.patient)
-                .subscribe(p => { 
-                  this.navCtrl.push(PatientFilePage, { patientId: p.json() }); 
+              this.patientSvc.saveOrUpdate(this.patient)
+                .subscribe(id => { 
+                  this.navCtrl.push(PatientFilePage, { patientId: id }); 
                 }, err => { 
-                  this.showError(err); this.isLoading = false; 
-                }, () => { 
                   this.isLoading = false; 
+                  this.showError(err);
                 });
             }
           }
@@ -91,13 +89,12 @@ export class PatientFilePage implements OnInit {
             text: 'OK',
             handler: () => {
               this.isLoading = true;
-              this.http.put(Constants.API_URL + '/patients/' + this.patient.id, this.patient)
+              this.patientSvc.saveOrUpdate(this.patient)
                 .subscribe((p) => { 
-                  
-                }, err => { 
-                  this.showError(err); this.isLoading = false; 
-                }, () => { 
                   this.isLoading = false; 
+                }, err => { 
+                  this.isLoading = false; 
+                  this.showError(err); 
                 });
             }
           }
@@ -122,13 +119,12 @@ export class PatientFilePage implements OnInit {
             text: 'OK',
             handler: () => {
               this.isLoading = true;
-              this.http.delete(Constants.API_URL + '/patients/' + this.patient.id)
-                .subscribe((p) => { 
-                  /* */ 
+              this.patientSvc.delete(this.patient.id)
+                .subscribe((p) => {
+                  this.isLoading = false;
                 }, err => { 
-                  this.showError(err); this.isLoading = false; 
-                }, () => { 
-                  this.isLoading = false; 
+                  this.isLoading = false;
+                  this.showError(err);  
                 });
             }
           }

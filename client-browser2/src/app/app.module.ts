@@ -11,6 +11,7 @@ import { LoginPage } from '../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
 
 import { LoginService } from '../providers/login.service';
+import { PatientService } from '../providers/patient.service';
 import { UploadService } from '../providers/upload.service';
 
 import { IonicStorageModule } from '@ionic/storage';
@@ -56,6 +57,7 @@ import { BrowserModule } from '@angular/platform-browser';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     LoginService, 
+    PatientService,
     UploadService
   ]
 })

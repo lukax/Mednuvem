@@ -1,16 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {Http} from '@angular/http';
-import {LoadingController, AlertController} from 'ionic-angular';
+import {LoadingController, AlertController, NavController} from 'ionic-angular';
 import {UploadService} from '../../providers/upload.service';
 import * as Constants from '../../providers/constants';
-import {Patient} from '../../providers/patient.service';
 
 @Component({
   templateUrl: 'import-patients.html'
 })
 export class ImportPatientsPage implements OnInit {
 
-  constructor(private http: Http,
+  constructor(private navCtrl: NavController,
               private uploadService: UploadService,
               private loadingCtrl: LoadingController,
               private alertCtrl: AlertController) {
@@ -29,14 +27,21 @@ export class ImportPatientsPage implements OnInit {
     let loading = this.loadingCtrl.create({});
     loading.present();
     this.uploadService.makeFileRequest(Constants.API_URL + '/patients/upload', [], files).subscribe(
-      () => {
+      (data) => {
         loading.dismiss();
+        this.alertCtrl.create({title: 'OK', message: data.count + ' registros importados. '}).present();
       },
       (err) => {
         loading.dismiss().then(() => {
-          this.alertCtrl.create({message: 'Oops... erro ao fazer upload. ' + (err.message || err.errorMessage || err) }).present();
+          this.alertCtrl.create({title: 'Oops...', message: 'Erro ao importar registros.' + (err.message || err.errorMessage || err) }).present();
         });
       });
+  }
+
+  close() {
+    if(this.navCtrl.canGoBack()) {
+      this.navCtrl.pop();
+    }
   }
 
 }

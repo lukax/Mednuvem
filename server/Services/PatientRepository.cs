@@ -62,7 +62,8 @@ namespace IdSvrHost.Services
             await Collection.Indexes.CreateOneAsync(Builders<Patient>.IndexKeys.Combine(Builders<Patient>.IndexKeys.Ascending(x => x.UserId), Builders<Patient>.IndexKeys.Descending(x => x.LastAppointment)));
         }
         
-        public async Task<PagedListResult<PatientListViewModel>> GetAll(string userId, int pageSize = 50, int pageNumber = 1, string orderBy = "", string search = "")
+        public async Task<PagedListResult<PatientListViewModel>> GetAll(
+            string userId, int pageSize = 50, int pageNumber = 1, string orderBy = "", string search = "")
         {
             var totalCount = await this.Count(userId); 
             var totalPages = (long) Math.Ceiling((double)totalCount / pageSize); 
@@ -124,7 +125,9 @@ namespace IdSvrHost.Services
             return new FailOperationResult("Nenhum paciente encontrado");
         }
 
-        public async Task<OperationResult> InsertOne(Patient patient){
+        public async Task<OperationResult> InsertOne(string userId, Patient patient)
+        {
+            patient.UserId = userId;
             var filter = FilterBuilder.Or(
                 FilterBuilder.And(
                     FilterBuilder.Eq(u => u.UserId, patient.UserId),
@@ -145,12 +148,16 @@ namespace IdSvrHost.Services
             }
         }
 
-        public async Task<OperationResult> InsertMany(IList<Patient> patients){
+        public async Task<OperationResult> InsertMany(string userId, List<Patient> patients)
+        {
+            patients.ForEach(x => x.UserId = userId);
             await Collection.InsertManyAsync(patients);
             return new SuccessOperationResult();
         }
 
-        public async Task<OperationResult> UpdateOne(Patient patient){
+        public async Task<OperationResult> UpdateOne(string userId, Patient patient)
+        {
+            patient.UserId = userId;
             var filter = FilterBuilder.And(
                     FilterBuilder.Eq(u => u.UserId, patient.UserId),
                     FilterBuilder.Eq(u => u.Id, patient.Id)

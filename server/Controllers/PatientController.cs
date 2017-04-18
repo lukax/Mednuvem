@@ -8,16 +8,17 @@ using System.Collections.Generic;
 using System.IO;
 using CsvHelper;
 using Microsoft.AspNetCore.Http;
-using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using IdentityServer4.Extensions;
 
 namespace Server.Core.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     public class PatientsController : Controller
     {
         private PatientRepository _patientRepository;
-        private string UserId => null;
+        private string UserId => User.GetSubjectId();
 
         public PatientsController(PatientRepository patientRepository)
         {
@@ -40,7 +41,7 @@ namespace Server.Core.Controllers
             patient.Id = Guid.NewGuid().ToString();
             patient.CreatedAt = DateTime.UtcNow;
 
-            var result = await _patientRepository.InsertOne(patient);
+            var result = await _patientRepository.InsertOne(UserId, patient);
             if(result.IsError){
                 return BadRequest(result);
             }
@@ -63,7 +64,7 @@ namespace Server.Core.Controllers
             patient.Id = patientId;
             patient.UpdatedAt = DateTime.UtcNow;
 
-            var result = await _patientRepository.UpdateOne(patient);
+            var result = await _patientRepository.UpdateOne(UserId, patient);
             if(result.IsError){
                 return BadRequest(result);
             }
@@ -103,7 +104,7 @@ namespace Server.Core.Controllers
 
             // full path to file in temp location
             //var filePath = Path.GetTempFileName();
-            IList<PatientImportViewModel> records = null;
+            IEnumerable<PatientImportViewModel> records = null;
             if (formFile.Length > 0)
             {
                 try {
@@ -112,25 +113,29 @@ namespace Server.Core.Controllers
                     stream.Position = 0;
                     var textReader = new StreamReader(stream);
                     var csv = new CsvReader( textReader );
-                    records = csv.GetRecords<PatientImportViewModel>().ToList();
+                    records = csv.GetRecords<PatientImportViewModel>().ToList().Where(x => x.Name != null);
                 } 
                 catch(Exception ex)
                 {
-                    return BadRequest("Could not read import file. " + ex.Message);    
+                    return BadRequest("Erro ao ler o arquivo. " + ex.Message);    
+                }
+
+                if(records == null || !records.Any())
+                {
+                    return BadRequest("Nenhum registro encontrado.");
                 }
 
                 try {
-                    var patients = records.Where(x => x.Name != null)
-                                          .Select(x => x.ToPatient())
+                    var patients = records.Select(x => x.ToPatient())
                                           .ToList();
-                    await _patientRepository.InsertMany(patients);
+                    await _patientRepository.InsertMany(UserId, patients);
                 }
                 catch(Exception ex) 
                 {
-                    return BadRequest("Could not save patient record. " + ex.Message);
+                    return BadRequest("Erro ao salvar registros. " + ex.Message);
                 }
             }
-            return Ok(new { count = records?.Count });
+            return Ok(new { count = records?.Count() });
         }
         
     }

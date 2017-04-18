@@ -76,6 +76,10 @@ export class LoginService {
     return usr;
   }
 
+  getAccessToken(): string {
+    return this.accessToken;
+  }
+
   private handleError(error: Response | any) {
     // In a real world app, we might use a remote logging infrastructure
     let errMsg: string;
