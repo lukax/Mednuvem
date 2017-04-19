@@ -71,7 +71,7 @@ namespace server
             // Add framework services.
             services.AddMvc(options =>
             {
-                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAllOrigin"));
+                options.Filters.Add(new CorsAuthorizationFilterFactory("default"));
             });
         }
 
@@ -95,6 +95,8 @@ namespace server
 
             app.UseIdentityServer();
 
+            app.UseStaticFiles();
+
             app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
             {
                 Authority = Config.ApiAuthority,
@@ -102,7 +104,7 @@ namespace server
                 RequireHttpsMetadata = false,
             });
 
-            app.UseMvc();
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Server.Core
 #if DEBUG
         public const string ApiAuthority = "http://localhost:5000";
 #else
-        public const string ApiAuthority = "http://mednuvem.azurewebsites.net";
+        public const string ApiAuthority = "https://mednuvem.azurewebsites.net";
 #endif
         public const string CompanyClaimType = "company";
 
