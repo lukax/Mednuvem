@@ -20,7 +20,7 @@ namespace IdentityServer4.Quickstart.UI
 
         public IActionResult Index()
         {
-            return View();
+            return LocalRedirect("~/index.html");
         }
 
         /// <summary>
