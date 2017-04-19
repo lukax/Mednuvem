@@ -67,6 +67,9 @@ export class Patient {
   notes: string;
   observations: string;
   medicalReceipt: string;
+  state: string = 'RJ';
+  appointmentMotivation: {description: string}[] = [];
+  appointmentIndication: {description: string}[] = [];
 }
 
 export class PagedListResult<T> {

@@ -20,6 +20,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import {MomentModule} from 'angular2-moment';
 import { BrowserModule } from '@angular/platform-browser';
 import { CKEditorModule } from 'ng2-ckeditor';
+import { AutoCompleteModule } from 'ionic2-auto-complete';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { CKEditorModule } from 'ng2-ckeditor';
     IonicStorageModule.forRoot(),
     FormsModule,
     MomentModule,
-    CKEditorModule
+    CKEditorModule,
+    AutoCompleteModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

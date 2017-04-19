@@ -157,14 +157,6 @@ export class PatientFilePage implements OnInit {
     actionSheet.present();
   }
 
-  presentLoading() {
-    let loader = this.loadingCtrl.create({
-      content: "Aguarde...",
-      duration: 3000
-    });
-    loader.present();
-  }
-
   patientAutocompleteListFormatter(data: Patient): string {
     let str = data.name;
     if (data.medicalInsurance) { str += ` (${data.medicalInsurance})`; };
@@ -189,5 +181,31 @@ export class PatientFilePage implements OnInit {
     }
   }
 
+  addMeetingMotivation() {
+      let prompt = this.alertCtrl.create({
+        title: 'Motivo de consulta',
+        inputs: [
+          {
+            name: 'description',
+            placeholder: 'Descrição'
+          },
+        ],
+        buttons: [
+          {
+            text: 'Cancelar',
+            handler: data => {
+              console.log('Cancel clicked', data);
+            }
+          },
+          {
+            text: 'Adicionar',
+            handler: data => {
+              console.log('Saved clicked', data);
+            }
+          }
+        ]
+      });
+      prompt.present();
+    }
 }
 

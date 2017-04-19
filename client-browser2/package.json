@@ -29,6 +29,7 @@
     "bootstrap": "^4.0.0-alpha.6",
     "client-oauth2": "^4.0.0",
     "ionic-angular": "3.0.1",
+    "ionic2-auto-complete": "^1.4.1-rc2",
     "ionicons": "3.0.0",
     "jwt-decode": "^2.2.0",
     "md5": "^2.2.1",

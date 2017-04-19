@@ -249,10 +249,9 @@
               <ion-list col-12>
                 <ion-list-header>
                   Motivo da consulta
+                  <a item-right href="#" (click)="addMeeetingMotivation()">Adicionar</a>
                 </ion-list-header>
-                <ion-item>Terminator II</ion-item>
-                <ion-item>The Empire Strikes Back</ion-item>
-                <ion-item>Blade Runner</ion-item>
+                <ion-item *ngFor="let m of patient.appointmentMotivation">{{m}}</ion-item>
               </ion-list>
             </ion-row>
             <br>
@@ -261,10 +260,9 @@
               <ion-list col-12>
                 <ion-list-header>
                   Indicação
-                </ion-list-header>
-                <ion-item>Terminator II</ion-item>
-                <ion-item>The Empire Strikes Back</ion-item>
-                <ion-item>Blade Runner</ion-item>
+                  <a item-right href="#" (click)="addAppointmentIndication()">Adicionar</a>
+                </ion-list-header>                
+                <ion-item *ngFor="let m of patient.appointmentIndication">{{m}}</ion-item>
               </ion-list>
             </ion-row>
           </ion-grid>
