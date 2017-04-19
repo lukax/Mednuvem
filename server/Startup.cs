@@ -17,6 +17,7 @@ using IdSvrHost.Models;
 using IdentityServer4.Quickstart.UI;
 using Newtonsoft.Json;
 using Server.Core.Models;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 
 namespace server
 {
@@ -50,8 +51,7 @@ namespace server
                     .AddTemporarySigningCredential()
                     .AddInMemoryIdentityResources(Config.GetIdentityResources())
                     .AddInMemoryApiResources(Config.GetApiResources())
-                    .AddInMemoryClients(Config.GetClients())
-                    .AddTestUsers(TestUsers.Users);
+                    .AddInMemoryClients(Config.GetClients());
             
             builder.Services.AddTransient<PatientRepository>();
             builder.Services.AddTransient<IRepository, MongoDbRepository>();
@@ -62,14 +62,17 @@ namespace server
             builder.Services.Configure<MongoDbRepositoryConfiguration>(Configuration.GetSection("MongoDbRepository"));
 
 
-            services.AddCors(options=>
+            services.AddCors(options =>
                 {
                     // this defines a CORS policy called "default"
                     options.AddPolicy("default", policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
                 });
 
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAllOrigin"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,7 +80,7 @@ namespace server
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
+            loggerFactory.AddFile("Logs/myapp-{Date}.txt", LogLevel.Debug);
 
             if (env.IsDevelopment())
             {
@@ -96,7 +99,6 @@ namespace server
             {
                 Authority = Config.ApiAuthority,
                 AllowedScopes = { "api" },
-
                 RequireHttpsMetadata = false,
             });
 

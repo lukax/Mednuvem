@@ -12,7 +12,11 @@ namespace Server.Core
     {
         public const string ApiClientId = "mednuvemApp";
         public const string ApiName = "api";
+#if DEBUG
         public const string ApiAuthority = "http://localhost:5000";
+#else
+        public const string ApiAuthority = "http://mednuvem.azurewebsites.net";
+#endif
         public const string CompanyClaimType = "company";
 
         public static class RoutePaths 
