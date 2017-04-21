@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using MongoDB.Bson;
@@ -60,6 +61,13 @@ namespace Server.Core.Models
         public string Address { get; set; }
         public string AddressComplement { get; set; }
         public string Neighborhood { get; set; }
+
+        public List<AppointmentIndication> AppointmentMotivation { get; set; }
+        public List<AppointmentIndication> AppointmentIndication { get; set; }
+    }
+
+    public class AppointmentIndication {
+        public string Description { get; set; }
     }
 
     public class PatientListViewModel 

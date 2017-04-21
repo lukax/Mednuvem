@@ -181,31 +181,75 @@ export class PatientFilePage implements OnInit {
     }
   }
 
-  addMeetingMotivation() {
-      let prompt = this.alertCtrl.create({
-        title: 'Motivo de consulta',
-        inputs: [
-          {
-            name: 'description',
-            placeholder: 'Descrição'
-          },
-        ],
-        buttons: [
-          {
-            text: 'Cancelar',
-            handler: data => {
-              console.log('Cancel clicked', data);
-            }
-          },
-          {
-            text: 'Adicionar',
-            handler: data => {
-              console.log('Saved clicked', data);
-            }
+  addAppointmentMotivation() {
+    let prompt = this.alertCtrl.create({
+      title: 'Motivo da consulta',
+      inputs: [
+        {
+          name: 'description',
+          placeholder: 'Descrição'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: data => {
+            console.log('Cancel clicked', data);
           }
-        ]
-      });
-      prompt.present();
-    }
+        },
+        {
+          text: 'Adicionar',
+          handler: data => {
+            if(this.patient.appointmentMotivation == null) {
+              this.patient.appointmentMotivation = [];
+            }
+            this.patient.appointmentMotivation.push(data);
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
+  addAppointmentIndication() {
+    let prompt = this.alertCtrl.create({
+      title: 'Indicação',
+      inputs: [
+        {
+          name: 'description',
+          placeholder: 'Descrição'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: data => {
+            console.log('Cancel clicked', data);
+          }
+        },
+        {
+          text: 'Adicionar',
+          handler: data => {
+            if(this.patient.appointmentIndication == null) {
+              this.patient.appointmentIndication = [];
+            }
+            this.patient.appointmentIndication.push(data);
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
+  removeAppointmentMotivation(item) {
+    let index = this.patient.appointmentMotivation.indexOf(item);
+    this.patient.appointmentMotivation.splice(index, 1);
+  }
+
+  removeAppointmentIndication(item) {
+    let index = this.patient.appointmentIndication.indexOf(item);
+    this.patient.appointmentIndication.splice(index, 1);
+  }
+
 }
 

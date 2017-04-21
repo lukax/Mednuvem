@@ -249,9 +249,16 @@
               <ion-list col-12>
                 <ion-list-header>
                   Motivo da consulta
-                  <a item-right href="#" (click)="addMeeetingMotivation()">Adicionar</a>
+                  <button type="button" ion-button icon-only clear item-right (click)="addAppointmentMotivation()">
+                    <ion-icon name="add"></ion-icon>
+                  </button>
                 </ion-list-header>
-                <ion-item *ngFor="let m of patient.appointmentMotivation">{{m}}</ion-item>
+                <ion-item *ngFor="let m of patient.appointmentMotivation">
+                  <button type="button" ion-button icon-only clear item-left (click)="removeAppointmentMotivation(m)">
+                    <ion-icon name="close"></ion-icon>
+                  </button>
+                  {{m.description}}
+                </ion-item>
               </ion-list>
             </ion-row>
             <br>
@@ -260,9 +267,16 @@
               <ion-list col-12>
                 <ion-list-header>
                   Indicação
-                  <a item-right href="#" (click)="addAppointmentIndication()">Adicionar</a>
+                  <button type="button" ion-button icon-only clear item-right (click)="addAppointmentIndication()">
+                    <ion-icon name="add"></ion-icon>
+                  </button>
                 </ion-list-header>                
-                <ion-item *ngFor="let m of patient.appointmentIndication">{{m}}</ion-item>
+                <ion-item *ngFor="let m of patient.appointmentIndication">
+                  <button type="button" ion-button icon-only clear item-left (click)="removeAppointmentIndication(m)">
+                    <ion-icon name="close"></ion-icon>
+                  </button>
+                  {{m.description}}
+                </ion-item>
               </ion-list>
             </ion-row>
           </ion-grid>
@@ -378,10 +392,10 @@
 <ion-footer>
   <ion-toolbar>
     <ion-buttons end>
-      <button ion-button type="submit" form="savePatientForm">
+      <button type="submit" ion-button form="savePatientForm">
         <ion-icon name="checkmark"></ion-icon>&nbsp;&nbsp;Gravar dados
       </button>
-      <button ion-button (click)="close()">
+      <button type="button" ion-button (click)="close()">
         <ion-icon name="close"></ion-icon>&nbsp;&nbsp;Cancelar
       </button>
     </ion-buttons>
