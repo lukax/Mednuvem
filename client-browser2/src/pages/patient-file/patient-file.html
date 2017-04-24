@@ -307,35 +307,55 @@
             <br>
             <h5>Família</h5>
             <ion-row>
-              <ion-item col-12>
+              <ion-item col-8>
                 <ion-label floating>Mãe</ion-label>
                 <ion-input type="text" name="motherName" [(ngModel)]="patient.mother.name"></ion-input>
               </ion-item>
-            </ion-row>
-            <ion-row>
-              <ion-item col-6>
+              <ion-item col-4>
                 <ion-label floating>Profissão</ion-label>
-                <ion-input type="text" name="motherProfession" [(ngModel)]="patient.mother.jobTitle"></ion-input>
+                <ion-input type="text" name="motherName" [(ngModel)]="patient.mother.jobTitle"></ion-input>
               </ion-item>
-              <ion-item col-6>
-                <ion-label floating>Telefone</ion-label>
-                <ion-input type="text" name="motherPhoneNumber" [(ngModel)]="patient.mother.phoneNumbers[0].number"></ion-input>
+            </ion-row>
+            <ion-row *ngFor="let phoneNumber of patient.mother.phoneNumbers">
+              <ion-item col-4>
+                <ion-label floating>Tipo</ion-label>
+                <ion-select name="phoneNumberType" [(ngModel)]="phoneNumber.type">
+                  <ion-option>Celular</ion-option>
+                  <ion-option>Comercial</ion-option>
+                  <ion-option>Contato</ion-option>
+                  <ion-option>Residencial</ion-option>
+                  <ion-option>Outro</ion-option>
+                </ion-select>
+              </ion-item>
+              <ion-item col-8>
+                <ion-label floating>Número</ion-label>
+                <ion-input type="text" name="phoneNumber" [(ngModel)]="phoneNumber.number"></ion-input>
               </ion-item>
             </ion-row>
             <ion-row>
-              <ion-item col-12>
+              <ion-item col-8>
                 <ion-label floating>Pai</ion-label>
                 <ion-input type="text" name="fatherName" [(ngModel)]="patient.father.name"></ion-input>
               </ion-item>
-            </ion-row>
-            <ion-row>
-              <ion-item col-6>
+              <ion-item col-4>
                 <ion-label floating>Profissão</ion-label>
-                <ion-input type="text" name="fatherProfession" [(ngModel)]="patient.father.jobTitle"></ion-input>
+                <ion-input type="text" name="fatherName" [(ngModel)]="patient.father.jobTitle"></ion-input>
               </ion-item>
-              <ion-item col-6>
-                <ion-label floating>Telefone</ion-label>
-                <ion-input type="text" name="fatherPhoneNumber" [(ngModel)]="patient.father.phoneNumbers[0].number"></ion-input>
+            </ion-row>
+            <ion-row *ngFor="let phoneNumber of patient.father.phoneNumbers">
+              <ion-item col-4>
+                <ion-label floating>Tipo</ion-label>
+                <ion-select name="phoneNumberType" [(ngModel)]="phoneNumber.type">
+                  <ion-option>Celular</ion-option>
+                  <ion-option>Comercial</ion-option>
+                  <ion-option>Contato</ion-option>
+                  <ion-option>Residencial</ion-option>
+                  <ion-option>Outro</ion-option>
+                </ion-select>
+              </ion-item>
+              <ion-item col-8>
+                <ion-label floating>Número</ion-label>
+                <ion-input type="text" name="phoneNumber" [(ngModel)]="phoneNumber.number"></ion-input>
               </ion-item>
             </ion-row>
             <br>
@@ -343,7 +363,7 @@
             <h5>Informações adicionais</h5>
             <ion-row>
               <ion-item>
-                <ion-label floating>Informações adicionais</ion-label>
+                <ion-label floating>Notas</ion-label>
                 <ion-textarea rows="4" name="observations" [(ngModel)]="patient.notes"></ion-textarea>
               </ion-item>
             </ion-row>

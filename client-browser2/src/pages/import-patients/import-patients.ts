@@ -48,7 +48,9 @@ export class ImportPatientsPage implements OnInit {
             buttons: [
               {
                 text: 'OK',
-                handler: () => { }
+                handler: () => {
+                  this.navCtrl.setRoot(SearchPage);
+                }
               }
             ]
           }).present();
