@@ -59,7 +59,7 @@ namespace IdSvrHost.Services
             if (_indexKeysCreated) return;
             _indexKeysCreated = true;
             await Collection.Indexes.CreateOneAsync(Builders<Patient>.IndexKeys.Combine(Builders<Patient>.IndexKeys.Ascending(x => x.UserId), Builders<Patient>.IndexKeys.Ascending(x => x.Id)));
-            await Collection.Indexes.CreateOneAsync(Builders<Patient>.IndexKeys.Combine(Builders<Patient>.IndexKeys.Ascending(x => x.UserId), Builders<Patient>.IndexKeys.Descending(x => x.LastAppointment)));
+            await Collection.Indexes.CreateOneAsync(Builders<Patient>.IndexKeys.Combine(Builders<Patient>.IndexKeys.Ascending(x => x.UserId), Builders<Patient>.IndexKeys.Descending(x => x.LastVisit)));
         }
         
         public async Task<PagedListResult<PatientListViewModel>> GetAll(
@@ -73,7 +73,7 @@ namespace IdSvrHost.Services
                 filter = FilterBuilder.And(filter, 
                     FilterBuilder.Regex(u => u.Name, new BsonRegularExpression($@"/{search}/i")));
             }
-            var sort = SortBuilder.Descending(x => x.LastAppointment);
+            var sort = SortBuilder.Descending(x => x.LastVisit);
             if(!string.IsNullOrWhiteSpace(orderBy)){
                 sort = SortBuilder.Ascending(orderBy);
             }
@@ -83,7 +83,7 @@ namespace IdSvrHost.Services
                                             .Include(x => x.Email)
                                             .Include(x => x.TaxIdNumber)
                                             .Include(x => x.MedicalInsurance)
-                                            .Include(x => x.LastAppointment);
+                                            .Include(x => x.LastVisit);
             return new PagedListResult<PatientListViewModel> {
                 TotalCount = totalCount,
                 TotalPages = totalPages,

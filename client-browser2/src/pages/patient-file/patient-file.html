@@ -108,31 +108,29 @@
                   <ion-input type="email" name="email" [(ngModel)]="patient.email"></ion-input>
                 </ion-item>
             </ion-row>
-            <ion-row>    
-              <ion-item col-6>
-                <ion-label floating>Celular</ion-label>
-                <ion-input type="text" name="phoneNumber" [(ngModel)]="patient.phoneNumber"></ion-input>
+            <ion-row *ngFor="let phoneNumber of patient.phoneNumbers">
+              <ion-item col-4>
+                <ion-label floating>Tipo</ion-label>
+                <ion-select name="phoneNumberType" [(ngModel)]="phoneNumber.type">
+                  <ion-option>Celular</ion-option>
+                  <ion-option>Comercial</ion-option>
+                  <ion-option>Contato</ion-option>
+                  <ion-option>Residencial</ion-option>
+                  <ion-option>Outro</ion-option>
+                </ion-select>
               </ion-item>
-                <ion-item col-6>
-                  <ion-label floating>Residencial</ion-label>
-                  <ion-input type="text" name="residentialPhoneNumber" [(ngModel)]="patient.residentialPhoneNumber"></ion-input>
-                </ion-item>
-                <ion-item col-6>
-                  <ion-label floating>Comercial</ion-label>
-                  <ion-input type="text" name="commercialPhoneNumber" [(ngModel)]="patient.commercialPhoneNumber"></ion-input>
-                </ion-item>
-                <ion-item col-6>
-                  <ion-label floating>Contato</ion-label>
-                  <ion-input type="text" name="contactPhoneNumber" [(ngModel)]="patient.contactPhoneNumber"></ion-input>
-                </ion-item>
+              <ion-item col-8>
+                <ion-label floating>Número</ion-label>
+                <ion-input type="text" name="phoneNumber" [(ngModel)]="phoneNumber.number"></ion-input>
+              </ion-item>
             </ion-row>
             <br>
             <br>
             <h5>Mídias sociais</h5>
-            <ion-row>
-                <ion-item col-2>
+            <ion-row *ngFor="let socialProfile of patient.socialProfiles">
+                <ion-item col-4>
                   <ion-label floating>Tipo</ion-label>
-                  <ion-select name="socialMediaType" [(ngModel)]="patient.socialMediaType">
+                  <ion-select name="socialMediaType" [(ngModel)]="socialProfile.type">
                     <ion-option>Facebook</ion-option>
                     <ion-option>WhatsApp</ion-option>
                     <ion-option>Twitter</ion-option>
@@ -141,24 +139,9 @@
                     <ion-option>Outro</ion-option>
                   </ion-select>
                 </ion-item>
-                <ion-item col-4>
+                <ion-item col-8>
                   <ion-label floating>Endereço</ion-label>
-                  <ion-input type="text" name="socialMediaAddress" [(ngModel)]="patient.socialMediaAddress"></ion-input>
-                </ion-item>
-                <ion-item col-2>
-                  <ion-label floating>Tipo</ion-label>
-                  <ion-select name="socialMediaType2" [(ngModel)]="patient.socialMediaType2">
-                    <ion-option>Facebook</ion-option>
-                    <ion-option>WhatsApp</ion-option>
-                    <ion-option>Twitter</ion-option>
-                    <ion-option>LinkedIn</ion-option>
-                    <ion-option>Google+</ion-option>
-                    <ion-option>Outro</ion-option>
-                  </ion-select>
-                </ion-item>
-                <ion-item col-4>
-                  <ion-label floating>Endereço</ion-label>
-                  <ion-input type="text" name="socialMediaType2Address" [(ngModel)]="patient.socialMediaType2Address"></ion-input>
+                  <ion-input type="text" name="socialMediaAddress" [(ngModel)]="socialProfile.description"></ion-input>
                 </ion-item>
             </ion-row>
             <br>
@@ -167,33 +150,33 @@
             <ion-row>
                 <ion-item col-6>
                   <ion-label floating>CEP</ion-label>
-                  <ion-input type="text" name="zipCode" [(ngModel)]="patient.zipCode"></ion-input>
+                  <ion-input type="text" name="zipCode" [(ngModel)]="patient.address.postalCode"></ion-input>
                 </ion-item>
             </ion-row>
             <ion-row>
                 <ion-item col-12>
                   <ion-label floating>Endereço</ion-label>
-                  <ion-input type="text" name="address" [(ngModel)]="patient.address"></ion-input>
+                  <ion-input type="text" name="address" [(ngModel)]="patient.address.street"></ion-input>
                 </ion-item>
             </ion-row>
             <ion-row>
                 <ion-item col-12>
                   <ion-label floating>Complemento</ion-label>
-                  <ion-input type="text" name="addressComplement" [(ngModel)]="patient.addressComplement"></ion-input>
+                  <ion-input type="text" name="addressComplement" [(ngModel)]="patient.address.streetComplement"></ion-input>
                 </ion-item>
             </ion-row>
             <ion-row>
                 <ion-item col-4>
                   <ion-label floating>Bairro</ion-label>
-                  <ion-input type="text" name="neighborhood" [(ngModel)]="patient.neighborhood"></ion-input>
+                  <ion-input type="text" name="neighborhood" [(ngModel)]="patient.address.neighborhood"></ion-input>
                 </ion-item>
                 <ion-item col-4>
                   <ion-label floating>Cidade</ion-label>
-                  <ion-input type="text" name="city" [(ngModel)]="patient.city"></ion-input>
+                  <ion-input type="text" name="city" [(ngModel)]="patient.address.city"></ion-input>
                 </ion-item>
                 <ion-item col-4>
                   <ion-label floating>Estado</ion-label>
-                  <ion-select name="state" [(ngModel)]="patient.state">
+                  <ion-select name="state" [(ngModel)]="patient.address.state">
                     <ion-option>AC</ion-option>
                     <ion-option>AL</ion-option>
                     <ion-option>AM</ion-option>
@@ -230,17 +213,17 @@
             <ion-row>
                 <ion-item>
                   <ion-label floating>Nome do responsável</ion-label>
-                  <ion-input type="text" name="accountablePerson" [(ngModel)]="patient.accountablePerson"></ion-input>
+                  <ion-input type="text" name="accountablePerson" [(ngModel)]="patient.accountablePerson.name"></ion-input>
                 </ion-item>
             </ion-row>
             <ion-row>
                 <ion-item col-6>
                   <ion-label floating>CPF</ion-label>
-                  <ion-input type="text" name="accountablePersonTaxIdNumber" [(ngModel)]="patient.accountablePersonTaxIdNumber"></ion-input>
+                  <ion-input type="text" name="accountablePersonTaxIdNumber" [(ngModel)]="patient.accountablePerson.taxIdNumber"></ion-input>
                 </ion-item>
                 <ion-item col-6>
                   <ion-label floating>RG</ion-label>
-                  <ion-input type="text" name="accountablePersonRegistrationNumber" [(ngModel)]="patient.accountablePersonRegistrationNumber"></ion-input>
+                  <ion-input type="text" name="accountablePersonRegistrationNumber" [(ngModel)]="patient.accountablePerson.registrationNumber"></ion-input>
                 </ion-item>
             </ion-row>
           </ion-grid>
@@ -270,7 +253,7 @@
                   <button type="button" ion-button icon-only clear item-right (click)="addAppointmentIndication()">
                     <ion-icon name="add"></ion-icon>
                   </button>
-                </ion-list-header>                
+                </ion-list-header>
                 <ion-item *ngFor="let m of patient.appointmentIndication">
                   <button type="button" ion-button icon-only clear item-left (click)="removeAppointmentIndication(m)">
                     <ion-icon name="close"></ion-icon>
@@ -285,80 +268,83 @@
             <ion-row>
               <ion-item col-12>
                 <ion-label floating>Profissão</ion-label>
-                <ion-input type="text" name="profession" [(ngModel)]="patient.profession"></ion-input>
+                <ion-input type="text" name="profession" [(ngModel)]="patient.jobTitle"></ion-input>
               </ion-item>
             </ion-row>
             <ion-row>
               <ion-item col-6>
                 <ion-label floating>CEP</ion-label>
-                <ion-input type="text" name="commercialZipCode" [(ngModel)]="patient.commercialZipCode"></ion-input>
+                <ion-input type="text" name="commercialZipCode" [(ngModel)]="patient.address.postalCode"></ion-input>
               </ion-item>
             </ion-row>
             <ion-row>
               <ion-item col-12>
                 <ion-label floating>Endereço</ion-label>
-                <ion-input type="text" name="commercialAddress" [(ngModel)]="patient.commercialAddress"></ion-input>
+                <ion-input type="text" name="commercialAddress" [(ngModel)]="patient.address.street"></ion-input>
               </ion-item>
             </ion-row>
             <ion-row>
               <ion-item col-6>
                 <ion-label floating>Complemento</ion-label>
-                <ion-input type="text" name="commercialComplement" [(ngModel)]="patient.commercialAddressComplement"></ion-input>
+                <ion-input type="text" name="commercialComplement" [(ngModel)]="patient.address.streetComplement"></ion-input>
               </ion-item>
               <ion-item col-6>
                 <ion-label floating>Bairro</ion-label>
-                <ion-input type="text" name="commercialNeighboorhood" [(ngModel)]="patient.commercialAddressNeighboorhood"></ion-input>
+                <ion-input type="text" name="commercialNeighboorhood" [(ngModel)]="patient.address.neighbourhood"></ion-input>
               </ion-item>
             </ion-row>
             <ion-row>
               <ion-item col-6>
                 <ion-label floating>Cidade</ion-label>
-                <ion-input type="text" name="commercialCity" [(ngModel)]="patient.commercialCity"></ion-input>
+                <ion-input type="text" name="commercialCity" [(ngModel)]="patient.address.city"></ion-input>
               </ion-item>
               <ion-item col-6>
                 <ion-label floating>Estado</ion-label>
-                <ion-input type="text" name="commercialState" [(ngModel)]="patient.commercialState"></ion-input>
+                <ion-input type="text" name="commercialState" [(ngModel)]="patient.address.state"></ion-input>
+              </ion-item>
+            </ion-row>
+            <br>
+            <br>
+            <h5>Família</h5>
+            <ion-row>
+              <ion-item col-12>
+                <ion-label floating>Mãe</ion-label>
+                <ion-input type="text" name="motherName" [(ngModel)]="patient.mother.name"></ion-input>
+              </ion-item>
+            </ion-row>
+            <ion-row>
+              <ion-item col-6>
+                <ion-label floating>Profissão</ion-label>
+                <ion-input type="text" name="motherProfession" [(ngModel)]="patient.mother.jobTitle"></ion-input>
+              </ion-item>
+              <ion-item col-6>
+                <ion-label floating>Telefone</ion-label>
+                <ion-input type="text" name="motherPhoneNumber" [(ngModel)]="patient.mother.phoneNumbers[0].number"></ion-input>
+              </ion-item>
+            </ion-row>
+            <ion-row>
+              <ion-item col-12>
+                <ion-label floating>Pai</ion-label>
+                <ion-input type="text" name="fatherName" [(ngModel)]="patient.father.name"></ion-input>
+              </ion-item>
+            </ion-row>
+            <ion-row>
+              <ion-item col-6>
+                <ion-label floating>Profissão</ion-label>
+                <ion-input type="text" name="fatherProfession" [(ngModel)]="patient.father.jobTitle"></ion-input>
+              </ion-item>
+              <ion-item col-6>
+                <ion-label floating>Telefone</ion-label>
+                <ion-input type="text" name="fatherPhoneNumber" [(ngModel)]="patient.father.phoneNumbers[0].number"></ion-input>
               </ion-item>
             </ion-row>
             <br>
             <br>
             <h5>Informações adicionais</h5>
             <ion-row>
-              <ion-item col-12>
-                <ion-label floating>Mãe</ion-label>
-                <ion-input type="text" name="motherName" [(ngModel)]="patient.motherName"></ion-input>
-              </ion-item>
-            </ion-row>
-            <ion-row>
-              <ion-item col-6>
-                <ion-label floating>Profissão</ion-label>
-                <ion-input type="text" name="motherProfession" [(ngModel)]="patient.motherProfession"></ion-input>
-              </ion-item>
-              <ion-item col-6>
-                <ion-label floating>Telefone</ion-label>
-                <ion-input type="text" name="motherPhoneNumber" [(ngModel)]="patient.motherPhoneNumber"></ion-input>
-              </ion-item>
-            </ion-row>
-            <ion-row>
-              <ion-item col-12>
-                <ion-label floating>Pai</ion-label>
-                <ion-input type="text" name="fatherName" [(ngModel)]="patient.fatherName"></ion-input>
-              </ion-item>
-            </ion-row>
-            <ion-row>
-              <ion-item col-6>
-                <ion-label floating>Profissão</ion-label>
-                <ion-input type="text" name="fatherProfession" [(ngModel)]="patient.fatherProfession"></ion-input>
-              </ion-item>
-              <ion-item col-6>
-                <ion-label floating>Telefone</ion-label>
-                <ion-input type="text" name="fatherPhoneNumber" [(ngModel)]="patient.fatherPhoneNumber"></ion-input>
-              </ion-item>
-            </ion-row>
-            <ion-row>
               <ion-item>
                 <ion-label floating>Informações adicionais</ion-label>
-                <ion-textarea rows="4" name="observations" [(ngModel)]="patient.observations"></ion-textarea>
+                <ion-textarea rows="4" name="observations" [(ngModel)]="patient.notes"></ion-textarea>
               </ion-item>
             </ion-row>
           </ion-grid>
@@ -376,7 +362,7 @@
               </h5>
               <ion-item>
                 <ckeditor name="medicalReceipt"
-                  [(ngModel)]="patient.medicalReceipt"
+                  [(ngModel)]="patient.medicalReceipts[0]"
                   [config]="{language: 'pt', toolbar : 'Basic'}">
                 </ckeditor>
               </ion-item>
@@ -385,7 +371,7 @@
     </form>
 
 
-                
+
 </ion-content>
 
 

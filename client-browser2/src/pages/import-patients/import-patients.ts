@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {LoadingController, AlertController, NavController} from 'ionic-angular';
 import {UploadService} from '../../providers/upload.service';
 import * as Constants from '../../providers/constants';
+import {SearchPage} from '../search/search';
 
 @Component({
   templateUrl: 'import-patients.html'
@@ -29,7 +30,13 @@ export class ImportPatientsPage implements OnInit {
 
   importPatients() {
     if(!this.files){
-      this.alertCtrl.create({title: 'Oops...', message: 'Nenhum arquivo selecionado'}).present();
+      this.alertCtrl.create({title: 'Oops...', message: 'Nenhum arquivo selecionado',
+        buttons: [
+          {
+            text: 'Cancelar',
+            handler: () => { }
+          }
+        ]}).present();
       return;
     }
     let loading = this.loadingCtrl.create({});
@@ -37,13 +44,26 @@ export class ImportPatientsPage implements OnInit {
     this.uploadService.makeFileRequest(Constants.API_URL + '/patients/upload', [], this.files).subscribe(
       (data) => {
         loading.dismiss().then(() => {
-          this.alertCtrl.create({title: 'OK', message: 'Registros importados. '}).present();
+          this.alertCtrl.create({title: 'Importar pacientes', message: data.count + ' registros importados. ',
+            buttons: [
+              {
+                text: 'OK',
+                handler: () => { }
+              }
+            ]
+          }).present();
         });
         console.log('importPatients', data);
       },
       (err) => {
         loading.dismiss().then(() => {
-          this.alertCtrl.create({title: 'Oops...', message: 'Erro ao importar registros.' + (err.message || err.errorMessage || err) }).present();
+          this.alertCtrl.create({title: 'Oops...', message: 'Erro ao importar registros.' + (err.message || err.errorMessage || err),
+            buttons: [
+              {
+                text: 'OK',
+                handler: () => { }
+              }
+            ] }).present();
         });
       });
   }
@@ -51,6 +71,8 @@ export class ImportPatientsPage implements OnInit {
   close() {
     if(this.navCtrl.canGoBack()) {
       this.navCtrl.pop();
+    } else {
+      this.navCtrl.setRoot(SearchPage);
     }
   }
 

@@ -1,4 +1,5 @@
 wwwroot
+Logs/
 
 *.swp
 *.*~

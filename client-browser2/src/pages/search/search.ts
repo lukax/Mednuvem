@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Http} from '@angular/http';
 import {LoadingController, ActionSheetController, NavController} from 'ionic-angular';
 import {Observable} from 'rxjs/Observable';
-import {Patient} from '../../providers/patient.service';
+import {Patient} from '../../providers/patient';
 import {PatientFilePage} from '../patient-file/patient-file';
 import {PatientService} from '../../providers/patient.service';
 

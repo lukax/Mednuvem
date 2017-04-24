@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { LoginService } from './login.service';
 import * as Constants from './constants';
+import { Patient } from './patient';
 
 @Injectable()
 export class PatientService {
@@ -51,25 +52,6 @@ export class PatientService {
 		}
 	}
 
-}
-
-export class Patient {
-  id: string;
-  name: string;
-  taxIdNumber: string;
-  address: string;
-  email: string;
-  phoneNumber: string;
-  medicalInsurance: string;
-  birthDate: Date;
-  lastAppointment: Date;
-  accountablePerson: string;
-  notes: string;
-  observations: string;
-  medicalReceipt: string;
-  state: string = 'RJ';
-  appointmentMotivation: {description: string}[] = [];
-  appointmentIndication: {description: string}[] = [];
 }
 
 export class PagedListResult<T> {

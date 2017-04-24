@@ -2,7 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {ToastController, LoadingController, ActionSheetController, NavParams, NavController, AlertController} from 'ionic-angular';
 import * as Constants from '../../providers/constants';
-import {Patient, PatientService} from '../../providers/patient.service';
+import {Patient} from '../../providers/patient';
+import {PatientService} from '../../providers/patient.service';
+import {SearchPage} from '../search/search';
 
 @Component({
   templateUrl: 'patient-file.html'
@@ -38,7 +40,7 @@ export class PatientFilePage implements OnInit {
           this.patient = p;
         }, err => {
           this.showError(err);
-          this.isLoading = false; 
+          this.isLoading = false;
         });
     }
   }
@@ -56,18 +58,17 @@ export class PatientFilePage implements OnInit {
         buttons: [
           {
             text: 'Cancelar',
-            handler: () => {
-            }
+            handler: () => { }
           },
           {
             text: 'OK',
             handler: () => {
               this.isLoading = true;
               this.patientSvc.saveOrUpdate(this.patient)
-                .subscribe(id => { 
-                  this.navCtrl.push(PatientFilePage, { patientId: id }); 
-                }, err => { 
-                  this.isLoading = false; 
+                .subscribe(id => {
+                  this.navCtrl.push(PatientFilePage, { patientId: id });
+                }, err => {
+                  this.isLoading = false;
                   this.showError(err);
                 });
             }
@@ -82,19 +83,18 @@ export class PatientFilePage implements OnInit {
         buttons: [
           {
             text: 'Cancelar',
-            handler: () => {
-            }
+            handler: () => { }
           },
           {
             text: 'OK',
             handler: () => {
               this.isLoading = true;
               this.patientSvc.saveOrUpdate(this.patient)
-                .subscribe((p) => { 
-                  this.isLoading = false; 
-                }, err => { 
-                  this.isLoading = false; 
-                  this.showError(err); 
+                .subscribe((p) => {
+                  this.isLoading = false;
+                }, err => {
+                  this.isLoading = false;
+                  this.showError(err);
                 });
             }
           }
@@ -112,8 +112,7 @@ export class PatientFilePage implements OnInit {
         buttons: [
           {
             text: 'Cancelar',
-            handler: () => {
-            }
+            handler: () => { }
           },
           {
             text: 'OK',
@@ -122,9 +121,9 @@ export class PatientFilePage implements OnInit {
               this.patientSvc.delete(this.patient.id)
                 .subscribe((p) => {
                   this.isLoading = false;
-                }, err => { 
+                }, err => {
                   this.isLoading = false;
-                  this.showError(err);  
+                  this.showError(err);
                 });
             }
           }
@@ -148,9 +147,7 @@ export class PatientFilePage implements OnInit {
         }, {
           text: 'Cancelar',
           role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
+          handler: () => { }
         }
       ]
     });
@@ -178,6 +175,8 @@ export class PatientFilePage implements OnInit {
   close() {
     if(this.navCtrl.canGoBack()){
       this.navCtrl.pop();
+    } else {
+      this.navCtrl.setRoot(SearchPage);
     }
   }
 
@@ -193,17 +192,15 @@ export class PatientFilePage implements OnInit {
       buttons: [
         {
           text: 'Cancelar',
-          handler: data => {
-            console.log('Cancel clicked', data);
-          }
+          handler: data => { }
         },
         {
           text: 'Adicionar',
           handler: data => {
-            if(this.patient.appointmentMotivation == null) {
-              this.patient.appointmentMotivation = [];
+            if(this.patient.appointmentInfo.motivations == null) {
+              this.patient.appointmentInfo.motivations = [];
             }
-            this.patient.appointmentMotivation.push(data);
+            this.patient.appointmentInfo.motivations.push(data);
           }
         }
       ]
@@ -223,17 +220,15 @@ export class PatientFilePage implements OnInit {
       buttons: [
         {
           text: 'Cancelar',
-          handler: data => {
-            console.log('Cancel clicked', data);
-          }
+          handler: data => { }
         },
         {
           text: 'Adicionar',
           handler: data => {
-            if(this.patient.appointmentIndication == null) {
-              this.patient.appointmentIndication = [];
+            if(this.patient.appointmentInfo.indications == null) {
+              this.patient.appointmentInfo.indications = [];
             }
-            this.patient.appointmentIndication.push(data);
+            this.patient.appointmentInfo.indications.push(data);
           }
         }
       ]
@@ -242,13 +237,13 @@ export class PatientFilePage implements OnInit {
   }
 
   removeAppointmentMotivation(item) {
-    let index = this.patient.appointmentMotivation.indexOf(item);
-    this.patient.appointmentMotivation.splice(index, 1);
+    let index = this.patient.appointmentInfo.motivations.indexOf(item);
+    this.patient.appointmentInfo.motivations.splice(index, 1);
   }
 
   removeAppointmentIndication(item) {
-    let index = this.patient.appointmentIndication.indexOf(item);
-    this.patient.appointmentIndication.splice(index, 1);
+    let index = this.patient.appointmentInfo.indications.indexOf(item);
+    this.patient.appointmentInfo.indications.splice(index, 1);
   }
 
 }

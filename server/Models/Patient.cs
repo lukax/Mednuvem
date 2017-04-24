@@ -2,15 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using AutoMapper;
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using server;
 
 namespace Server.Core.Models
 {
     [BsonIgnoreExtraElementsAttribute]
-    public class Patient 
+    public class Patient : BasicPerson
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string UserId { get; set; }
@@ -18,55 +16,102 @@ namespace Server.Core.Models
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public string Name { get; set; }
+        public string MedicalInsurance { get; set; }
 
+        public BasicPerson AccountablePerson { get; set; } = new BasicPerson();
+        public BasicPerson Mother { get; set; } = new BasicPerson();
+        public BasicPerson Father { get; set; } = new BasicPerson();
+
+        public List<SocialProfile> SocialProfiles { get; set; } = new List<SocialProfile>();
+        public List<MedicalReceipt> MedicalReceipts { get; set; } = new List<MedicalReceipt>();
+        public string MedicalObservations { get; set; }
+        
+        public AppointmentInfo AppointmentInfo { get; set; } = new AppointmentInfo();
+        public string Status { get; set; }
+
+        [DisplayFormat(DataFormatString = "yyyy-MM-ddThh:mm")]
+        public DateTime LastVisit { get; set; }
+
+        public string Gender { get; set; }
+        public Address Address { get; set; }
+        public Address CommercialAddress { get; set; }
+
+        [DisplayFormat(DataFormatString = "yyyy-MM-dd")]
+        public DateTime BirthDate { get; set; }
+
+        public string MaritalStatus { get; set; }
+        public string Spouse { get; set; }
+        public string Notes { get; set; }
+    }
+
+    public class MedicalReceipt 
+    {
+        [DisplayFormat(DataFormatString = "yyyy-MM-ddThh:mm")]
+        public DateTime CreatedAt { get; set; }
+
+        public string Type { get; set; }
+        public string Description { get; set; }
+    }
+
+    public class AppointmentInfo 
+    {
+        public List<DescriptionInfo> Motivations { get; set; } = new List<DescriptionInfo>();
+        public List<DescriptionInfo> Indications { get; set; } = new List<DescriptionInfo>();
+        public List<AppointmentVisit> Visits { get; set; } = new List<AppointmentVisit>();
+    }
+
+    public class AppointmentVisit 
+    {
+        [DisplayFormat(DataFormatString = "yyyy-MM-ddThh:mm")]
+        public DateTime CreatedAt { get; set; }
+
+        [DisplayFormat(DataFormatString = "yyyy-MM-ddThh:mm")]
+        public DateTime VisitDate { get; set; }
+
+        public string Status { get; set; }
+        public string Description { get; set; }
+    }
+
+    public class BasicPerson 
+    {
+        public string Name { get; set; }
         public string TaxIdNumber { get; set; }
         public string RegistrationNumber { get; set; }
-        
-        public string Email { get; set; }
+        public string Email { get; set; }        
+        public string JobTitle { get; set; }
+        public List<PhoneNumber> PhoneNumbers { get; set; } = new List<PhoneNumber>();
 
         [BsonIgnore]
         public string EmailHash => MD5Util.CreateMD5(Email);
-
-        public string MedicalInsurance { get; set; }
-        public string AccountablePerson { get; set; }
-        public string AccountablePersonTaxIdNumber { get; set; }
-        public string AccountablePersonRegistrationNumber { get; set; }
-
-
-        [DisplayFormat(DataFormatString = "yyyy-MM-dd")]
-        public DateTime? BirthDate { get; set; }
-
-        [DisplayFormat(DataFormatString = "yyyy-MM-ddThh:mm")]
-        public DateTime? LastAppointment { get; set; }
-        
-        public string Observations { get; set; }
-        public string MedicalReceipt { get; set; }
-        public string Gender { get; set; }
-        
-        public string MaritalStatus { get; set; }
-        public string Spouse { get; set; }
-
-        public string PhoneNumber { get; set; }
-        public string ResidentialPhoneNumber { get; set; }
-        public string CommercialPhoneNumber { get; set; }
-        public string ContactPhoneNumber { get; set; }
-
-        public string SocialMediaType { get; set; }
-        public string SocialMediaAddress { get; set; }
-        public string SocialMediaType2 { get; set; }
-        public string SocialMediaAddress2 { get; set; }
-
-        public string ZipCode { get; set; }
-        public string Address { get; set; }
-        public string AddressComplement { get; set; }
-        public string Neighborhood { get; set; }
-
-        public List<AppointmentIndication> AppointmentMotivation { get; set; }
-        public List<AppointmentIndication> AppointmentIndication { get; set; }
     }
 
-    public class AppointmentIndication {
+    public class Address 
+    {
+        public string Type { get; set; }
+        public string PostalCode { get; set; }
+        public string Street { get; set; }
+        public string StreetComplement { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Country { get; set; }
+        public string Neighbourhood { get; set; }
+    }
+
+    public class PhoneNumber 
+    {
+        public string Type { get; set; }
+        public string Number { get; set; }
+    }
+
+    public class SocialProfile 
+    {
+        public string Type { get; set; }
+        public string Description { get; set; }
+    }
+
+    public class DescriptionInfo 
+    {
+        public string Type { get; set; }
         public string Description { get; set; }
     }
 
@@ -76,7 +121,7 @@ namespace Server.Core.Models
         public string Name { get; set; }
         public string TaxIdNumber { get; set; }
         public string MedicalInsurance { get; set; }
-        public DateTime? LastAppointment { get; set; }
+        public DateTime LastVisit { get; set; }
         public string Email { get; set; }
         
         [BsonIgnore]
@@ -103,11 +148,11 @@ namespace Server.Core.Models
                 Name = this.Name,
                 Email = this.Email,
                 MedicalInsurance = this.MedicalInsurance,
-                AccountablePerson = this.AccountablePerson,
+                AccountablePerson = new BasicPerson { Name = this.AccountablePerson },
                 BirthDate = birthDateOk ? birthDate : default(DateTime),
-                LastAppointment = lastAppointmentOk ? lastAppointment : default(DateTime),
-                PhoneNumber = this.PhoneNumber,
-                Address = this.Address
+                LastVisit  = lastAppointmentOk ? lastAppointment : default(DateTime),
+                PhoneNumbers = new List<PhoneNumber> { new PhoneNumber { Type = "Contato", Number = this.PhoneNumber } },
+                Address = new Address { Street = this.Address }
             };
         }
     }
