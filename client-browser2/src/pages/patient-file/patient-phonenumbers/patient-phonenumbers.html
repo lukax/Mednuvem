@@ -1,0 +1,22 @@
+<ion-row>
+  <button col-12 type="button" ion-button clear small (click)="add()" class="button-section">
+    Telefones&nbsp;&nbsp;<ion-icon name="add"></ion-icon>
+  </button>
+</ion-row>
+
+<ion-row *ngFor="let phoneNumber of data">
+  <ion-item col-4>
+    <ion-label floating>Tipo</ion-label>
+    <ion-select name="phoneNumberType" [(ngModel)]="phoneNumber.type">
+      <ion-option>Celular</ion-option>
+      <ion-option>Comercial</ion-option>
+      <ion-option>Contato</ion-option>
+      <ion-option>Residencial</ion-option>
+      <ion-option>Outro</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item col-8>
+    <ion-label floating>Número</ion-label>
+    <ion-input type="text" name="phoneNumber" [(ngModel)]="phoneNumber.number"></ion-input>
+  </ion-item>
+</ion-row>

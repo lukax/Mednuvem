@@ -33,8 +33,8 @@ namespace Server.Core.Models
         public DateTime LastVisit { get; set; }
 
         public string Gender { get; set; }
-        public Address Address { get; set; }
-        public Address CommercialAddress { get; set; }
+        public Address Address { get; set; } = new Address();
+        public Address CommercialAddress { get; set; } = new Address();
 
         [DisplayFormat(DataFormatString = "yyyy-MM-dd")]
         public DateTime BirthDate { get; set; }

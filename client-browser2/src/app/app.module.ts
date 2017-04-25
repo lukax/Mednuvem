@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MyApp } from './app.component';
 import { SearchPage } from '../pages/search/search';
-import { PatientFilePage } from '../pages/patient-file/patient-file';
+import { PatientFilePage, PatientSocialProfileComponent, PatientPhoneNumberComponent, PatientAddressComponent } from '../pages/patient-file/patient-file';
 import { PatientSchedulePage } from '../pages/patient-schedule/patient-schedule';
 import { ImportPatientsPage } from '../pages/import-patients/import-patients';
 import { LoginPage } from '../pages/login/login';
@@ -17,7 +17,7 @@ import { UploadService } from '../providers/upload.service';
 import { IonicStorageModule } from '@ionic/storage';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import {MomentModule} from 'angular2-moment';
+import { MomentModule } from 'angular2-moment';
 import { BrowserModule } from '@angular/platform-browser';
 import { CKEditorModule } from 'ng2-ckeditor';
 import { AutoCompleteModule } from 'ionic2-auto-complete';
@@ -30,7 +30,10 @@ import { AutoCompleteModule } from 'ionic2-auto-complete';
     PatientSchedulePage,
     ImportPatientsPage,
     LoginPage,
-    RegisterPage
+    RegisterPage,
+    PatientPhoneNumberComponent,
+    PatientSocialProfileComponent,
+    PatientAddressComponent
   ],
   imports: [
     BrowserModule,
@@ -54,13 +57,16 @@ import { AutoCompleteModule } from 'ionic2-auto-complete';
     PatientSchedulePage,
     ImportPatientsPage,
     LoginPage,
-    RegisterPage
+    RegisterPage,
+    PatientPhoneNumberComponent,
+    PatientSocialProfileComponent,
+    PatientAddressComponent
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    LoginService, 
+    LoginService,
     PatientService,
     UploadService
   ]

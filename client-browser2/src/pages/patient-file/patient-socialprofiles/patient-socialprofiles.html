@@ -1,0 +1,23 @@
+<ion-row>
+  <button col-12 type="button" ion-button clear small (click)="add()" class="button-section">
+    Mídias sociais&nbsp;&nbsp;<ion-icon name="add"></ion-icon>
+  </button>
+</ion-row>
+
+<ion-row *ngFor="let socialProfile of data">
+  <ion-item col-4>
+    <ion-label floating>Tipo</ion-label>
+    <ion-select name="socialMediaType" [(ngModel)]="socialProfile.type">
+      <ion-option>Facebook</ion-option>
+      <ion-option>WhatsApp</ion-option>
+      <ion-option>Twitter</ion-option>
+      <ion-option>LinkedIn</ion-option>
+      <ion-option>Google+</ion-option>
+      <ion-option>Outro</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item col-8>
+    <ion-label floating>Endereço</ion-label>
+    <ion-input type="text" name="socialMediaAddress" [(ngModel)]="socialProfile.description"></ion-input>
+  </ion-item>
+</ion-row>

@@ -1,0 +1,66 @@
+<ion-row>
+  <button col-12 type="button" ion-button clear small (click)="add()" class="button-section">
+    Endereço&nbsp;&nbsp;<ion-icon name="add"></ion-icon>
+  </button>
+</ion-row>
+
+<ion-row>
+  <ion-item col-12>
+    <ion-label floating>CEP</ion-label>
+    <ion-input type="text" name="zipCode" [(ngModel)]="data.postalCode"></ion-input>
+  </ion-item>
+</ion-row>
+<ion-row>
+  <ion-item col-12>
+    <ion-label floating>Endereço</ion-label>
+    <ion-input type="text" name="address" [(ngModel)]="data.street"></ion-input>
+  </ion-item>
+</ion-row>
+<ion-row>
+  <ion-item col-12>
+    <ion-label floating>Complemento</ion-label>
+    <ion-input type="text" name="addressComplement" [(ngModel)]="data.streetComplement"></ion-input>
+  </ion-item>
+</ion-row>
+<ion-row>
+  <ion-item col-4>
+    <ion-label floating>Bairro</ion-label>
+    <ion-input type="text" name="neighborhood" [(ngModel)]="data.neighborhood"></ion-input>
+  </ion-item>
+  <ion-item col-4>
+    <ion-label floating>Cidade</ion-label>
+    <ion-input type="text" name="city" [(ngModel)]="data.city"></ion-input>
+  </ion-item>
+  <ion-item col-4>
+    <ion-label floating>Estado</ion-label>
+    <ion-select name="state" [(ngModel)]="data.state">
+      <ion-option>AC</ion-option>
+      <ion-option>AL</ion-option>
+      <ion-option>AM</ion-option>
+      <ion-option>AP</ion-option>
+      <ion-option>BA</ion-option>
+      <ion-option>CE</ion-option>
+      <ion-option>DF</ion-option>
+      <ion-option>ES</ion-option>
+      <ion-option>GO</ion-option>
+      <ion-option>MA</ion-option>
+      <ion-option>MG</ion-option>
+      <ion-option>MS</ion-option>
+      <ion-option>MT</ion-option>
+      <ion-option>PA</ion-option>
+      <ion-option>PB</ion-option>
+      <ion-option>PE</ion-option>
+      <ion-option>PI</ion-option>
+      <ion-option>PR</ion-option>
+      <ion-option>RJ</ion-option>
+      <ion-option>RN</ion-option>
+      <ion-option>RO</ion-option>
+      <ion-option>RR</ion-option>
+      <ion-option>RS</ion-option>
+      <ion-option>SC</ion-option>
+      <ion-option>SE</ion-option>
+      <ion-option>SP</ion-option>
+      <ion-option>TO</ion-option>
+    </ion-select>
+  </ion-item>
+</ion-row>

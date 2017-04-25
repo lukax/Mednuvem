@@ -5,6 +5,9 @@ import * as Constants from '../../providers/constants';
 import {Patient} from '../../providers/patient';
 import {PatientService} from '../../providers/patient.service';
 import {SearchPage} from '../search/search';
+export {PatientPhoneNumberComponent} from './patient-phonenumbers/patient-phonenumbers';
+export {PatientSocialProfileComponent} from './patient-socialprofiles/patient-socialprofiles';
+export {PatientAddressComponent} from './patient-address/patient-address';
 
 @Component({
   templateUrl: 'patient-file.html'
