@@ -236,16 +236,26 @@
           </ion-grid>
           <ion-grid *ngSwitchCase="'observations'">
             <ion-row>
+              <ion-item class="button-section">
+                <span class="text-title">
+                  Observações
+                </span>
+              </ion-item>
+            </ion-row>
+            <ion-row>
               <ion-item>
                 <ion-label floating>Observações do paciente</ion-label>
                 <ion-textarea rows="3" name="medicalObservations" [(ngModel)]="patient.medicalObservations"></ion-textarea>
               </ion-item>
             </ion-row>
             <ion-row>
-              <h5>
-                <br>
-                <br>&nbsp;&nbsp;&nbsp;&nbsp;Receita
-              </h5>
+              <ion-item class="button-section">
+                <span class="text-title">
+                  Receita
+                </span>
+              </ion-item>
+            </ion-row>
+            <ion-row>
               <ion-item>
                 <ckeditor name="medicalReceipt"
                   [(ngModel)]="patient.medicalReceipts[0]"

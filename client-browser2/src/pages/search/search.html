@@ -13,9 +13,9 @@
 
 <ion-content padding>
 
-    <ion-searchbar 
+    <ion-searchbar
         [(ngModel)]="searchText"
-        (ionInput)="searchPatients()" 
+        (ionInput)="searchPatients()"
         showCancelButton="true"
         placeholder="Comece a escrever..."
         debounce="500" autofocus>
@@ -45,16 +45,16 @@
         </button>
         <ion-item *ngIf="!isLoading && !isError && isEmptyPatients()">
             <h2>Nenhum paciente encontrado. <a href="#" (click)="searchPatients()">Tentar novamente.</a></h2>
-        </ion-item>  
+        </ion-item>
         <ion-item *ngIf="!isLoading && isError">
             <h2>Oops... erro ao se comunicar com servidor. <a href="#" (click)="searchPatients()">Tentar novamente.</a></h2>
-        </ion-item>  
+        </ion-item>
     </ion-list>
 
     <ion-infinite-scroll (ionInfinite)="searchPatients($event)">
-    <ion-infinite-scroll-content 
+    <ion-infinite-scroll-content
       loadingText="Carregando pacientes..."></ion-infinite-scroll-content>
     </ion-infinite-scroll>
-    
+
 </ion-content>
 

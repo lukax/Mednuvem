@@ -21,7 +21,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { MomentModule } from 'angular2-moment';
 import { CKEditorModule } from 'ng2-ckeditor';
-import { AutoCompleteModule } from 'ionic2-auto-complete';
+//import { AutoCompleteModule } from 'ionic2-auto-complete';
 import { CalendarModule } from 'angular-calendar';
 
 @NgModule({
@@ -50,7 +50,7 @@ import { CalendarModule } from 'angular-calendar';
     FormsModule,
     MomentModule,
     CKEditorModule,
-    AutoCompleteModule,
+    //AutoCompleteModule,
     BrowserAnimationsModule,
     CalendarModule.forRoot()
   ],

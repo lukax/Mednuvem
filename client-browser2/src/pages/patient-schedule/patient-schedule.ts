@@ -45,7 +45,7 @@ export class PatientSchedulePage {
   view: string = 'month';
 
   viewDate: Date = new Date();
-
+  yearValues = new Date().getFullYear() + "," + (new Date().getFullYear() + 1);
   modalData: {
     action: string,
     event: CalendarEvent
@@ -75,13 +75,14 @@ export class PatientSchedulePage {
     actions: this.actions
   }, {
     start: startOfDay(new Date()),
+    end: addDays(new Date(), 1),
     title: 'Lucas D. E.',
     type: 'Consulta',
     color: colors.yellow,
     actions: this.actions
   }, {
-    start: subDays(endOfMonth(new Date()), 3),
-    end: addDays(endOfMonth(new Date()), 3),
+    start: subDays(startOfDay(new Date()), 3),
+    end: addDays(startOfDay(new Date()), 1),
     title: 'Bruna S. R.',
     type: 'Consulta',
     color: colors.blue

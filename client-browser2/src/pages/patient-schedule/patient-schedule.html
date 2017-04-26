@@ -89,7 +89,7 @@
 
   <ion-item>
     <span class="text-title">
-      Editar eventos
+      Eventos
     </span>
     <button ion-button outline item-right>
       Novo&nbsp;<ion-icon name="add"></ion-icon>
@@ -128,12 +128,12 @@
       </td>
       <td>
         <ion-item>
-          <ion-datetime displayFormat="DD/MM/YYYY hh:mm" pickerFormat="DD/MM/YYYY hh:mm" [(ngModel)]="event.start"></ion-datetime>
+          <ion-datetime displayFormat="DD/MM/YYYY hh:mm" pickerFormat="DD/MM/YYYY HH:mm" hourValues="7,8,9,10,11,12,13,14,15,16,17,18,19,20,21" minuteValues="0,5,10,15,20,25,30,35,40,45,50,55" yearValues="{{yearValues}}" [(ngModel)]="event.start"></ion-datetime>
         </ion-item>
       </td>
       <td>
         <ion-item>
-          <ion-datetime displayFormat="DD/MM/YYYY hh:mm" pickerFormat="DD/MM/YYYY hh:mm" [(ngModel)]="event.start"></ion-datetime>
+          <ion-datetime displayFormat="DD/MM/YYYY hh:mm" pickerFormat="DD/MM/YYYY HH:mm" hourValues="7,8,9,10,11,12,13,14,15,16,17,18,19,20,21" minuteValues="0,5,10,15,20,25,30,35,40,45,50,55" yearValues="{{yearValues}}" [(ngModel)]="event.end"></ion-datetime>
         </ion-item>
       </td>
       <td>
