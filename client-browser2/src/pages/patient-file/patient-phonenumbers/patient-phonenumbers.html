@@ -1,7 +1,12 @@
 <ion-row>
-  <button col-12 type="button" ion-button clear small (click)="add()" class="button-section">
-    Telefones&nbsp;&nbsp;<ion-icon name="add"></ion-icon>
-  </button>
+  <ion-item class="button-section">
+    <span class="text-title">
+      Telefones
+    </span>
+    <button type="button" ion-button icon-only item-right clear small (click)="add()" class="button-section">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-item>
 </ion-row>
 
 <ion-row *ngFor="let phoneNumber of data">

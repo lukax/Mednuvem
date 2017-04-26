@@ -3,21 +3,148 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title><ion-icon name="list"></ion-icon> Consultas</ion-title>
+    <ion-title><ion-icon name="list"></ion-icon> Agenda</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="patient-schedule">
 
-  <ion-item-group>
-    <ion-item-divider color="light">A</ion-item-divider>
-    <ion-item *ngFor="let item of items">{{item.title}}</ion-item>
-  </ion-item-group>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="btn-group">
+        <button ion-button clear
+          mwlCalendarPreviousView
+          [view]="view"
+          [(viewDate)]="viewDate">
+          <ion-icon name="arrow-back"></ion-icon>
+        </button>
+        <button ion-button clear
+          mwlCalendarToday
+          [(viewDate)]="viewDate">
+          Hoje
+        </button>
+        <button ion-button clear
+          mwlCalendarNextView
+          [view]="view"
+          [(viewDate)]="viewDate">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <h3 class="text-center calendar-date-text">{{ viewDate | calendarDate:(view + 'ViewTitle'):'pt' }}</h3>
+    </div>
+    <div class="col-md-4">
+      <div class="btn-group float-right">
+        <button ion-button clear
+          (click)="view = 'month'"
+          color="{{ view === 'month' ? 'light' : '' }}">
+          Mês
+        </button>
+        <button ion-button clear
+          (click)="view = 'week'"
+          color="{{ view === 'week' ? 'light' : ''}}">
+          Semana
+        </button>
+        <button ion-button clear
+          (click)="view = 'day'"
+          color="{{ view === 'day' ? 'light' : ''}}">
+          Dia
+        </button>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div [ngSwitch]="view">
+    <mwl-calendar-month-view
+      *ngSwitchCase="'month'"
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      [activeDayIsOpen]="activeDayIsOpen"
+      (dayClicked)="dayClicked($event.day)"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)">
+    </mwl-calendar-month-view>
+    <mwl-calendar-week-view
+      *ngSwitchCase="'week'"
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)">
+    </mwl-calendar-week-view>
+    <mwl-calendar-day-view
+      *ngSwitchCase="'day'"
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)">
+    </mwl-calendar-day-view>
+  </div>
 
-  <ion-item-group>
-    <ion-item-divider color="light">B</ion-item-divider>
-    <ion-item>Angola</ion-item>
-    <ion-item>Argentina</ion-item>
-  </ion-item-group>
+  <br><br><br>
+
+
+  <ion-item>
+    <span class="text-title">
+      Editar eventos
+    </span>
+    <button ion-button outline item-right>
+      Novo&nbsp;<ion-icon name="add"></ion-icon>
+    </button>
+  </ion-item>
+
+  <table class="event-editor-table">
+
+    <thead>
+    <tr>
+      <th>Paciente</th>
+      <th>Cor</th>
+      <th>Descrição</th>
+      <th>Início</th>
+      <th>Término</th>
+      <th>Remover</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let event of events; let index = index">
+      <td>
+        <ion-input type="text"
+          [(ngModel)]="event.title"
+          (keyup)="refresh.next()"></ion-input>
+      </td>
+      <td>
+        <input type="color"
+               [(ngModel)]="event.color.primary"
+               (change)="refresh.next()">
+      </td>
+      <td>
+        <ion-input type="text"
+                   [(ngModel)]="event.type"
+                   (keyup)="refresh.next()"></ion-input>
+      </td>
+      <td>
+        <ion-item>
+          <ion-datetime displayFormat="DD/MM/YYYY hh:mm" pickerFormat="DD/MM/YYYY hh:mm" [(ngModel)]="event.start"></ion-datetime>
+        </ion-item>
+      </td>
+      <td>
+        <ion-item>
+          <ion-datetime displayFormat="DD/MM/YYYY hh:mm" pickerFormat="DD/MM/YYYY hh:mm" [(ngModel)]="event.start"></ion-datetime>
+        </ion-item>
+      </td>
+      <td>
+        <button ion-button color="danger" small clear
+          (click)="events.splice(index, 1); refresh.next()">
+          <ion-icon name="close"></ion-icon>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+
+  </table>
 
 </ion-content>

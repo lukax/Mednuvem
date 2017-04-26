@@ -113,9 +113,11 @@
             <patient-address [data]="patient.address"></patient-address>
             <br>
             <ion-row>
-              <button col-12 type="button" ion-button clear small class="button-section">
-                Dados do responsável&nbsp;&nbsp;<ion-icon name="add"></ion-icon>
-              </button>
+              <ion-item class="button-section">
+                <span class="text-title">
+                  Dados do responsável
+                </span>
+              </ion-item>
             </ion-row>
             <ion-row>
                 <ion-item>
@@ -136,12 +138,13 @@
           </ion-grid>
           <ion-grid *ngSwitchCase="'indication'">
             <ion-row>
+              <ion-item class="button-section">
+                <span class="text-title">Motivo da consulta</span>
+                <button type="button" ion-button icon-only item-right clear small class="button-section" (click)="addAppointmentMotivation()">
+                  <ion-icon name="add"></ion-icon>
+                </button>
+              </ion-item>
               <ion-list col-12>
-                <ion-row>
-                  <button col-12 type="button" ion-button clear small (click)="addAppointmentMotivation()">
-                    Motivo da consulta&nbsp;&nbsp;<ion-icon name="add"></ion-icon>
-                  </button>
-                </ion-row>
                 <ion-item *ngFor="let m of patient.appointmentInfo.motivations">
                   <button type="button" ion-button icon-only clear item-left (click)="removeAppointmentMotivation(m)">
                     <ion-icon name="close"></ion-icon>
@@ -152,12 +155,13 @@
             </ion-row>
             <hr>
             <ion-row>
+              <ion-item class="button-section">
+                <span class="text-title">Indicação</span>
+                <button type="button" ion-button icon-only item-right clear small class="button-section" (click)="addAppointmentIndication()">
+                  <ion-icon name="add"></ion-icon>
+                </button>
+              </ion-item>
               <ion-list col-12>
-                <ion-row>
-                  <button col-12 type="button" ion-button clear small (click)="addAppointmentIndication()">
-                    Indicação&nbsp;&nbsp;<ion-icon name="add"></ion-icon>
-                  </button>
-                </ion-row>
                 <ion-item *ngFor="let m of patient.appointmentInfo.indications">
                   <button type="button" ion-button icon-only clear item-left (click)="removeAppointmentIndication(m)">
                     <ion-icon name="close"></ion-icon>
@@ -168,7 +172,11 @@
             </ion-row>
           </ion-grid>
           <ion-grid *ngSwitchCase="'additional'">
-            <h5>Dados profissionais</h5>
+            <ion-row>
+              <ion-item class="button-section">
+                <span class="text-title">Dados profissionais</span>
+              </ion-item>
+            </ion-row>
             <ion-row>
               <ion-item col-12>
                 <ion-label floating>Profissão</ion-label>
@@ -178,7 +186,11 @@
             <patient-address [data]="patient.commercialAddress"></patient-address>
             <br>
             <br>
-            <h5>Mãe</h5>
+            <ion-row>
+              <ion-item class="button-section">
+                <span class="text-title">Família - Mãe</span>
+              </ion-item>
+            </ion-row>
             <ion-row>
               <ion-item col-8>
                 <ion-label floating>Nome da mãe</ion-label>
@@ -192,7 +204,11 @@
             <phone-numbers [data]="patient.mother.phoneNumbers"></phone-numbers>
             <br>
             <br>
-            <h5>Pai</h5>
+            <ion-row>
+              <ion-item class="button-section">
+                <span class="text-title">Família - Pai</span>
+              </ion-item>
+            </ion-row>
             <ion-row>
               <ion-item col-8>
                 <ion-label floating>Nome do pai</ion-label>
@@ -206,7 +222,11 @@
             <phone-numbers [data]="patient.father.phoneNumbers"></phone-numbers>
             <br>
             <br>
-            <h5>Informações adicionais</h5>
+            <ion-row>
+              <ion-item class="button-section">
+                <span class="text-title">Informações adicionais</span>
+              </ion-item>
+            </ion-row>
             <ion-row>
               <ion-item>
                 <ion-label floating>Notas</ion-label>

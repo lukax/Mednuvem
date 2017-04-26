@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title><ion-icon name="list"></ion-icon> Evento</ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        <span ion-text color="primary">OK</span>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <div>
+      Action:
+      <pre>{{ modalData?.action }}</pre>
+    </div>
+    <div>
+      Event:
+      <pre>{{ modalData?.event | json }}</pre>
+    </div>
+</ion-content>

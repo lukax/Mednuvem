@@ -1,36 +1,154 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef } from '@angular/core';
+import {
+  startOfDay,
+  endOfDay,
+  subDays,
+  addDays,
+  endOfMonth,
+  isSameDay,
+  isSameMonth,
+  addHours
+} from 'date-fns';
+import { Subject } from 'rxjs/Subject';
+import {
+  CalendarEvent,
+  CalendarEventAction,
+  CalendarEventTimesChangedEvent
+} from 'angular-calendar';
+import { ModalController } from 'ionic-angular';
+import { ScheduleOptionsPage } from './schedule-options/schedule-options';
+export * from './schedule-options/schedule-options';
+
+const colors: any = {
+  red: {
+    primary: '#ad2121',
+    secondary: '#FAE3E3'
+  },
+  blue: {
+    primary: '#1e90ff',
+    secondary: '#D1E8FF'
+  },
+  yellow: {
+    primary: '#e3bc08',
+    secondary: '#FDF1BA'
+  }
+};
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: 'patient-schedule.html'
 })
 export class PatientSchedulePage {
-  selectedItem: any;
-  icons: string[];
-  items: Array<{title: string, note: string, icon: string}>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    // If we navigated to this page, we will have an item available as a nav param
-    this.selectedItem = navParams.get('item');
+  @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
-    // Let's populate this page with some filler content for funzies
-    this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
-    'american-football', 'boat', 'bluetooth', 'build'];
+  view: string = 'month';
 
-    this.items = [];
-    for (let i = 1; i < 11; i++) {
-      this.items.push({
-        title: 'Item ' + i,
-        note: 'This is item #' + i,
-        icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-      });
+  viewDate: Date = new Date();
+
+  modalData: {
+    action: string,
+    event: CalendarEvent
+  };
+
+  actions: CalendarEventAction[] = [{
+    label: '<i class="fa fa-fw fa-pencil"></i>',
+    onClick: ({event}: {event: CalendarEvent}): void => {
+      this.handleEvent('Edited', event);
+    }
+  }, {
+    label: '<i class="fa fa-fw fa-times"></i>',
+    onClick: ({event}: {event: CalendarEvent}): void => {
+      this.events = this.events.filter(iEvent => iEvent !== event);
+      this.handleEvent('Deleted', event);
+    }
+  }];
+
+  refresh: Subject<any> = new Subject();
+
+  events: PatientCalendarEvent[] = [{
+    start: subDays(startOfDay(new Date()), 1),
+    end: addDays(new Date(), 1),
+    title: 'Ivan de C.',
+    type: 'Consulta',
+    color: colors.red,
+    actions: this.actions
+  }, {
+    start: startOfDay(new Date()),
+    title: 'Lucas D. E.',
+    type: 'Consulta',
+    color: colors.yellow,
+    actions: this.actions
+  }, {
+    start: subDays(endOfMonth(new Date()), 3),
+    end: addDays(endOfMonth(new Date()), 3),
+    title: 'Bruna S. R.',
+    type: 'Consulta',
+    color: colors.blue
+  }, {
+    start: addHours(startOfDay(new Date()), 2),
+    end: new Date(),
+    title: 'Welder S. S.',
+    type: 'Consulta',
+    color: colors.yellow,
+    actions: this.actions,
+    resizable: {
+      beforeStart: true,
+      afterEnd: true
+    },
+    draggable: true
+  }];
+
+  activeDayIsOpen: boolean = true;
+
+  constructor(private modalCtrl: ModalController) {}
+
+  dayClicked({date, events}: {date: Date, events: CalendarEvent[]}): void {
+
+    if (isSameMonth(date, this.viewDate)) {
+      if (
+        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+        events.length === 0
+      ) {
+        this.activeDayIsOpen = false;
+      } else {
+        this.activeDayIsOpen = true;
+        this.viewDate = date;
+      }
     }
   }
 
-  itemTapped(event, item) {
-    // That's right, we're pushing to ourselves!
-    this.navCtrl.push(PatientSchedulePage, {
-      item: item
-    });
+  eventTimesChanged({event, newStart, newEnd}: CalendarEventTimesChangedEvent): void {
+    event.start = newStart;
+    event.end = newEnd;
+    this.handleEvent('Dropped or resized', event);
+    this.refresh.next();
   }
+
+  handleEvent(action: string, event: CalendarEvent): void {
+    this.modalData = {event, action};
+    let modal = this.modalCtrl.create(ScheduleOptionsPage, this.modalData);
+    modal.present();
+  }
+
+  addEvent(): void {
+    this.events.push({
+      title: 'New event',
+      start: startOfDay(new Date()),
+      end: endOfDay(new Date()),
+      color: colors.red,
+      draggable: true,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true
+      }
+    });
+    this.refresh.next();
+  }
+
+}
+
+export interface PatientCalendarEvent extends CalendarEvent {
+  type?: string;
+  description?: string;
 }

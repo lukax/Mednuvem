@@ -2,10 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
 import { SearchPage } from '../pages/search/search';
 import { PatientFilePage } from '../pages/patient-file/patient-file';
-//import { PatientSchedulePage } from '../pages/patient-schedule/patient-schedule';
+import { PatientSchedulePage } from '../pages/patient-schedule/patient-schedule';
 import { ImportPatientsPage } from '../pages/import-patients/import-patients';
 import { LoginPage } from '../pages/login/login';
 import { LoginService } from '../providers/login.service';
@@ -21,8 +20,8 @@ export class MyApp {
   pages: Array<{title: string, component: any, icon: string, auth: boolean}>;
 
   constructor(
-      public platform: Platform, 
-      public statusBar: StatusBar, 
+      public platform: Platform,
+      public statusBar: StatusBar,
       public menu: MenuController,
       public splashScreen: SplashScreen,
       public loginService: LoginService) {
@@ -31,7 +30,7 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Buscar', component: SearchPage, icon: 'search', auth: true },
-      //{ title: 'Consultas', component: PatientSchedulePage, icon: 'list', auth: true },
+      { title: 'Agenda', component: PatientSchedulePage, icon: 'calendar', auth: true },
       //{ title: 'Nova consulta', component: PatientFilePage, icon: 'time', auth: true },
       { title: 'Novo paciente', component: PatientFilePage, icon: 'person-add', auth: true },
       { title: 'Importar', component: ImportPatientsPage, icon: 'folder', auth: true },
@@ -45,7 +44,7 @@ export class MyApp {
     this.loginService.isLoggedIn().then(
       (ok) => {
         if(ok) {
-          this.rootPage = SearchPage;
+          this.rootPage = PatientSchedulePage;
         } else {
         }
         console.log("[AUTH] ", this.loginService.getUser());

@@ -1,5 +1,9 @@
 // http://ionicframework.com/docs/v2/theming/
 @import "../../node_modules/bootstrap/scss/bootstrap-grid";
+@import "../../node_modules/bootstrap/scss/mixins";
+@import "../../node_modules/bootstrap/scss/utilities/float";
+@import "../../node_modules/bootstrap/scss/utilities/text";
+@import "../../node_modules/angular-calendar/scss/angular-calendar";
 
 // App Global Sass
 // --------------------------------------------------
@@ -14,3 +18,9 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+.text-title {
+  color: #444444;
+  @extend .text-uppercase;
+  @extend .font-weight-bold;
+}
