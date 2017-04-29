@@ -45,7 +45,7 @@
               </ion-item>
               <ion-item col-4>
                 <ion-label stacked>Última Consulta</ion-label>
-                <ion-datetime displayFormat="DD/MM/YYYY h:mm A" pickerFormat="MM/DD/YYYY h mm A" name="lastAppointment" [(ngModel)]="patient.lastAppointment"></ion-datetime>
+                <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH mm" name="lastAppointment" [(ngModel)]="patient.lastAppointment"></ion-datetime>
               </ion-item>
             </ion-row>
             <ion-row>
@@ -55,7 +55,7 @@
                 </ion-item>
                 <ion-item col-4>
                   <ion-label stacked>Data de nascimento</ion-label>
-                  <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat="MM/DD/YYYY" name="birthDate" [(ngModel)]="patient.birthDate"></ion-datetime>
+                  <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat="DD/MM/YYYY" name="birthDate" [(ngModel)]="patient.birthDate"></ion-datetime>
               </ion-item>
             </ion-row>
             <ion-row>
@@ -140,13 +140,13 @@
             <ion-row>
               <ion-item class="button-section">
                 <span class="text-title">Motivo da consulta</span>
-                <button type="button" ion-button icon-only item-right clear small class="button-section" (click)="addAppointmentMotivation()">
+                <button type="button" ion-button outline item-right class="button-section" (click)="addAppointmentMotivation()">
                   <ion-icon name="add"></ion-icon>
                 </button>
               </ion-item>
               <ion-list col-12>
                 <ion-item *ngFor="let m of patient.appointmentInfo.motivations">
-                  <button type="button" ion-button icon-only clear item-left (click)="removeAppointmentMotivation(m)">
+                  <button type="button" ion-button outline item-left (click)="removeAppointmentMotivation(m)">
                     <ion-icon name="close"></ion-icon>
                   </button>
                   {{m.description}}
@@ -157,13 +157,13 @@
             <ion-row>
               <ion-item class="button-section">
                 <span class="text-title">Indicação</span>
-                <button type="button" ion-button icon-only item-right clear small class="button-section" (click)="addAppointmentIndication()">
+                <button type="button" ion-button outline item-right class="button-section" (click)="addAppointmentIndication()">
                   <ion-icon name="add"></ion-icon>
                 </button>
               </ion-item>
               <ion-list col-12>
                 <ion-item *ngFor="let m of patient.appointmentInfo.indications">
-                  <button type="button" ion-button icon-only clear item-left (click)="removeAppointmentIndication(m)">
+                  <button type="button" ion-button outline item-left (click)="removeAppointmentIndication(m)">
                     <ion-icon name="close"></ion-icon>
                   </button>
                   {{m.description}}
@@ -253,15 +253,16 @@
                 <span class="text-title">
                   Receita
                 </span>
+                <button type="submit" ion-button item-right outline class="button-section">
+                  <ion-icon name="checkmark"></ion-icon>
+                </button>
               </ion-item>
             </ion-row>
             <ion-row>
-              <ion-item>
                 <ckeditor name="medicalReceipt"
                   [(ngModel)]="patient.medicalReceipts[0]"
-                  [config]="{language: 'pt', toolbar : 'Basic'}">
+                  [config]="{language: 'pt', toolbar : 'Basic', uiColor: '#ffffff'}">
                 </ckeditor>
-              </ion-item>
             </ion-row>
           </ion-grid>
     </form>
@@ -275,7 +276,7 @@
   <ion-toolbar>
     <ion-buttons end>
       <button type="submit" ion-button form="savePatientForm">
-        <ion-icon name="checkmark"></ion-icon>&nbsp;&nbsp;Gravar dados
+        <ion-icon name="checkmark"></ion-icon>&nbsp;&nbsp;Salvar dados
       </button>
       <button type="button" ion-button (click)="close()">
         <ion-icon name="close"></ion-icon>&nbsp;&nbsp;Cancelar

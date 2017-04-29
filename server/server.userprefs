@@ -1,0 +1,20 @@
+﻿<Properties StartupConfiguration="{7890A7ED-E84C-4EE1-B74E-6B8E57FED0B1}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/PatientController.cs">
+    <Files>
+      <File FileName="Controllers/Account/AccountController.cs" Line="81" Column="1" />
+      <File FileName="Services/UserRepository.cs" Line="39" Column="12" />
+      <File FileName="Services/TeamRepository.cs" Line="27" Column="39" />
+      <File FileName="Controllers/PatientController.cs" Line="21" Column="39" />
+      <File FileName="Services/UserUtilService.cs" Line="7" Column="46" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/espdlucas/dev/mednuvem/server/Services/BaseRepository.cs" relfile="Services/BaseRepository.cs" line="75" column="36" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.ItemProperties.server PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>

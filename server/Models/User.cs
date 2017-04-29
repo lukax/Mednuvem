@@ -3,12 +3,17 @@ using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
+using Server.Core.Models;
 
 namespace IdSvrHost.Models
 {
-    public class MongoDbUser
+    public class User : ITeamEntity
     {
-        public string Id { get; set; }
+		public string Id { get; set; }
+		public string TeamId { get; set; }
+		public DateTime CreatedAt { get; set; }
+		public DateTime UpdatedAt { get; set; }
+
         public string Username { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
@@ -16,9 +21,7 @@ namespace IdSvrHost.Models
         public bool IsActive { get; set; }
         public string HashedPassword { get; set; }
         public string Company { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-
+        public string Role { get; set; }
 
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }

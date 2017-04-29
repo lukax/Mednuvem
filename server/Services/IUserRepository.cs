@@ -3,10 +3,10 @@ using IdSvrHost.Models;
 
 namespace IdSvrHost.Services
 {
-    public interface IRepository
+    public interface IUserRepository
     {
-        MongoDbUser GetUserByUsername(string username);
-        MongoDbUser GetUserById(string id);
+        User GetUserByUsername(string username);
+        User GetUserById(string id);
         bool ValidatePassword(string username, string plainTextPassword);
     }
 }

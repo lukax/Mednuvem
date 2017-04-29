@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,11 +7,10 @@ using server;
 namespace Server.Core.Models
 {
     [BsonIgnoreExtraElementsAttribute]
-    public class Patient : BasicPerson
+    public class Patient : BasicPerson, ITeamEntity
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-        public string UserId { get; set; }
-
+        public string Id { get; set; }
+        public string TeamId { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
@@ -42,6 +40,7 @@ namespace Server.Core.Models
         public string MaritalStatus { get; set; }
         public string Spouse { get; set; }
         public string Notes { get; set; }
+
     }
 
     public class MedicalReceipt 

@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title><ion-icon name="list"></ion-icon> Agenda</ion-title>
+    <ion-title><ion-icon name="calendar"></ion-icon> Agenda</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -101,7 +101,7 @@
     <thead>
     <tr>
       <th>Paciente</th>
-      <th>Cor</th>
+      <th>Tipo</th>
       <th>Descrição</th>
       <th>Início</th>
       <th>Término</th>
@@ -117,13 +117,13 @@
           (keyup)="refresh.next()"></ion-input>
       </td>
       <td>
-        <input type="color"
-               [(ngModel)]="event.color.primary"
-               (change)="refresh.next()">
+        <ion-input type="text"
+                   [(ngModel)]="event.type"
+                   (keyup)="refresh.next()"></ion-input>
       </td>
       <td>
         <ion-input type="text"
-                   [(ngModel)]="event.type"
+                   [(ngModel)]="event.description"
                    (keyup)="refresh.next()"></ion-input>
       </td>
       <td>

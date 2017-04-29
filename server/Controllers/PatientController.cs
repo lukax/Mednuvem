@@ -10,6 +10,7 @@ using CsvHelper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using IdentityServer4.Extensions;
+using server.Services;
 
 namespace Server.Core.Controllers
 {
@@ -18,7 +19,7 @@ namespace Server.Core.Controllers
     public class PatientsController : Controller
     {
         private PatientRepository _patientRepository;
-        private string UserId => User.GetSubjectId();
+        private string TeamId => User.GetTeamId();
 
         public PatientsController(PatientRepository patientRepository)
         {
@@ -41,7 +42,7 @@ namespace Server.Core.Controllers
             patient.Id = Guid.NewGuid().ToString();
             patient.CreatedAt = DateTime.UtcNow;
 
-            var result = await _patientRepository.InsertOne(UserId, patient);
+            var result = await _patientRepository.InsertOne(TeamId, patient);
             if(result.IsError){
                 return BadRequest(result);
             }
@@ -64,7 +65,7 @@ namespace Server.Core.Controllers
             patient.Id = patientId;
             patient.UpdatedAt = DateTime.UtcNow;
 
-            var result = await _patientRepository.UpdateOne(UserId, patient);
+            var result = await _patientRepository.UpdateOne(TeamId, patient);
             if(result.IsError){
                 return BadRequest(result);
             }
@@ -75,12 +76,12 @@ namespace Server.Core.Controllers
         [Route("")]
         public async Task<IActionResult> GetAll(int pageSize = 50, int pageNumber = 1, string orderBy = "", string search = "")
         {
-            return Ok(await _patientRepository.GetAll(UserId, pageSize, pageNumber, orderBy, search));
+            return Ok(await _patientRepository.GetAll(TeamId, pageSize, pageNumber, orderBy, search));
         }
 
         [HttpGet("{patientId}")]
         public async Task<IActionResult> FindOne(string patientId){
-            var p = await _patientRepository.FindOne(UserId, patientId);
+            var p = await _patientRepository.FindOne(TeamId, patientId);
             if(p == null) {
                 return NotFound();
             }
@@ -89,7 +90,7 @@ namespace Server.Core.Controllers
 
         [HttpDeleteAttribute("{patientId}")]
         public async Task<IActionResult> DeleteOne(string patientId){
-            var result = await _patientRepository.DeleteOne(UserId, patientId);
+            var result = await _patientRepository.DeleteOne(TeamId, patientId);
             if(result.IsError){
                 return BadRequest(result);
             }
@@ -128,7 +129,7 @@ namespace Server.Core.Controllers
                 try {
                     var patients = records.Select(x => x.ToPatient())
                                           .ToList();
-                    await _patientRepository.InsertMany(UserId, patients);
+                    await _patientRepository.InsertMany(TeamId, patients);
                 }
                 catch(Exception ex) 
                 {

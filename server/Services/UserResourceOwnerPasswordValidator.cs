@@ -5,11 +5,11 @@ using IdentityServer4.Models;
 
 namespace IdSvrHost.Services
 {
-    public class MongoDbResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
+    public class UserResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     {
-        private readonly IRepository _repository;
+        private readonly IUserRepository _repository;
 
-        public MongoDbResourceOwnerPasswordValidator(IRepository repository)
+        public UserResourceOwnerPasswordValidator(IUserRepository repository)
         {
             _repository = repository;
         }

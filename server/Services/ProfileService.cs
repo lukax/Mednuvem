@@ -9,11 +9,11 @@ using Server.Core;
 
 namespace IdSvrHost.Services
 {
-    public class MongoDbProfileService : IProfileService
+    public class ProfileService : IProfileService
     {
-        private readonly IRepository _repository;
+        private readonly IUserRepository _repository;
 
-        public MongoDbProfileService(IRepository repository)
+        public ProfileService(IUserRepository repository)
         {
             _repository = repository;
         }
@@ -31,8 +31,10 @@ namespace IdSvrHost.Services
                 new Claim(JwtClaimTypes.GivenName, user.GetFirstName()),
                 new Claim(JwtClaimTypes.FamilyName, user.GetLastName()),
                 new Claim(JwtClaimTypes.Email, user.Email),
-                new Claim(Config.CompanyClaimType, user.Company),
-                new Claim(JwtClaimTypes.EmailVerified, user.EmailVerified.ToString().ToLower(), ClaimValueTypes.Boolean)
+				new Claim(JwtClaimTypes.EmailVerified, user.EmailVerified.ToString().ToLower(), ClaimValueTypes.Boolean),
+				new Claim(Config.CompanyClaimType, user.Company),
+                new Claim(Config.TeamIdClaimType, user.TeamId),
+                new Claim(Config.RoleClaimType, user.Role)
             };
 
             context.IssuedClaims = claims;

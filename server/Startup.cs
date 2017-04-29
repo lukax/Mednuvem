@@ -52,17 +52,18 @@ namespace server
                     .AddInMemoryIdentityResources(Config.GetIdentityResources())
                     .AddInMemoryApiResources(Config.GetApiResources())
                     .AddInMemoryClients(Config.GetClients());
-            
+
+			builder.Services.Configure<MongoDbRepositoryConfiguration>(Configuration.GetSection("MongoDbRepository"));
+			builder.Services.AddTransient<IUserRepository, UserRepository>();
+            builder.Services.AddTransient<UserRepository>();
+            builder.Services.AddTransient<IProfileService, ProfileService>();
+            builder.Services.AddTransient<IResourceOwnerPasswordValidator, UserResourceOwnerPasswordValidator>();
+            builder.Services.AddTransient<IPasswordHasher<User>, PasswordHasher<User>>();
+			builder.Services.AddTransient<UserRepository>();
             builder.Services.AddTransient<PatientRepository>();
-            builder.Services.AddTransient<IRepository, MongoDbRepository>();
-            builder.Services.AddTransient<MongoDbRepository>();
-            builder.Services.AddTransient<IProfileService, MongoDbProfileService>();
-            builder.Services.AddTransient<IResourceOwnerPasswordValidator, MongoDbResourceOwnerPasswordValidator>();
-            builder.Services.AddTransient<IPasswordHasher<MongoDbUser>, PasswordHasher<MongoDbUser>>();
-            builder.Services.Configure<MongoDbRepositoryConfiguration>(Configuration.GetSection("MongoDbRepository"));
+            builder.Services.AddTransient<CalendarEventRepository>();
 
-
-            services.AddCors(options =>
+			services.AddCors(options =>
                 {
                     // this defines a CORS policy called "default"
                     options.AddPolicy("default", policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());

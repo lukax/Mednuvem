@@ -17,7 +17,7 @@ export class MyApp {
 
   rootPage: any = LoginPage;
 
-  pages: Array<{title: string, component: any, icon: string, auth: boolean}>;
+  pages: Array<{title: string, component: any, icon: string, auth: boolean, popup?: boolean}>;
 
   constructor(
       public platform: Platform,
@@ -32,8 +32,8 @@ export class MyApp {
       { title: 'Buscar', component: SearchPage, icon: 'search', auth: true },
       { title: 'Agenda', component: PatientSchedulePage, icon: 'calendar', auth: true },
       //{ title: 'Nova consulta', component: PatientFilePage, icon: 'time', auth: true },
-      { title: 'Novo paciente', component: PatientFilePage, icon: 'person-add', auth: true },
-      { title: 'Importar', component: ImportPatientsPage, icon: 'folder', auth: true },
+      { title: 'Novo paciente', component: PatientFilePage, icon: 'person-add', auth: true, popup: true },
+      { title: 'Importar', component: ImportPatientsPage, icon: 'folder', auth: true, popup: true },
 
       { title: 'Login', component: LoginPage, icon: 'log-in', auth: false },
     ];
@@ -65,7 +65,11 @@ export class MyApp {
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+    if(page.popup){
+      this.nav.push(page.component);
+    } else {
+      this.nav.setRoot(page.component);
+    }
   }
 
   openLogin() {

@@ -33,13 +33,13 @@ namespace IdentityServer4.Quickstart.UI
         private readonly TestUserStore _users;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly AccountService _account;
-        private readonly MongoDbRepository _repository;
+        private readonly UserRepository _repository;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IHttpContextAccessor httpContextAccessor,
-            MongoDbRepository repository,
+            UserRepository repository,
             TestUserStore users = null)
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
@@ -72,7 +72,7 @@ namespace IdentityServer4.Quickstart.UI
                 return BadRequest(ModelState);
             }
 
-            var user = new MongoDbUser()
+            var user = new User()
             {
                 Username = model.Email,
                 Name = model.Name,
