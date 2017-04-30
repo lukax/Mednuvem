@@ -24,11 +24,6 @@
     </ion-item>
 
     <ion-item>
-      <ion-label stacked>Empresa</ion-label>
-      <ion-input type="text" [(ngModel)]="user.company" required></ion-input>
-    </ion-item>
-
-    <ion-item>
       <ion-label stacked>Email</ion-label>
       <ion-input type="email" [(ngModel)]="user.email" required></ion-input>
     </ion-item>
@@ -44,13 +39,23 @@
     </ion-item>
 
     <ion-item>
+      <ion-label stacked>Empresa</ion-label>
+      <ion-input type="text" [(ngModel)]="user.company" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Cargo</ion-label>
+      <ion-input type="text" [(ngModel)]="user.jobTitle" required></ion-input>
+    </ion-item>
+
+    <ion-item>
       <ion-label stacked>Código de convite</ion-label>
       <ion-input type="text" [(ngModel)]="user.invitationCode" required placeholder="xxxxxx"></ion-input>
     </ion-item>
-    
+
     <ion-item class="help-text">
       <ion-avatar item-left>
-        <ion-icon name="help-circle"></ion-icon> 
+        <ion-icon name="help-circle"></ion-icon>
       </ion-avatar>
       <p>
         O código de convite é necessário para poder se cadastrar. Para mais informações contate <a href="mailto:suporte@mednuvem.com">suporte@mednuvem.com</a>.

@@ -41,6 +41,7 @@ namespace Server.Core.Controllers
             var patient = viewModel;
             patient.Id = Guid.NewGuid().ToString();
             patient.CreatedAt = DateTime.UtcNow;
+            patient.UpdatedAt = DateTime.UtcNow;
 
             var result = await _patientRepository.InsertOne(TeamId, patient);
             if(result.IsError){

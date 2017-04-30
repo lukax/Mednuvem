@@ -34,7 +34,11 @@ namespace Server.Core.Controllers
                 ModelState.AddModelError("", "Paciente inválido.");
                 return BadRequest(ModelState);
             }
-            if(Convert.ToDateTime(viewModel.End) > DateTime.UtcNow)
+            if(viewModel.Start < DateTime.UtcNow)
+            {
+                ModelState.AddModelError("start", "Data de início inválida.");
+            }
+            if(viewModel.End > DateTime.UtcNow || viewModel.Start > viewModel.End)
             {
                 ModelState.AddModelError("end", "Data de término inválida.");
             }
@@ -50,19 +54,23 @@ namespace Server.Core.Controllers
             return Json(viewModel.Id);
         }
 
-        [HttpPut("{patientId}")]
-        public async Task<IActionResult> Update(string patientId, [FromBody] CalendarEvent viewModel)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id, [FromBody] CalendarEvent viewModel)
         {
             if(viewModel == null || !ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Paciente inválido.");
                 return BadRequest(ModelState);
             }
-            if(Convert.ToDateTime(viewModel.End) > DateTime.UtcNow)
+            if(viewModel.Start < DateTime.UtcNow)
+            {
+                ModelState.AddModelError("start", "Data de início inválida.");
+            }
+            if(viewModel.End > DateTime.UtcNow || viewModel.Start > viewModel.End)
             {
                 ModelState.AddModelError("end", "Data de término inválida.");
             }
-            viewModel.Id = patientId;
+            viewModel.Id = id;
             viewModel.TeamId = TeamId;
             viewModel.UpdatedAt = DateTime.UtcNow;
 
@@ -80,18 +88,18 @@ namespace Server.Core.Controllers
             return Ok(await _calendarEventRepository.GetAll(TeamId, pageSize, pageNumber, orderBy, search));
         }
 
-        [HttpGet("{patientId}")]
-        public async Task<IActionResult> FindOne(string patientId){
-            var p = await _calendarEventRepository.FindOne(TeamId, patientId);
+        [HttpGet("{id}")]
+        public async Task<IActionResult> FindOne(string id){
+            var p = await _calendarEventRepository.FindOne(TeamId, id);
             if(p == null) {
                 return NotFound();
             }
             return Ok(p);
         }
 
-        [HttpDeleteAttribute("{patientId}")]
-        public async Task<IActionResult> DeleteOne(string patientId){
-            var result = await _calendarEventRepository.DeleteOne(TeamId, patientId);
+        [HttpDeleteAttribute("{id}")]
+        public async Task<IActionResult> DeleteOne(string id){
+            var result = await _calendarEventRepository.DeleteOne(TeamId, id);
             if(result.IsError){
                 return BadRequest(result);
             }
