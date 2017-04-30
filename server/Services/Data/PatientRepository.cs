@@ -10,7 +10,7 @@ using Server.Core.Models;
 
 namespace IdSvrHost.Services
 {
-    public class PatientRepository : TeamRepository<Patient>
+    public class PatientRepository : BaseRepository<Patient>
     {
 
         public PatientRepository(IOptions<MongoDbRepositoryConfiguration> config)

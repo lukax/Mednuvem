@@ -37,13 +37,14 @@ namespace IdSvrHost.Services
             user.UpdatedAt = DateTime.UtcNow;
             user.HashedPassword = _passwordHasher.HashPassword(user, plainTextPassword);
             await _db.GetCollection<User>(UsersCollectionName).InsertOneAsync(user);
-            // await _db.GetCollection<Team>(TeamsCollectionName).InsertOneAsync(new Team
-            // {
-            //     Id = user.TeamId,
-            //     CreatedAt = DateTime.UtcNow,
-            //     UpdatedAt = DateTime.UtcNow,
-            //     Name = user.Company
-            // });
+            await _db.GetCollection<Team>(TeamsCollectionName).InsertOneAsync(new Team
+            {
+                Id = user.TeamId,
+                UserId = user.Id,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                Company = user.Company
+            });
         }
 
         public User GetUserById(string id)

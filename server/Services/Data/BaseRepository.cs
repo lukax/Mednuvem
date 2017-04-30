@@ -19,7 +19,7 @@ namespace IdSvrHost.Services
         public long TotalPages { get; set; }
     }
 
-    public abstract class TeamRepository<T> where T : ITeamEntity 
+    public abstract class BaseRepository<T> where T : ITeamEntity 
     {
         private readonly string _collectionName;
         private readonly IMongoDatabase _db;
@@ -29,7 +29,7 @@ namespace IdSvrHost.Services
         protected ProjectionDefinitionBuilder<T> Projection => Builders<T>.Projection;
         protected IMongoCollection<T> Collection => _db.GetCollection<T>(_collectionName);
 
-        public TeamRepository(IOptions<MongoDbRepositoryConfiguration> config, string collectionName)
+        public BaseRepository(IOptions<MongoDbRepositoryConfiguration> config, string collectionName)
         {
             this._collectionName = collectionName;
             var client = new MongoClient(config.Value.ConnectionString);
@@ -44,6 +44,7 @@ namespace IdSvrHost.Services
             if (_indexKeysCreated) return;
             _indexKeysCreated = true;
 
+            await Collection.Indexes.CreateOneAsync(Builders<T>.IndexKeys.Ascending(x => x.TeamId));
 			await Collection.Indexes.CreateOneAsync(Builders<T>.IndexKeys.Combine(Builders<T>.IndexKeys.Ascending(x => x.TeamId), Builders<T>.IndexKeys.Ascending(x => x.Id)));
         }
         

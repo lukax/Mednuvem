@@ -10,7 +10,7 @@ using Server.Core.Models;
 
 namespace IdSvrHost.Services
 {
-    public class CalendarEventRepository : TeamRepository<CalendarEvent>
+    public class CalendarEventRepository : BaseRepository<CalendarEvent>
     {
 
         public CalendarEventRepository(IOptions<MongoDbRepositoryConfiguration> config)
