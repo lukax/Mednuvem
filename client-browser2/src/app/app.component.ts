@@ -3,6 +3,7 @@ import { Nav, Platform, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { SearchPage } from '../pages/search/search';
+import { TeamPage } from '../pages/team/team';
 import { PatientFilePage } from '../pages/patient-file/patient-file';
 import { PatientSchedulePage } from '../pages/patient-schedule/patient-schedule';
 import { ImportPatientsPage } from '../pages/import-patients/import-patients';
@@ -34,6 +35,7 @@ export class MyApp {
       //{ title: 'Nova consulta', component: PatientFilePage, icon: 'time', auth: true },
       { title: 'Novo paciente', component: PatientFilePage, icon: 'person-add', auth: true, popup: true },
       { title: 'Importar', component: ImportPatientsPage, icon: 'folder', auth: true, popup: true },
+      { title: 'Equipe', component: TeamPage, icon: 'people', auth: true },
 
       { title: 'Login', component: LoginPage, icon: 'log-in', auth: false },
     ];

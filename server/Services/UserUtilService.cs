@@ -9,7 +9,7 @@ namespace server.Services
     {
         public static string GetTeamId(this ClaimsPrincipal user)
         {
-            return user.Claims.FirstOrDefault(x => x.Type == Config.TeamIdClaimType)?.Value;
+            return user?.Claims.FirstOrDefault(x => x.Type == Config.TeamIdClaimType)?.Value;
         }
 
     }

@@ -1,16 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {Http} from '@angular/http';
-import {LoadingController, ActionSheetController, NavController} from 'ionic-angular';
+import {LoadingController, ActionSheetController, NavController, AlertController} from 'ionic-angular';
 import {Observable} from 'rxjs/Observable';
-import {Patient} from '../../providers/patient';
-import {PatientFilePage} from '../patient-file/patient-file';
-import {PatientService} from '../../providers/patient.service';
+import {Team} from '../../providers/patient';
+import {TeamService} from '../../providers/team.service';
 
 @Component({
-  templateUrl: 'search.html'
+  templateUrl: 'team.html'
 })
-export class SearchPage implements OnInit {
-  patients: Patient[];
+export class TeamPage implements OnInit {
+  teams: Team[];
   pageSize: number = 25;
   pageNumber: number = 1;
   isLoading: boolean = false;
@@ -22,7 +21,8 @@ export class SearchPage implements OnInit {
               private actionSheetCtrl: ActionSheetController,
               private loadingCtrl: LoadingController,
               private navCtrl: NavController,
-              private patientSvc: PatientService) {
+              private teamSvc: TeamService,
+              private alertCtrl: AlertController) {
 
 
   }
@@ -38,14 +38,14 @@ export class SearchPage implements OnInit {
       this.pageNumber = 1;
     }
     this.isLoading = true;
-    this.patientSvc.search(this.searchText, this.pageNumber, this.pageSize)
+    this.teamSvc.search(this.searchText, this.pageNumber, this.pageSize)
       .subscribe((data) => {
         this.isLoading = false;
         this.isError = false;
         let result = data.result;
         if($infinteScrollEvent){
           if(result.length > 0){
-            this.patients.push(...result);
+            this.te.push(...result);
           } else {
             this.pageNumber --;
           }
@@ -65,13 +65,38 @@ export class SearchPage implements OnInit {
       });
   }
 
-  getPatient(patient: Patient) {
-    this.navCtrl.push(PatientFilePage, { patientId: patient.id });
-  }
-
-  isEmpty() {
+  isEmptyPatients() {
     return this.patients != null && this.patients.length == 0;
   }
+
+
+  addMember() {
+    let prompt = this.alertCtrl.create({
+      title: 'Adicionar membro da equipe',
+      inputs: [
+        {
+          name: 'description',
+          placeholder: 'Email'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          handler: data => { }
+        },
+        {
+          text: 'Adicionar',
+          handler: data => {
+            if(data){
+
+            }
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
 
 }
 

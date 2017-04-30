@@ -6,6 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyApp } from './app.component';
 import { SearchPage } from '../pages/search/search';
+import { TeamPage } from '../pages/team/team';
 import { PatientFilePage, PatientSocialProfileComponent, PatientPhoneNumberComponent, PatientAddressComponent } from '../pages/patient-file/patient-file';
 import { PatientSchedulePage, ScheduleOptionsPage } from '../pages/patient-schedule/patient-schedule';
 import { ImportPatientsPage } from '../pages/import-patients/import-patients';
@@ -14,6 +15,7 @@ import { RegisterPage } from '../pages/register/register';
 
 import { LoginService } from '../providers/login.service';
 import { PatientService } from '../providers/patient.service';
+import { TeamService } from '../providers/team.service';
 import { UploadService } from '../providers/upload.service';
 
 import { IonicStorageModule } from '@ionic/storage';
@@ -36,6 +38,7 @@ import { CalendarModule } from 'angular-calendar';
     PatientPhoneNumberComponent,
     PatientSocialProfileComponent,
     PatientAddressComponent,
+    TeamPage,
     ScheduleOptionsPage
   ],
   imports: [
@@ -66,6 +69,7 @@ import { CalendarModule } from 'angular-calendar';
     PatientPhoneNumberComponent,
     PatientSocialProfileComponent,
     PatientAddressComponent,
+    TeamPage,
     ScheduleOptionsPage
   ],
   providers: [
@@ -74,6 +78,7 @@ import { CalendarModule } from 'angular-calendar';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     LoginService,
     PatientService,
+    TeamService,
     UploadService
   ]
 })

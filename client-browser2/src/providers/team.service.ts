@@ -7,34 +7,34 @@ import * as Constants from './constants';
 import { Patient } from './patient';
 
 @Injectable()
-export class PatientService {
+export class TeamService {
 
 	constructor(public loginService: LoginService) {
 
 	}
 
 	search(searchText: string, pageNumber: number, pageSize: number): Observable<PagedListResult<Patient>> {
-		return this.loginService.AuthGet(Constants.API_URL +  `/patients?pageNumber=${pageNumber}&pageSize=${pageSize}&search=${searchText}`)
+		return this.loginService.AuthGet(Constants.API_URL +  `/teams?pageNumber=${pageNumber}&pageSize=${pageSize}&search=${searchText}`)
 			.map(this.extractData);
 	}
 
 	findOne(id: string): Observable<Patient> {
-		return this.loginService.AuthGet(Constants.API_URL + '/patients/' + id)
+		return this.loginService.AuthGet(Constants.API_URL + '/teams/' + id)
 			.map(this.extractData);
 	}
 
 	saveOrUpdate(patient: Patient): Observable<string> {
 		if(patient.id !== null){
-			return this.loginService.AuthPut(Constants.API_URL + '/patients/' + patient.id, patient)
+			return this.loginService.AuthPut(Constants.API_URL + '/teams/' + patient.id, patient)
 				.map(this.extractData);
 		} else {
-			return this.loginService.AuthPost(Constants.API_URL + '/patients', patient)
+			return this.loginService.AuthPost(Constants.API_URL + '/teams', patient)
 				.map(this.extractData);
 		}
 	}
 
 	delete(id: string): Observable<void> {
-		return this.loginService.AuthDelete(Constants.API_URL + '/patients/' + id)
+		return this.loginService.AuthDelete(Constants.API_URL + '/teams/' + id)
 			.map(this.extractData);
 	}
 

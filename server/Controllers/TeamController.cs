@@ -27,7 +27,7 @@ namespace Server.Core.Controllers
             _teamRepository = teamRepository;
         }
 
-        [HttpPost]
+        [HttpPost("Member")]
         public async Task<IActionResult> AddMember([FromBody] string userEmail)
         {
             if(string.IsNullOrWhiteSpace(userEmail) || !ModelState.IsValid)

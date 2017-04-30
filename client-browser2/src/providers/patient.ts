@@ -1,4 +1,10 @@
-
+export class Team {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string;
+  company: string;
+}
 
 export class BasicPerson {
     name: string;

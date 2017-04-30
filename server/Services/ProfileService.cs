@@ -33,9 +33,12 @@ namespace IdSvrHost.Services
                 new Claim(JwtClaimTypes.Email, user.Email),
 				new Claim(JwtClaimTypes.EmailVerified, user.EmailVerified.ToString().ToLower(), ClaimValueTypes.Boolean),
 				new Claim(Config.CompanyClaimType, user.Company),
-                new Claim(Config.TeamIdClaimType, user.TeamId),
-                new Claim(Config.RoleClaimType, user.Role)
+                new Claim(Config.TeamIdClaimType, user.TeamId)
             };
+
+            if(user.Role != null) {
+                claims.Add(new Claim(Config.RoleClaimType, user.Role));
+            }
 
             context.IssuedClaims = claims;
 

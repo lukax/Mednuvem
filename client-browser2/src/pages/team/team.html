@@ -4,8 +4,8 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      <ion-icon name="search"></ion-icon>
-      <span>Buscar</span>
+      <ion-icon name="people"></ion-icon>
+      <span>Equipe</span>
       <ion-spinner class="loading-toolbar" *ngIf="isLoading"></ion-spinner>
     </ion-title>
   </ion-navbar>
@@ -27,10 +27,10 @@
             <ion-avatar item-left>
                 <img src="https://www.gravatar.com/avatar/7a4e4b4ff62d7420c4fd414e6d910f5d?s=40&amp;f=y&amp;d=mm">
             </ion-avatar>
-            <h2>Nome do paciente</h2>
+            <h2>Membro da equipe</h2>
             <p>Status</p>
             <button ion-button clear item-right>
-                Última consulta
+                Última mensagem
             </button>
         </button>
         <button ion-item *ngFor="let patient of patients" (click)="getPatient(patient)">

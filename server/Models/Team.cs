@@ -14,6 +14,8 @@ namespace server.Models
 		public string Company { get; set; }
 
         [BsonIgnore]
-        public string TeamId => Id;
+        public string TeamId { get { return Id; } set { Id = value; } }
+
+        public string[] Members { get; set; }
     }
 }

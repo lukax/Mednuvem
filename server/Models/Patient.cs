@@ -144,6 +144,7 @@ namespace Server.Core.Models
             var birthDateOk = DateTime.TryParse(this.BirthDate, out birthDate);
             var lastAppointmentOk = DateTime.TryParse(this.LastAppointment, out lastAppointment);
             return new Patient {
+                Id = Guid.NewGuid().ToString(),
                 Name = this.Name,
                 Email = this.Email,
                 MedicalInsurance = this.MedicalInsurance,
