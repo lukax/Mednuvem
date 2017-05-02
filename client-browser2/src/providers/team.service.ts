@@ -4,7 +4,7 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { LoginService } from './login.service';
 import * as Constants from './constants';
-import { Patient } from './patient';
+import { Team, TeamMember } from './patient';
 
 @Injectable()
 export class TeamService {
@@ -13,30 +13,25 @@ export class TeamService {
 
 	}
 
-	search(searchText: string, pageNumber: number, pageSize: number): Observable<PagedListResult<Patient>> {
-		return this.loginService.AuthGet(Constants.API_URL +  `/teams?pageNumber=${pageNumber}&pageSize=${pageSize}&search=${searchText}`)
+	get(): Observable<Team> {
+		return this.loginService.AuthGet(Constants.API_URL +  `/teams`)
 			.map(this.extractData);
 	}
 
-	findOne(id: string): Observable<Patient> {
-		return this.loginService.AuthGet(Constants.API_URL + '/teams/' + id)
-			.map(this.extractData);
+	addMember(member: TeamMember): Promise<void> {
+		return this.loginService.AuthPost(Constants.API_URL + `/teams/member`, member)
+			.map(this.extractData).toPromise();
 	}
 
-	saveOrUpdate(patient: Patient): Observable<string> {
-		if(patient.id !== null){
-			return this.loginService.AuthPut(Constants.API_URL + '/teams/' + patient.id, patient)
-				.map(this.extractData);
-		} else {
-			return this.loginService.AuthPost(Constants.API_URL + '/teams', patient)
-				.map(this.extractData);
-		}
+	removeMember(teamId: string, userId: string): Promise<void> {
+		return this.loginService.AuthDelete(Constants.API_URL + `/teams/${teamId}/member/${userId}`)
+			.map(this.extractData).toPromise();
 	}
 
-	delete(id: string): Observable<void> {
-		return this.loginService.AuthDelete(Constants.API_URL + '/teams/' + id)
-			.map(this.extractData);
-	}
+	createTeam(teamName: { name: string }): Promise<void> {
+    return this.loginService.AuthPost(Constants.API_URL + `/teams`, teamName)
+      .map(this.extractData).toPromise();
+  }
 
 	private extractData(res: Response) {
 		try{

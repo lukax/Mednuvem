@@ -19,7 +19,10 @@
             <ion-avatar item-left>
               <img src="https://www.gravatar.com/avatar/{{loginService.getUser().email_hash}}?s=40&amp;&amp;d=mm">
             </ion-avatar>
-            <h2>{{loginService.getUser().name}}</h2>
+            <h2>
+              {{loginService.getUser().name}}<br>
+              <small>{{loginService.getUser().company}}</small>
+            </h2>
 
             <button ion-button icon-only clear (click)="logout()" item-right>
               <ion-icon name="log-out"></ion-icon>

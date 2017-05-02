@@ -23,35 +23,35 @@
 
 
     <ion-list>
-        <button ion-item style="opacity: 0.4" disabled>
+        <ion-item>
             <ion-avatar item-left>
                 <img src="https://www.gravatar.com/avatar/7a4e4b4ff62d7420c4fd414e6d910f5d?s=40&amp;f=y&amp;d=mm">
             </ion-avatar>
             <h2>Nome do paciente</h2>
             <p>Status</p>
-            <button ion-button clear item-right>
+            <button ion-button clear item-right disabled>
                 Última consulta
             </button>
-        </button>
+        </ion-item>
         <button ion-item *ngFor="let patient of patients" (click)="getPatient(patient)">
             <ion-avatar item-left>
                 <img src="https://www.gravatar.com/avatar/{{patient.emailHash}}?s=40&amp;d=mm">
             </ion-avatar>
             <h2>{{patient.name}}</h2>
             <p>{{patient.medicalInsurance}} {{patient.taxIdNumber}}</p>
-            <button ion-button clear item-right>
+            <button ion-button clear item-right disabled>
                 {{patient.lastAppointment | amTimeAgo}}
             </button>
         </button>
         <ion-item *ngIf="!isLoading && !isError && isEmpty()">
-            <h2>Nenhum paciente encontrado. <a href="#" (click)="searchPatients()">Tentar novamente.</a></h2>
+            <h2>Nenhum paciente encontrado. <a href="#" (click)="search()">Tentar novamente.</a></h2>
         </ion-item>
         <ion-item *ngIf="!isLoading && isError">
-            <h2>Oops... erro ao se comunicar com servidor. <a href="#" (click)="searchPatients()">Tentar novamente.</a></h2>
+            <h2>Oops... erro ao se comunicar com servidor. <a href="#" (click)="search()">Tentar novamente.</a></h2>
         </ion-item>
     </ion-list>
 
-    <ion-infinite-scroll (ionInfinite)="searchPatients($event)">
+    <ion-infinite-scroll (ionInfinite)="search($event)">
     <ion-infinite-scroll-content
       loadingText="Carregando pacientes..."></ion-infinite-scroll-content>
     </ion-infinite-scroll>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using IdSvrHost.Models;
 using Microsoft.AspNetCore.Identity;
@@ -14,7 +15,6 @@ namespace IdSvrHost.Services
         private readonly IMongoDatabase _db;
         private const string UsersCollectionName = "Users";
         private const string ClientsCollectionName = "Clients";
-        private const string TeamsCollectionName = "Teams";
 
         public UserRepository(IOptions<MongoDbRepositoryConfiguration> config, IPasswordHasher<User> passwordHasher)
         {
@@ -25,6 +25,7 @@ namespace IdSvrHost.Services
 
         public User GetUserByUsername(string username)
         {
+            username = username.ToLower();
             var collection = _db.GetCollection<User>(UsersCollectionName);
             var filter = Builders<User>.Filter.Eq(u => u.Username, username);
             return collection.Find(filter).SingleOrDefaultAsync().Result;
@@ -32,19 +33,10 @@ namespace IdSvrHost.Services
 
         public async Task CreateUser(User user, string plainTextPassword){
             user.Id = Guid.NewGuid().ToString();
-            user.TeamId = Guid.NewGuid().ToString();
             user.CreatedAt = DateTime.UtcNow;
             user.UpdatedAt = DateTime.UtcNow;
             user.HashedPassword = _passwordHasher.HashPassword(user, plainTextPassword);
             await _db.GetCollection<User>(UsersCollectionName).InsertOneAsync(user);
-            await _db.GetCollection<Team>(TeamsCollectionName).InsertOneAsync(new Team
-            {
-                Id = user.TeamId,
-                UserId = user.Id,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
-                Company = user.Company
-            });
         }
 
         public User GetUserById(string id)
@@ -52,6 +44,13 @@ namespace IdSvrHost.Services
             var collection = _db.GetCollection<User>(UsersCollectionName);
             var filter = Builders<User>.Filter.Eq(u => u.Id, id);
             return collection.Find(filter).SingleOrDefaultAsync().Result;
+        }
+
+        public async Task<List<User>> GetUserById(string[] id)
+        {
+            var collection = _db.GetCollection<User>(UsersCollectionName);
+            var filter = Builders<User>.Filter.In(u => u.Id, id);
+            return await collection.Find(filter).ToListAsync();
         }
 
         public bool ValidatePassword(string username, string plainTextPassword)

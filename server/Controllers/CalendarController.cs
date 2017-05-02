@@ -19,11 +19,12 @@ namespace Server.Core.Controllers
     public class CalendarController : Controller
     {
         private CalendarEventRepository _calendarEventRepository;
-        private string TeamId => User.GetTeamId();
+        private UserUtilService _userUtilService;
 
-        public CalendarController(CalendarEventRepository calendarEventRepository)
+        public CalendarController(CalendarEventRepository calendarEventRepository, UserUtilService userUtilService)
         {
             _calendarEventRepository = calendarEventRepository;
+            _userUtilService = userUtilService;
         }
 
         [HttpPost]
@@ -43,11 +44,11 @@ namespace Server.Core.Controllers
                 ModelState.AddModelError("end", "Data de término inválida.");
             }
             viewModel.Id = Guid.NewGuid().ToString();
-            viewModel.TeamId = TeamId;
+            viewModel.TeamId = _userUtilService.GetTeamId(User);
             viewModel.CreatedAt = DateTime.UtcNow;
             viewModel.UpdatedAt = DateTime.UtcNow;
 
-            var result = await _calendarEventRepository.InsertOne(TeamId, viewModel);
+            var result = await _calendarEventRepository.InsertOne(viewModel);
             if(result.IsError){
                 return BadRequest(result);
             }
@@ -71,10 +72,10 @@ namespace Server.Core.Controllers
                 ModelState.AddModelError("end", "Data de término inválida.");
             }
             viewModel.Id = id;
-            viewModel.TeamId = TeamId;
+            viewModel.TeamId = _userUtilService.GetTeamId(User);
             viewModel.UpdatedAt = DateTime.UtcNow;
 
-            var result = await _calendarEventRepository.UpdateOne(TeamId, viewModel);
+            var result = await _calendarEventRepository.UpdateOne(viewModel);
             if(result.IsError){
                 return BadRequest(result);
             }
@@ -85,12 +86,12 @@ namespace Server.Core.Controllers
         [Route("")]
         public async Task<IActionResult> GetAll(int pageSize = 50, int pageNumber = 1, string orderBy = "", string search = "")
         {
-            return Ok(await _calendarEventRepository.GetAll(TeamId, pageSize, pageNumber, orderBy, search));
+            return Ok(await _calendarEventRepository.GetAll(_userUtilService.GetTeamId(User), pageSize, pageNumber, orderBy, search));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> FindOne(string id){
-            var p = await _calendarEventRepository.FindOne(TeamId, id);
+            var p = await _calendarEventRepository.FindOne(_userUtilService.GetTeamId(User), id);
             if(p == null) {
                 return NotFound();
             }
@@ -99,7 +100,7 @@ namespace Server.Core.Controllers
 
         [HttpDeleteAttribute("{id}")]
         public async Task<IActionResult> DeleteOne(string id){
-            var result = await _calendarEventRepository.DeleteOne(TeamId, id);
+            var result = await _calendarEventRepository.DeleteOne(_userUtilService.GetTeamId(User), id);
             if(result.IsError){
                 return BadRequest(result);
             }

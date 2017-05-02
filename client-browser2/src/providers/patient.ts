@@ -3,7 +3,15 @@ export class Team {
   createdAt: Date;
   updatedAt: Date;
   userId: string;
-  company: string;
+  name: string;
+  members: TeamMember[] = [];
+}
+
+export class TeamMember {
+    userId: string;
+    role: string;
+    name: string;
+    email: string;
 }
 
 export class BasicPerson {

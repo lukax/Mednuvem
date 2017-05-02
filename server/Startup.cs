@@ -18,6 +18,7 @@ using IdentityServer4.Quickstart.UI;
 using Newtonsoft.Json;
 using Server.Core.Models;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
+using server.Services;
 
 namespace server
 {
@@ -62,6 +63,8 @@ namespace server
 			builder.Services.AddTransient<UserRepository>();
             builder.Services.AddTransient<PatientRepository>();
             builder.Services.AddTransient<CalendarEventRepository>();
+            builder.Services.AddTransient<TeamRepository>();
+            builder.Services.AddTransient<UserUtilService>();
 
 			services.AddCors(options =>
                 {

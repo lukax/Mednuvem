@@ -54,26 +54,32 @@ namespace IdSvrHost.Services
             return await Collection.CountAsync(filter);
         }
 
-        public async Task<T> FindOne(string teamId, string patientId)
+        public async Task<T> FindOne(string teamId, string entityId)
         {
 			var filter = Filter.And(
                 Filter.Eq(u => u.TeamId, teamId),
-                Filter.Eq(u => u.Id, patientId)
+                Filter.Eq(u => u.Id, entityId)
             );
             return await Collection.Find(filter).FirstOrDefaultAsync();
         }
 
-        public async Task<OperationResult> DeleteOne(string teamId, string id)
+        public async Task<T> FindOneById(string entityId)
+        {
+			var filter = Filter.Eq(u => u.Id, entityId);
+            return await Collection.Find(filter).FirstOrDefaultAsync();
+        }
+
+        public async Task<OperationResult> DeleteOne(string teamId, string entityId)
         {
 			var filter = Filter.And(
                 Filter.Eq(u => u.TeamId, teamId),
-                Filter.Eq(u => u.Id, id)
+                Filter.Eq(u => u.Id, entityId)
             );
             var res = await Collection.DeleteOneAsync(filter);
             if(res.DeletedCount > 0){
                 return new SuccessOperationResult();
             }
-            return new FailOperationResult("Nenhum paciente encontrado");
+            return new FailOperationResult("Nenhum registro encontrado");
         }
 
         public async Task<OperationResult> InsertMany(string teamId, List<T> entityList)
@@ -83,17 +89,16 @@ namespace IdSvrHost.Services
             return new SuccessOperationResult();
         }
 
-		public async Task<OperationResult> InsertOne(string teamId, T entity)
+		public async Task<OperationResult> InsertOne(T entity)
 		{
-            entity.TeamId = teamId;
 			var filter = Filter.Or(
 				Filter.And(
-					Filter.Eq(u => u.TeamId, teamId),
+					Filter.Eq(u => u.TeamId, entity.TeamId),
 					Filter.Eq(u => u.Id, entity.Id)
 				));
 			if (await Collection.CountAsync(filter) > 0)
 			{
-				return new FailOperationResult("Já existe um paciente com essas informações.");
+				return new FailOperationResult("Já existe um registro com essas informações.");
 			}
 			else
 			{
@@ -102,16 +107,15 @@ namespace IdSvrHost.Services
 			}
 		}
 
-        public async Task<OperationResult> UpdateOne(string teamId, T entity)
+        public async Task<OperationResult> UpdateOne(T entity)
         {
-            entity.TeamId = teamId;
 			var filter = Filter.And(
-                    Filter.Eq(u => u.TeamId, teamId),
+                    Filter.Eq(u => u.TeamId, entity.TeamId),
                     Filter.Eq(u => u.Id, entity.Id)
                 );
             if(await Collection.CountAsync(filter) == 0)
             {
-                return new FailOperationResult("Nenhum paciente encontrado.");
+                return new FailOperationResult("Nenhum registro encontrado.");
             }
             else
             {

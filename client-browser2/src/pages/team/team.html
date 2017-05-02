@@ -15,7 +15,6 @@
 
     <ion-searchbar
         [(ngModel)]="searchText"
-        (ionInput)="search()"
         showCancelButton="true"
         placeholder="Comece a escrever..."
         debounce="500" autofocus>
@@ -23,38 +22,33 @@
 
 
     <ion-list>
-        <button ion-item style="opacity: 0.4" disabled>
+        <ion-item>
             <ion-avatar item-left>
                 <img src="https://www.gravatar.com/avatar/7a4e4b4ff62d7420c4fd414e6d910f5d?s=40&amp;f=y&amp;d=mm">
             </ion-avatar>
             <h2>Membro da equipe</h2>
             <p>Status</p>
-            <button ion-button clear item-right>
-                Última mensagem
+            <button ion-button clear item-right icon-right (click)="addMember()">
+              Adicionar à equipe <ion-icon name="add"></ion-icon>
             </button>
-        </button>
-        <button ion-item *ngFor="let patient of patients" (click)="getPatient(patient)">
+        </ion-item>
+        <ion-item ion-item *ngFor="let member of team.members">
             <ion-avatar item-left>
-                <img src="https://www.gravatar.com/avatar/{{patient.emailHash}}?s=40&amp;d=mm">
+                <img src="https://www.gravatar.com/avatar/{{member.emailHash}}?s=40&amp;d=mm">
             </ion-avatar>
-            <h2>{{patient.name}}</h2>
-            <p>{{patient.medicalInsurance}} {{patient.taxIdNumber}}</p>
-            <button ion-button clear item-right>
-                {{patient.lastAppointment | amTimeAgo}}
+            <h2>{{member.name}}</h2>
+            <p>{{member.email}} ({{member.role == 'owner' ? 'coordenador' : 'membro'}})</p>
+            <button ion-button icon-only clear item-right (click)="removeMember(member)">
+                <ion-icon name="close"></ion-icon>
             </button>
-        </button>
+        </ion-item>
         <ion-item *ngIf="!isLoading && !isError && isEmpty()">
-            <h2>Nenhum paciente encontrado. <a href="#" (click)="searchPatients()">Tentar novamente.</a></h2>
+            <h2>Nenhuma equipe encontrada. <a href="#" (click)="createTeam()">Criar nova equipe.</a></h2>
         </ion-item>
         <ion-item *ngIf="!isLoading && isError">
-            <h2>Oops... erro ao se comunicar com servidor. <a href="#" (click)="searchPatients()">Tentar novamente.</a></h2>
+            <h2>Oops... erro ao se comunicar com servidor. <a href="#" (click)="get()">Tentar novamente.</a></h2>
         </ion-item>
     </ion-list>
-
-    <ion-infinite-scroll (ionInfinite)="searchPatients($event)">
-    <ion-infinite-scroll-content
-      loadingText="Carregando pacientes..."></ion-infinite-scroll-content>
-    </ion-infinite-scroll>
 
 </ion-content>
 

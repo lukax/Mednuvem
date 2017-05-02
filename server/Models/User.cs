@@ -7,10 +7,9 @@ using Server.Core.Models;
 
 namespace IdSvrHost.Models
 {
-    public class User : ITeamEntity
+    public class User
     {
 		public string Id { get; set; }
-		public string TeamId { get; set; }
 		public DateTime CreatedAt { get; set; }
 		public DateTime UpdatedAt { get; set; }
 
@@ -21,7 +20,6 @@ namespace IdSvrHost.Models
         public bool IsActive { get; set; }
         public string HashedPassword { get; set; }
         public string Company { get; set; }
-        public string Role { get; set; }
 
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }

@@ -136,7 +136,7 @@ export class PatientFilePage implements OnInit {
     }
   }
 
-  presentPatientOptions() {
+  presentOptions() {
     if(this.patient.id == null) return;
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Ficha do Paciente - Opções',

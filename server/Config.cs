@@ -18,8 +18,6 @@ namespace Server.Core
         public const string ApiAuthority = "https://mednuvem.azurewebsites.net";
 #endif
         public const string CompanyClaimType = "company";
-        public const string TeamIdClaimType = "teamId";
-        public const string RoleClaimType = "role";
 
         public static class RoutePaths 
         {
