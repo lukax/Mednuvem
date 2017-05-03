@@ -95,11 +95,9 @@ namespace Server.Core.Controllers
                     UserId = user.Id,
                     Role = "collaborator",
                 });
-            } else {
-                existingMember.Role = viewModel.Role;
             }
 
-            await _teamRepository.InsertOne(team);
+            await _teamRepository.UpdateOne(team);
 
             return Ok();
         }        
@@ -131,6 +129,10 @@ namespace Server.Core.Controllers
             }
             team.Members.Remove(member);
             
+            if(team.Members.Count == 1) {
+                team.Members.First().Role = "owner";
+            }
+
             if(team.Members.Any()) {
                 await _teamRepository.UpdateOne(team);
             } else {

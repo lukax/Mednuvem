@@ -28,7 +28,7 @@ namespace IdSvrHost.Services
             username = username.ToLower();
             var collection = _db.GetCollection<User>(UsersCollectionName);
             var filter = Builders<User>.Filter.Eq(u => u.Username, username);
-            return collection.Find(filter).SingleOrDefaultAsync().Result;
+            return collection.Find(filter).SingleOrDefault();
         }
 
         public async Task CreateUser(User user, string plainTextPassword){

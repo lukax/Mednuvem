@@ -72,7 +72,7 @@ export class TeamPage implements OnInit {
                 this.get();
               } catch (ex) {
                 await loading.dismiss();
-                this.alertCtrl.create({ message: 'Oops... erro de conexão. ' + ex }).present();
+                this.alertCtrl.create({ message: 'Oops... ação não completada. ' + ex }).present();
               }
             }
           }
@@ -99,7 +99,7 @@ export class TeamPage implements OnInit {
                 this.get();
               } catch(ex) {
                 await loading.dismiss();
-                this.alertCtrl.create({ message: 'Oops... erro de conexão. ' + ex }).present();
+                this.alertCtrl.create({ message: 'Oops... ação não completada. ' + ex }).present();
               }
 
           }
@@ -134,7 +134,7 @@ export class TeamPage implements OnInit {
                 this.get();
               } catch (ex) {
                 await loading.dismiss();
-                this.alertCtrl.create({ message: 'Oops... erro de conexão. ' + ex }).present();
+                this.alertCtrl.create({ message: 'Oops... ação não completada. ' + ex }).present();
               }
             }
           }

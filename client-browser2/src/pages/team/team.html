@@ -22,7 +22,7 @@
 
 
     <ion-list>
-        <ion-item>
+        <ion-item style="opacity: 0.6">
             <ion-avatar item-left>
                 <img src="https://www.gravatar.com/avatar/7a4e4b4ff62d7420c4fd414e6d910f5d?s=40&amp;f=y&amp;d=mm">
             </ion-avatar>
@@ -38,7 +38,7 @@
             </ion-avatar>
             <h2>{{member.name}}</h2>
             <p>{{member.email}} ({{member.role == 'owner' ? 'coordenador' : 'membro'}})</p>
-            <button ion-button icon-only clear item-right (click)="removeMember(member)">
+            <button ion-button icon-only clear item-right (click)="removeMember(member)" color="danger">
                 <ion-icon name="close"></ion-icon>
             </button>
         </ion-item>

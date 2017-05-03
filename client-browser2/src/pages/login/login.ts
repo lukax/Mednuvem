@@ -40,12 +40,16 @@ export class LoginPage implements OnInit, OnDestroy  {
         loader.dismiss().then(() => {
           let alert = this.alertCtrl.create({
             title: 'Oops...',
-            subTitle: 'Não foi possível fazer login. ' + (err.message || err.error || err.errorMessage || 'Erro desconhecido'),
+            subTitle: 'Não foi possível fazer login. ' /*+ (err.message || err.error || err.errorMessage || 'Erro desconhecido')*/,
             buttons: ['OK']
           });
           alert.present();
         });
       });
+  }
+
+  isLoginEnabled() {
+    return !!this.username && !!this.password;
   }
 
   register(){
