@@ -38,17 +38,17 @@
       <div class="btn-group float-right">
         <button ion-button clear
           (click)="view = 'month'"
-          color="{{ view === 'month' ? 'light' : '' }}">
+          color="{{ view === 'month' ? 'dark' : '' }}">
           Mês
         </button>
         <button ion-button clear
           (click)="view = 'week'"
-          color="{{ view === 'week' ? 'light' : ''}}">
+          color="{{ view === 'week' ? 'dark' : ''}}">
           Semana
         </button>
         <button ion-button clear
           (click)="view = 'day'"
-          color="{{ view === 'day' ? 'light' : ''}}">
+          color="{{ view === 'day' ? 'dark' : ''}}">
           Dia
         </button>
       </div>
@@ -91,7 +91,7 @@
     <span class="text-title">
       Eventos
     </span>
-    <button ion-button outline item-right>
+    <button ion-button outline item-right (click)="handleEvent()">
       Novo&nbsp;<ion-icon name="add"></ion-icon>
     </button>
   </ion-item>
@@ -104,44 +104,39 @@
       <th>Tipo</th>
       <th>Descrição</th>
       <th>Início</th>
-      <th>Término</th>
-      <th>Remover</th>
+      <th>Fim</th>
+      <th>Editar</th>
     </tr>
     </thead>
 
     <tbody>
     <tr *ngFor="let event of events; let index = index">
       <td>
-        <ion-input type="text"
-          [(ngModel)]="event.title"
-          (keyup)="refresh.next()"></ion-input>
+        {{event.title}}
       </td>
       <td>
-        <ion-input type="text"
-                   [(ngModel)]="event.type"
-                   (keyup)="refresh.next()"></ion-input>
+        {{event.type}}
       </td>
       <td>
-        <ion-input type="text"
-                   [(ngModel)]="event.description"
-                   (keyup)="refresh.next()"></ion-input>
+        {{event.description || '-'}}
       </td>
       <td>
-        <ion-item>
-          <ion-datetime displayFormat="DD/MM/YYYY hh:mm" pickerFormat="DD/MM/YYYY HH:mm" hourValues="7,8,9,10,11,12,13,14,15,16,17,18,19,20,21" minuteValues="0,5,10,15,20,25,30,35,40,45,50,55" yearValues="{{yearValues}}" [(ngModel)]="event.start"></ion-datetime>
-        </ion-item>
+        {{event.start | date:'medium'}}
       </td>
       <td>
-        <ion-item>
-          <ion-datetime displayFormat="DD/MM/YYYY hh:mm" pickerFormat="DD/MM/YYYY HH:mm" hourValues="7,8,9,10,11,12,13,14,15,16,17,18,19,20,21" minuteValues="0,5,10,15,20,25,30,35,40,45,50,55" yearValues="{{yearValues}}" [(ngModel)]="event.end"></ion-datetime>
-        </ion-item>
+        {{event.end | date:'medium'}}
       </td>
       <td>
+        <button ion-button small clear
+                (click)="handleEvent('click', event)">
+          <ion-icon name="create"></ion-icon>
+        </button>
         <button ion-button color="danger" small clear
-          (click)="events.splice(index, 1); refresh.next()">
+          (click)="removeEvent(event)">
           <ion-icon name="close"></ion-icon>
         </button>
       </td>
+
     </tr>
     </tbody>
 

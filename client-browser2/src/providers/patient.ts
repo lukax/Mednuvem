@@ -1,3 +1,6 @@
+import { CalendarEvent } from 'angular-calendar';
+import { startOfDay, addHours } from 'date-fns';
+
 export class Team {
   id: string;
   createdAt: Date;
@@ -8,20 +11,20 @@ export class Team {
 }
 
 export class TeamMember {
-    userId: string;
-    role: string;
-    name: string;
-    email: string;
+  userId: string;
+  role: string;
+  name: string;
+  email: string;
 }
 
 export class BasicPerson {
-    name: string;
-    taxIdNumber: string;
-    registrationNumber: string;
-    email: string;
-    emailHash: string;
-    jobTitle: string;
-    phoneNumbers: PhoneNumber[] = [];
+  name: string;
+  taxIdNumber: string;
+  registrationNumber: string;
+  email: string;
+  emailHash: string;
+  jobTitle: string;
+  phoneNumbers: PhoneNumber[] = [];
 }
 
 export class Patient extends BasicPerson {
@@ -67,29 +70,62 @@ export class PhoneNumber {
 }
 
 export class SocialProfile {
-    type: string;
-    description: string;
+  type: string;
+  description: string;
 }
 
 export class MedicalReceipt {
-    type: string;
-    description: string;
+  type: string;
+  description: string;
 }
 
 export class AppointmentInfo {
-    motivations: DescriptionInfo[] = [];
-    indications: DescriptionInfo[] = [];
-    visits: AppointmentVisit[] = [];
+  motivations: DescriptionInfo[] = [];
+  indications: DescriptionInfo[] = [];
+  visits: AppointmentVisit[] = [];
 }
 
 export class DescriptionInfo {
-    type: string;
-    description: string;
+  type: string;
+  description: string;
 }
 
 export class AppointmentVisit {
-    createdAt: Date;
-    visitDate: Date;
-    status: string;
-    description: string;
+  createdAt: Date;
+  visitDate: Date;
+  status: string;
+  description: string;
+}
+
+export class PatientCalendarEvent {
+  color: EventColor;
+  actions?: EventAction[];
+  allDay?: boolean;
+  cssClass?: string;
+  resizable?: { beforeStart?: boolean; afterEnd?: boolean; };
+  draggable?: boolean;
+
+  id?: string;
+  start: string = startOfDay(new Date()).toISOString();
+  end?: string = addHours(startOfDay(new Date()), 1).toISOString();
+  title: string;
+  type?: string = 'Consulta';
+  description?: string;
+}
+
+export interface EventColor {
+  primary: string;
+  secondary: string;
+}
+export interface EventAction {
+  label: string;
+  cssClass?: string;
+  onClick({event}: {
+    event: PatientCalendarEvent;
+  }): any;
+}
+export interface CalendarEventTimesChangedEvent {
+  event: PatientCalendarEvent;
+  newStart: string;
+  newEnd?: string;
 }

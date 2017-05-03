@@ -8,7 +8,7 @@ import { MyApp } from './app.component';
 import { SearchPage } from '../pages/search/search';
 import { TeamPage } from '../pages/team/team';
 import { PatientFilePage, PatientSocialProfileComponent, PatientPhoneNumberComponent, PatientAddressComponent } from '../pages/patient-file/patient-file';
-import { PatientSchedulePage, ScheduleOptionsPage } from '../pages/patient-schedule/patient-schedule';
+import { CalendarEventsPage, ScheduleOptionsPage } from '../pages/calendar-events/calendar-events';
 import { ImportPatientsPage } from '../pages/import-patients/import-patients';
 import { LoginPage } from '../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
@@ -25,13 +25,14 @@ import { MomentModule } from 'angular2-moment';
 import { CKEditorModule } from 'ng2-ckeditor';
 //import { AutoCompleteModule } from 'ionic2-auto-complete';
 import { CalendarModule } from 'angular-calendar';
+import {CalendarService} from "../providers/calendar.service";
 
 @NgModule({
   declarations: [
     MyApp,
     SearchPage,
     PatientFilePage,
-    PatientSchedulePage,
+    CalendarEventsPage,
     ImportPatientsPage,
     LoginPage,
     RegisterPage,
@@ -62,7 +63,7 @@ import { CalendarModule } from 'angular-calendar';
     MyApp,
     SearchPage,
     PatientFilePage,
-    PatientSchedulePage,
+    CalendarEventsPage,
     ImportPatientsPage,
     LoginPage,
     RegisterPage,
@@ -79,7 +80,8 @@ import { CalendarModule } from 'angular-calendar';
     LoginService,
     PatientService,
     TeamService,
-    UploadService
+    UploadService,
+    CalendarService
   ]
 })
 export class AppModule {}

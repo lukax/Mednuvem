@@ -20,11 +20,11 @@ namespace Server.Core.Models
         [Required] 
         public DateTime End { get; set; }
 
-        [Required]
         public string PatientId { get; set; }
 
         [Required]
         public string Title { get; set; }
+        public string Type { get; set; }
         public string Status { get; set; }
         public string Description { get; set; }
         public EventColor Color { get; set; }

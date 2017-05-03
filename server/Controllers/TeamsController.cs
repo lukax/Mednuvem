@@ -95,9 +95,13 @@ namespace Server.Core.Controllers
                     UserId = user.Id,
                     Role = "collaborator",
                 });
-            }
 
-            await _teamRepository.UpdateOne(team);
+                await _teamRepository.UpdateOne(team);
+            } 
+            else 
+            {
+                return BadRequest("Usuário já faz parte da equipe.");
+            }
 
             return Ok();
         }        

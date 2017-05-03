@@ -1,11 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, MenuController } from 'ionic-angular';
+import {Nav, Platform, MenuController, LoadingController} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { SearchPage } from '../pages/search/search';
 import { TeamPage } from '../pages/team/team';
 import { PatientFilePage } from '../pages/patient-file/patient-file';
-import { PatientSchedulePage } from '../pages/patient-schedule/patient-schedule';
+import { CalendarEventsPage } from '../pages/calendar-events/calendar-events';
 import { ImportPatientsPage } from '../pages/import-patients/import-patients';
 import { LoginPage } from '../pages/login/login';
 import { LoginService } from '../providers/login.service';
@@ -25,13 +25,14 @@ export class MyApp {
       public statusBar: StatusBar,
       public menu: MenuController,
       public splashScreen: SplashScreen,
-      public loginService: LoginService) {
+      public loginService: LoginService,
+      public loadingCtrl: LoadingController) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Buscar', component: SearchPage, icon: 'search', auth: true },
-      { title: 'Agenda', component: PatientSchedulePage, icon: 'calendar', auth: true },
+      { title: 'Agenda', component: CalendarEventsPage, icon: 'calendar', auth: true },
       //{ title: 'Nova consulta', component: PatientFilePage, icon: 'time', auth: true },
       { title: 'Novo paciente', component: PatientFilePage, icon: 'person-add', auth: true, popup: true },
       { title: 'Importar', component: ImportPatientsPage, icon: 'folder', auth: true, popup: true },
@@ -43,14 +44,18 @@ export class MyApp {
   }
 
   initializeApp() {
+    let wait = this.loadingCtrl.create({});
+    wait.present();
     this.loginService.isLoggedIn().then(
       (ok) => {
         if(ok) {
-          this.rootPage = PatientSchedulePage;
-        } else {
+          this.rootPage = CalendarEventsPage;
         }
         console.log("[AUTH] ", this.loginService.getUser());
-      });
+      })
+      .catch(() => {})
+      .then(() => { wait.dismiss(); });
+
     this.loginService.userLoadedEvent.subscribe((obj) => {
       if(obj == null){
         this.openLogin();

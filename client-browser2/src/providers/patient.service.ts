@@ -24,7 +24,7 @@ export class PatientService {
 	}
 
 	saveOrUpdate(patient: Patient): Observable<string> {
-		if(patient.id !== null){
+		if(patient.id != null){
 			return this.loginService.AuthPut(Constants.API_URL + '/patients/' + patient.id, patient)
 				.map(this.extractData);
 		} else {
