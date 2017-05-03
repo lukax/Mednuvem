@@ -70,13 +70,14 @@ export class CalendarEventsPage implements OnInit{
   }
 
   ngOnInit() {
-    this.loadEntries();
+    this.search();
   }
 
-  loadEntries() {
+  search() {
     this.isLoading = true;
     this.calendarSvc.search(this.searchText, 1, 100)
       .subscribe(data => {
+        this.isLoading = false;
         data.result.forEach(x => {
           x.start = <any>new Date(x.start);
           x.end = <any>new Date(x.end);
@@ -84,11 +85,10 @@ export class CalendarEventsPage implements OnInit{
           x.actions = this.actions;
         });
         Object.assign(this.events, data.result);
-        this.isLoading = false;
         this.refresh.next();
       }, err => {
-        this.isError = true;
         this.isLoading = false;
+        this.isError = true;
       });
   }
 
@@ -121,16 +121,20 @@ export class CalendarEventsPage implements OnInit{
     let modal = this.modalCtrl.create(ScheduleOptionsPage, this.modalData);
     modal.onDidDismiss(data => {
       if(data){
-        this.loadEntries();
+        this.search();
       }
     });
     modal.present();
   }
 
+  isEmpty() {
+    return this.events == null || this.events.length == 0;
+  }
+
   async removeEvent(event: PatientCalendarEvent) {
     try {
       await this.calendarSvc.delete(event.id).toPromise();
-      this.loadEntries();
+      this.search();
     } catch(ex) {
       this.alertCtrl.create({title: 'Oops... não foi possível completar ação.', buttons: [{ text: 'OK' }]}).present();
     }

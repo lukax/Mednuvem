@@ -136,10 +136,15 @@
           <ion-icon name="close"></ion-icon>
         </button>
       </td>
-
     </tr>
     </tbody>
-
   </table>
+
+  <ion-item *ngIf="!isError && isEmpty()">
+    <h2>Nenhum evento encontrado. <a href="#" (click)="search()">Tentar novamente.</a></h2>
+  </ion-item>
+  <ion-item *ngIf="isError">
+    <h2>Oops... erro ao se comunicar com servidor. <a href="#" (click)="search()">Tentar novamente.</a></h2>
+  </ion-item>
 
 </ion-content>

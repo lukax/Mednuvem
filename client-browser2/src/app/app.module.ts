@@ -23,9 +23,11 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { MomentModule } from 'angular2-moment';
 import { CKEditorModule } from 'ng2-ckeditor';
-//import { AutoCompleteModule } from 'ionic2-auto-complete';
+import { AutoCompleteModule } from 'ionic2-auto-complete';
 import { CalendarModule } from 'angular-calendar';
-import {CalendarService} from "../providers/calendar.service";
+import { CalendarService } from "../providers/calendar.service";
+import { PatientAutoCompleteService } from '../providers/patient-autocomplete.service';
+import {PatientSearchbarComponent} from "../pages/patient-searchbar/PatientSearchbar";
 
 @NgModule({
   declarations: [
@@ -40,7 +42,8 @@ import {CalendarService} from "../providers/calendar.service";
     PatientSocialProfileComponent,
     PatientAddressComponent,
     TeamPage,
-    ScheduleOptionsPage
+    ScheduleOptionsPage,
+    PatientSearchbarComponent
   ],
   imports: [
     BrowserModule,
@@ -54,9 +57,9 @@ import {CalendarService} from "../providers/calendar.service";
     FormsModule,
     MomentModule,
     CKEditorModule,
-    //AutoCompleteModule,
     BrowserAnimationsModule,
-    CalendarModule.forRoot()
+    CalendarModule.forRoot(),
+    AutoCompleteModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -81,7 +84,8 @@ import {CalendarService} from "../providers/calendar.service";
     PatientService,
     TeamService,
     UploadService,
-    CalendarService
+    CalendarService,
+    PatientAutoCompleteService
   ]
 })
 export class AppModule {}

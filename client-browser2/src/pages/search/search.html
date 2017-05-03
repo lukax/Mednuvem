@@ -29,7 +29,7 @@
             </ion-avatar>
             <h2>Nome do paciente</h2>
             <p>Status</p>
-            <button ion-button clear item-right>
+            <button ion-button color="dark" clear item-right disabled>
                 Última consulta
             </button>
         </ion-item>
@@ -39,7 +39,7 @@
             </ion-avatar>
             <h2>{{patient.name}}</h2>
             <p>{{patient.medicalInsurance}} {{patient.taxIdNumber}}</p>
-            <button ion-button clear item-right disabled>
+            <button ion-button color="dark" clear item-right disabled>
                 {{patient.lastAppointment | amTimeAgo}}
             </button>
         </button>

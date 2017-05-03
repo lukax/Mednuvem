@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title><ion-icon name="list"></ion-icon> Evento</ion-title>
+    <ion-title><ion-icon name="list"></ion-icon> Evento - {{modalData.event.type}}</ion-title>
     <ion-buttons start>
       <button ion-button (click)="cancel()">
         <span ion-text color="primary">Cancelar</span>
@@ -19,6 +19,11 @@
     <div>
       <ion-list>
         <ion-row>
+          <ion-auto-complete #searchbar col-md-12
+                             [dataProvider]="patientAutoCompleteService"
+                             [options]="{ placeholder : 'Nome do paciente' }"></ion-auto-complete>
+        </ion-row>
+        <ion-row>
           <ion-item col-md-12>
             <ion-label floating>Tipo</ion-label>
             <ion-select name="eventType" [(ngModel)]="modalData.event.type" required>
@@ -29,17 +34,11 @@
         <ion-row>
           <ion-item col-md-6>
             <ion-label stacked>Início</ion-label>
-            <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" name="eventStart" [(ngModel)]="modalData.event.start"></ion-datetime>
+            <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" yearValues="2017,2018" hourValues="7,8,9,10,11,12,13,14,15,16,17,18,19" minuteValues="0,5,10,15,20,25,30,35,40,45,50,55" name="eventStart" [(ngModel)]="modalData.event.start"></ion-datetime>
           </ion-item>
           <ion-item col-md-6>
             <ion-label stacked>Fim</ion-label>
-            <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" name="eventEnd" [(ngModel)]="modalData.event.end"></ion-datetime>
-          </ion-item>
-        </ion-row>
-        <ion-row>
-          <ion-item col-md-12>
-            <ion-label floating>Paciente</ion-label>
-            <ion-input type="text" name="eventTitle" [(ngModel)]="modalData.event.title" required></ion-input>
+            <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" yearValues="2017,2018" hourValues="7,8,9,10,11,12,13,14,15,16,17,18,19" minuteValues="0,5,10,15,20,25,30,35,40,45,50,55" name="eventEnd" [(ngModel)]="modalData.event.end"></ion-datetime>
           </ion-item>
         </ion-row>
         <ion-row>
