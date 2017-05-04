@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Http} from '@angular/http';
-import {LoadingController, ActionSheetController, NavController, AlertController} from 'ionic-angular';
-import {Observable} from 'rxjs/Observable';
-import {Team, TeamMember} from '../../providers/patient';
+import {LoadingController, AlertController} from 'ionic-angular';
+import {Team, TeamMember, TeamMessage} from '../../providers/patient';
 import {TeamService} from '../../providers/team.service';
 
 @Component({
@@ -13,11 +11,10 @@ export class TeamPage implements OnInit {
   isLoading: boolean = false;
   isError: boolean = false;
   searchText: string = '';
+  teamMessages: TeamMessage[] = [];
+  teamMessageText: string;
 
-  constructor(private http: Http,
-              private actionSheetCtrl: ActionSheetController,
-              private loadingCtrl: LoadingController,
-              private navCtrl: NavController,
+  constructor(private loadingCtrl: LoadingController,
               private teamSvc: TeamService,
               private alertCtrl: AlertController) {
 
@@ -142,7 +139,14 @@ export class TeamPage implements OnInit {
       ]
     });
     prompt.present();
-
   }
+
+  sendTeamMessage(){
+    if(this.teamMessageText){
+      this.teamMessages.push({userId: 'asd', email: 'espdlucas@gmail.com', message: this.teamMessageText, createdAt: new Date()});
+      this.teamMessageText = '';
+    }
+  }
+
 }
 

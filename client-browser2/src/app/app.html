@@ -17,7 +17,7 @@
     <ion-footer *ngIf="isLoggedIn()">
           <ion-item>
             <ion-avatar item-left>
-              <img src="https://www.gravatar.com/avatar/{{loginService.getUser().email_hash}}?s=40&amp;&amp;d=mm">
+              <user-avatar [email]="loginService.getUser().email" size="40"></user-avatar>
             </ion-avatar>
             <h2>
               {{loginService.getUser().name}}<br>

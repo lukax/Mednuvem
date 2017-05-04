@@ -28,6 +28,8 @@ import { CalendarModule } from 'angular-calendar';
 import { CalendarService } from "../providers/calendar.service";
 import { PatientAutoCompleteService } from '../providers/patient-autocomplete.service';
 import {PatientSearchbarComponent} from "../pages/patient-searchbar/PatientSearchbar";
+import {UserAvatarComponent} from "../pages/user-avatar/user-avatar";
+import {TeamChatService} from "../providers/team-chat.service";
 
 @NgModule({
   declarations: [
@@ -43,7 +45,8 @@ import {PatientSearchbarComponent} from "../pages/patient-searchbar/PatientSearc
     PatientAddressComponent,
     TeamPage,
     ScheduleOptionsPage,
-    PatientSearchbarComponent
+    PatientSearchbarComponent,
+    UserAvatarComponent
   ],
   imports: [
     BrowserModule,
@@ -74,7 +77,8 @@ import {PatientSearchbarComponent} from "../pages/patient-searchbar/PatientSearc
     PatientSocialProfileComponent,
     PatientAddressComponent,
     TeamPage,
-    ScheduleOptionsPage
+    ScheduleOptionsPage,
+    UserAvatarComponent
   ],
   providers: [
     StatusBar,
@@ -85,7 +89,8 @@ import {PatientSearchbarComponent} from "../pages/patient-searchbar/PatientSearc
     TeamService,
     UploadService,
     CalendarService,
-    PatientAutoCompleteService
+    PatientAutoCompleteService,
+    TeamChatService
   ]
 })
 export class AppModule {}

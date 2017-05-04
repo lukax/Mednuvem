@@ -17,6 +17,13 @@ export class TeamMember {
   email: string;
 }
 
+export class TeamChatMessage {
+  createdAt?: Date;
+  userId?: string;
+  email?: string;
+  message: string;
+}
+
 export class BasicPerson {
   name: string;
   taxIdNumber: string;

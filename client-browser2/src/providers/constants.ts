@@ -3,8 +3,10 @@
  */
 
 export const SERVER_URL = 'http://localhost:5000';
+export const SERVER_URL_WS = 'ws://localhost:5000';
 export const API_URL = 'http://localhost:5000/api';
 //export const SERVER_URL = 'https://mednuvem.azurewebsites.net';
+//export const SERVER_URL_WS = 'ws://mednuvem.azurewebsites.net';
 //export const API_URL = 'https://mednuvem.azurewebsites.net/api';
 
 export const CLIENT_OAUTH2_CONFIG = {

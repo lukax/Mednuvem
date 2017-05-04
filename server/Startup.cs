@@ -19,6 +19,8 @@ using Newtonsoft.Json;
 using Server.Core.Models;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using server.Services;
+using WebSocketManager;
+using Server.Core.Controllers.Chat;
 
 namespace server
 {
@@ -77,10 +79,12 @@ namespace server
             {
                 options.Filters.Add(new CorsAuthorizationFilterFactory("default"));
             });
+
+            services.AddWebSocketManager();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -96,10 +100,10 @@ namespace server
             }
 
             app.UseCors("default");
-
             app.UseIdentityServer();
-
             app.UseStaticFiles();
+            app.UseWebSockets();
+            app.MapWebSocketManager("/chat", serviceProvider.GetService<ChatHandler>());
 
             app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
             {
@@ -109,6 +113,7 @@ namespace server
             });
 
             app.UseMvcWithDefaultRoute();
+            app.MapWebSocketManager("/notifications", serviceProvider.GetService<NotificationsMessageHandler>());
         }
     }
 }

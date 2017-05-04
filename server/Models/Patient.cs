@@ -79,9 +79,6 @@ namespace Server.Core.Models
         public string Email { get; set; }        
         public string JobTitle { get; set; }
         public List<PhoneNumber> PhoneNumbers { get; set; } = new List<PhoneNumber>();
-
-        [BsonIgnore]
-        public string EmailHash => MD5Util.CreateMD5(Email);
     }
 
     public class Address 

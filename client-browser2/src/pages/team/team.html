@@ -50,5 +50,26 @@
         </ion-item>
     </ion-list>
 
+    <form (ngSubmit)="sendTeamMessage()">
+      <ion-row>
+        <ion-item class="button-section">
+          <span class="text-title">Mensagens</span>
+        </ion-item>
+      </ion-row>
+      <ion-row>
+        <ion-item col-12>
+          <ion-input type="text" name="teamMessageText" [(ngModel)]="teamMessageText" placeholder="Digitar mensagem para a equipe"></ion-input>
+          <button type="submit" ion-button icon-only clear item-right><ion-icon name="send"></ion-icon></button>
+        </ion-item>
+      </ion-row>
+    </form>
+    <ion-row>
+      <ion-item *ngFor="let msg of teamMessages">
+        <user-avatar [email]="msg.email" size="32"></user-avatar>&nbsp;&nbsp;
+        <span>{{msg.userId}}: {{msg.message}}</span>
+        <small item-right>{{msg.createdAt | amTimeAgo}}</small>
+      </ion-item>
+    </ion-row>
+
 </ion-content>
 

@@ -5,7 +5,7 @@
     </button>
     <ion-title>
       <div>
-        <img class="img-avatar" src="https://www.gravatar.com/avatar/{{patient.emailHash}}?s=40&amp;d=mm">
+        <user-avatar [email]="patient.email" size="40"></user-avatar>
         <span>Paciente - {{patient.id != null ? patient.name : ''}}</span>
         <ion-spinner class="loading-toolbar" *ngIf="isLoading"></ion-spinner>
       </div>

@@ -6,7 +6,6 @@ import { Observable } from 'rxjs/Rx';
 import * as Constants from './constants';
 import * as ClientOAuth2 from 'client-oauth2';
 import * as jwt_decode from 'jwt-decode';
-import md5 from 'md5';
 
 export interface User {
   name: string;
@@ -59,7 +58,7 @@ export class LoginService {
         this.storage.get('accessToken').then((token) => {
           this.accessToken = token;
           let isOk = token != null;
-          resolve(isOk); 
+          resolve(isOk);
         }).catch(err => reject(err));
       } else {
         resolve(true);
@@ -72,7 +71,6 @@ export class LoginService {
       return null;
     }
     let usr = jwt_decode(this.accessToken);
-    usr.email_hash = md5(usr.email);
     return usr;
   }
 
