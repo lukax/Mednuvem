@@ -28,6 +28,8 @@
             <ion-label floating>Tipo</ion-label>
             <ion-select name="eventType" [(ngModel)]="modalData.event.type" required>
               <ion-option>Consulta</ion-option>
+              <ion-option>Retorno</ion-option>
+              <ion-option>Resultado de Exame</ion-option>
             </ion-select>
           </ion-item>
         </ion-row>
@@ -39,6 +41,16 @@
           <ion-item col-md-6>
             <ion-label stacked>Fim</ion-label>
             <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" yearValues="2017,2018" hourValues="7,8,9,10,11,12,13,14,15,16,17,18,19" minuteValues="0,5,10,15,20,25,30,35,40,45,50,55" name="eventEnd" [(ngModel)]="modalData.event.end"></ion-datetime>
+          </ion-item>
+        </ion-row>
+        <ion-row>
+          <ion-item col-md-12>
+            <ion-label floating>Status</ion-label>
+            <ion-select name="eventStatus" [(ngModel)]="modalData.event.status" required>
+              <ion-option>Atendido</ion-option>
+              <ion-option>Em Consulta</ion-option>
+              <ion-option>Não Compareceu</ion-option>
+            </ion-select>
           </ion-item>
         </ion-row>
         <ion-row>

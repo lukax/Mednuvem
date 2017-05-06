@@ -1,5 +1,6 @@
 using System.Net.WebSockets;
 using System.Threading.Tasks;
+using server.Models;
 using WebSocketManager;
 using WebSocketManager.Common;
 
@@ -28,7 +29,10 @@ namespace Server.Core.Controllers.Chat
 
         public async Task SendMessage(string socketId, string message)
         {
-            await InvokeClientMethodToAllAsync("receiveMessage", socketId, message);
+            await InvokeClientMethodToAllAsync("receiveMessage", socketId, 
+                new TeamChatMessage {
+                    Message = message
+                });
         }
 
         public override async Task OnDisconnected(WebSocket socket)

@@ -118,6 +118,7 @@ export class PatientCalendarEvent {
   title: string;
   type?: string = 'Consulta';
   description?: string;
+  status?: string;
 }
 
 export interface EventColor {

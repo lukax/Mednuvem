@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using server.Services;
 using WebSocketManager;
 using Server.Core.Controllers.Chat;
+using Microsoft.Extensions.Primitives;
 
 namespace server
 {
@@ -105,15 +106,30 @@ namespace server
             app.UseWebSockets();
             app.MapWebSocketManager("/chat", serviceProvider.GetService<ChatHandler>());
 
-            app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
+            var authenticationOptions = new IdentityServerAuthenticationOptions
             {
                 Authority = Config.ApiAuthority,
                 AllowedScopes = { "api" },
-                RequireHttpsMetadata = false,
-            });
+                RequireHttpsMetadata = false
+            };
+            var tokenRetriever = authenticationOptions.TokenRetriever;
+            authenticationOptions.TokenRetriever = (req) => {
+                    string authHeaderToken = tokenRetriever(req);
+                    if(authHeaderToken != null){
+                        return authHeaderToken;
+                    }
+                    StringValues queryTokenValues;
+                    if(req.Query.TryGetValue("access_token", out queryTokenValues)){
+                        string queryToken = queryTokenValues.LastOrDefault();
+                        return queryToken;
+                    };
+                    return null;
+                };
 
-            app.UseMvcWithDefaultRoute();
-            app.MapWebSocketManager("/notifications", serviceProvider.GetService<NotificationsMessageHandler>());
+            app.UseIdentityServerAuthentication(authenticationOptions);
+
+            app.UseMvc();
+            //app.MapWebSocketManager("/notifications", serviceProvider.GetService<NotificationsMessageHandler>());
         }
     }
 }

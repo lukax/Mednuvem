@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {LoadingController, AlertController} from 'ionic-angular';
-import {Team, TeamMember, TeamMessage} from '../../providers/patient';
+import {Team, TeamMember, TeamChatMessage} from '../../providers/patient';
 import {TeamService} from '../../providers/team.service';
+import {TeamChatService} from "../../providers/team-chat.service";
 
 @Component({
   templateUrl: 'team.html'
@@ -11,18 +12,26 @@ export class TeamPage implements OnInit {
   isLoading: boolean = false;
   isError: boolean = false;
   searchText: string = '';
-  teamMessages: TeamMessage[] = [];
+  teamMessages: TeamChatMessage[] = [];
   teamMessageText: string;
+  chatError: string = null;
 
   constructor(private loadingCtrl: LoadingController,
               private teamSvc: TeamService,
-              private alertCtrl: AlertController) {
+              private alertCtrl: AlertController,
+              private teamChatSvc: TeamChatService) {
 
 
   }
 
   ngOnInit() {
     this.get();
+    this.teamChatSvc.getChatObservable().subscribe(
+      (data) => {
+        this.teamMessages.push(data);
+        this.chatError = null;
+      },
+      err => this.chatError = err);
   }
 
   get(): void {
@@ -41,6 +50,14 @@ export class TeamPage implements OnInit {
   isEmpty() {
     return this.team.members == null || this.team.members.length == 0;
   }
+
+  sendTeamMessage(){
+    if(this.teamMessageText){
+      this.teamChatSvc.sendMessage(this.teamMessageText);
+      this.teamMessageText = '';
+    }
+  }
+
 
   addMember() {
     let prompt = this.alertCtrl.create({
@@ -81,28 +98,28 @@ export class TeamPage implements OnInit {
 
   removeMember(member: TeamMember) {
     let prompt = this.alertCtrl.create({ message: `Deseja remover ${member.name} da equipe?`, buttons: [
-        {
-          text: 'Cancelar',
-          handler: data => { }
-        },
-        {
-          text: 'Remover',
-          handler: async (data) => {
-              let loading = this.loadingCtrl.create({});
-              await loading.present();
-              try {
-                await this.teamSvc.removeMember(this.team.id, member.userId);
-                await loading.dismiss();
-                this.get();
-              } catch(ex) {
-                await loading.dismiss();
-                this.alertCtrl.create({ message: 'Oops... ação não completada. ' + ex }).present();
-              }
-
+      {
+        text: 'Cancelar',
+        handler: data => { }
+      },
+      {
+        text: 'Remover',
+        handler: async (data) => {
+          let loading = this.loadingCtrl.create({});
+          await loading.present();
+          try {
+            await this.teamSvc.removeMember(this.team.id, member.userId);
+            await loading.dismiss();
+            this.get();
+          } catch(ex) {
+            await loading.dismiss();
+            this.alertCtrl.create({ message: 'Oops... ação não completada. ' + ex }).present();
           }
+
         }
-      ] });
-      prompt.present();
+      }
+    ] });
+    prompt.present();
   }
 
   createTeam() {
@@ -139,13 +156,6 @@ export class TeamPage implements OnInit {
       ]
     });
     prompt.present();
-  }
-
-  sendTeamMessage(){
-    if(this.teamMessageText){
-      this.teamMessages.push({userId: 'asd', email: 'espdlucas@gmail.com', message: this.teamMessageText, createdAt: new Date()});
-      this.teamMessageText = '';
-    }
   }
 
 }

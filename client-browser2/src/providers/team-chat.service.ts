@@ -10,20 +10,36 @@ import {Subject} from "rxjs/Subject";
 
 @Injectable()
 export class TeamChatService {
-  connection: Connection;
+  private connection: Connection;
+  private chatMessageSubject = new Subject<TeamChatMessage>();
 
-  chatMessageSubject = new Subject<TeamChatMessage>();
+  constructor(public loginService: LoginService) {
+    this.connection = new Connection(Constants.SERVER_URL_WS + '/chat?access_token=' + loginService.getAccessToken(), true);
 
-  constructor() {
-    this.connection = new Connection(Constants.SERVER_URL_WS, true);
-
-    this.connection.clientMethods["receiveMessage"] = (socketId, message) => {
-      this.chatMessageSubject.next({ message: message });
+    this.connection.clientMethods["receiveMessage"] = (socketId, teamChatMessage: TeamChatMessage) => {
+      this.chatMessageSubject.next(teamChatMessage);
     };
+    this.connection.connectionMethods.onConnected = () => {
+      console.log("You are now connected! Connection ID: " + this.connection.connectionId);
+    };
+    this.connection.connectionMethods.onDisconnected = () => {
+      this.chatMessageSubject.error("Desconectado.");
+      console.log("Disconnected!");
+      this.loginService.isLoggedIn().then(() => {
+        setTimeout(() => {
+          this.connection.start();
+        }, 5000);
+      });
+    };
+    this.connection.start();
   }
 
-  subscribeToChat(): Observable<TeamChatMessage> {
+  getChatObservable(): Observable<TeamChatMessage> {
     return this.chatMessageSubject.asObservable();
+  }
+
+  sendMessage(message: string) {
+    this.connection.invoke("SendMessage", this.connection.connectionId, message);
   }
 
 }
