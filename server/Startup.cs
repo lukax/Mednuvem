@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +16,7 @@ using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
 using IdSvrHost.Models;
 using IdentityServer4.Quickstart.UI;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Server.Core.Models;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
@@ -68,6 +70,17 @@ namespace server
             builder.Services.AddTransient<CalendarEventRepository>();
             builder.Services.AddTransient<TeamRepository>();
             builder.Services.AddTransient<UserUtilService>();
+            builder.Services.AddTransient<ChatHandler>();
+            services.AddTransient<User>(
+                s =>
+                {
+                    var httpContextUser = s.GetService<IHttpContextAccessor>()?.HttpContext?.User;
+                    if (httpContextUser != null && httpContextUser.IsAuthenticated())
+                    {
+                        return s.GetService<UserRepository>().GetUserById(httpContextUser.GetSubjectId());
+                    }
+                    return null;
+                });
 
 			services.AddCors(options =>
                 {

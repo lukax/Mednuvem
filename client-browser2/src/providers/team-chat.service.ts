@@ -14,8 +14,25 @@ export class TeamChatService {
   private chatMessageSubject = new Subject<TeamChatMessage>();
 
   constructor(public loginService: LoginService) {
-    this.connection = new Connection(Constants.SERVER_URL_WS + '/chat?access_token=' + loginService.getAccessToken(), true);
+    this.loginService.isLoggedIn().then(() => {
+      this.setup();
+    });
+  }
 
+  getChatObservable(): Observable<TeamChatMessage> {
+    return this.chatMessageSubject.asObservable();
+  }
+
+  sendMessage(message: string) {
+    this.connection.invoke("SendMessage", this.connection.connectionId, message);
+  }
+
+  connectChat() {
+    this.connection.start();
+  }
+
+  private setup() {
+    this.connection = new Connection(Constants.SERVER_URL_WS + '/chat?access_token=' + this.loginService.getAccessToken(), true);
     this.connection.clientMethods["receiveMessage"] = (socketId, teamChatMessage: TeamChatMessage) => {
       this.chatMessageSubject.next(teamChatMessage);
     };
@@ -31,15 +48,10 @@ export class TeamChatService {
         }, 5000);
       });
     };
-    this.connection.start();
-  }
 
-  getChatObservable(): Observable<TeamChatMessage> {
-    return this.chatMessageSubject.asObservable();
-  }
-
-  sendMessage(message: string) {
-    this.connection.invoke("SendMessage", this.connection.connectionId, message);
+    this.loginService.userLoadedEvent.subscribe(() => {
+      this.connection.start();
+    });
   }
 
 }

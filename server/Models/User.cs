@@ -20,6 +20,7 @@ namespace IdSvrHost.Models
         public bool IsActive { get; set; }
         public string HashedPassword { get; set; }
         public string Company { get; set; }
+        public bool IsOnline { get; set; }
 
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }

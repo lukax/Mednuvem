@@ -66,7 +66,7 @@
     <ion-row>
       <ion-item *ngFor="let msg of teamMessages">
         <user-avatar [email]="msg.email" size="32"></user-avatar>&nbsp;&nbsp;
-        <span>{{msg.userId}}: {{msg.message}}</span>
+        <span>{{msg.message}}</span>
         <small item-right>{{msg.createdAt | amTimeAgo}}</small>
       </ion-item>
       <ion-item *ngIf="chatError">

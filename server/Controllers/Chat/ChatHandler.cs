@@ -1,5 +1,8 @@
 using System.Net.WebSockets;
+using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
+using IdSvrHost.Models;
 using server.Models;
 using WebSocketManager;
 using WebSocketManager.Common;
@@ -8,7 +11,9 @@ namespace Server.Core.Controllers.Chat
 {
     public class ChatHandler : WebSocketHandler
     {
-        public ChatHandler(WebSocketConnectionManager webSocketConnectionManager) : base(webSocketConnectionManager)
+        public ChatHandler(
+            User user,
+            WebSocketConnectionManager webSocketConnectionManager) : base(webSocketConnectionManager)
         {
         }
 

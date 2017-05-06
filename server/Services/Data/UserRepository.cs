@@ -46,6 +46,13 @@ namespace IdSvrHost.Services
             return collection.Find(filter).SingleOrDefaultAsync().Result;
         }
 
+        public bool SetOnlineStatus(string id, bool isOnline)
+        {
+            var collection = _db.GetCollection<User>(UsersCollectionName);
+            var filter = Builders<User>.Filter.Eq(u => u.Id, id);
+            return collection.UpdateOne(filter, Builders<User>.Update.Set(x => x.IsOnline, isOnline)).MatchedCount > 0;
+        }
+
         public async Task<List<User>> GetUserById(string[] id)
         {
             var collection = _db.GetCollection<User>(UsersCollectionName);
