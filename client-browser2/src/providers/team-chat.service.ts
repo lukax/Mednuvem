@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { LoginService } from './login.service';
@@ -6,54 +6,65 @@ import * as Constants from './constants';
 import {TeamChatMessage} from './patient';
 import {Connection} from "../websocket-manager/Connection";
 import {Subject} from "rxjs/Subject";
+import Timer = NodeJS.Timer;
 
 @Injectable()
-export class TeamChatService {
-  private chatMessageSubject: Subject<TeamChatMessage> = new Subject<TeamChatMessage>();
-  private connection: Connection;
-  private isConnected: boolean = false;
+export class TeamChatService implements OnDestroy {
+  private _chatMessageSubject: Subject<TeamChatMessage> = new Subject<TeamChatMessage>();
+  private _connection: Connection;
+  private _isConnected: boolean = false;
+  private _connectionRetryTimeout: Timer;
 
   constructor(public loginService: LoginService) {
-    if(!this.isConnected){
-      this.loginService.isLoggedIn().then(() => {
-        this.setup();
-        this.connection.start();
-        this.isConnected = true;
-      });
-    }
+    this.retryConnection();
+  }
+
+  ngOnDestroy() {
+    clearTimeout(this._connectionRetryTimeout);
   }
 
   getChatObservable(): Observable<TeamChatMessage> {
-    return this.chatMessageSubject.asObservable();
+    return this._chatMessageSubject.asObservable();
   }
 
   sendMessage(message: string) {
-    if(this.connection != null) {
-      this.connection.invoke("SendMessage", this.connection.connectionId, message);
-    }
+    if(!this.isConnected) return;
+    this._connection.invoke("SendMessage", this._connection.connectionId, message);
   }
 
-  private setup() {
-    this.connection = new Connection(Constants.SERVER_URL_WS + '/chat?access_token=' + this.loginService.getAccessToken(), true);
-    this.connection.clientMethods["receiveMessage"] = (socketId, teamChatMessage: TeamChatMessage) => {
-      this.chatMessageSubject.next(teamChatMessage);
+  isConnected() {
+    return this._isConnected;
+  }
+
+  private retryConnection() {
+    this._connectionRetryTimeout = setTimeout(() => {
+      this.setupConnection();
+      this.retryConnection();
+    }, 5000);
+  }
+
+  private async setupConnection() {
+    let isLoggedIn = await this.loginService.isLoggedIn();
+    if(!isLoggedIn) return;
+
+    if(this._isConnected) return; this._isConnected = true;
+
+    this._connection = new Connection(Constants.SERVER_URL_WS + '/chat?access_token=' + this.loginService.getAccessToken(), false);
+    this._connection.clientMethods["receiveMessage"] = (socketId, teamChatMessage: TeamChatMessage) => {
+      this._chatMessageSubject.next(teamChatMessage);
     };
-    this.connection.connectionMethods.onConnected = () => {
-      console.log("You are now connected! Connection ID: " + this.connection.connectionId);
+    this._connection.connectionMethods.onConnected = () => {
+      console.log("[TeamChatService]: Connection ID: " + this._connection.connectionId);
     };
-    this.connection.connectionMethods.onDisconnected = () => {
-      this.chatMessageSubject.error("Desconectado.");
-      console.log("Disconnected!");
-      this.loginService.isLoggedIn().then(() => {
-        setTimeout(() => {
-          this.connection.start();
-        }, 5000);
-      });
+    this._connection.connectionMethods.onDisconnected = () => {
+      this._isConnected = false;
+      console.log("[TeamChatService]: Disconnected");
     };
 
-    this.loginService.userLoadedEvent.subscribe(() => {
-      this.connection.start();
+    this.loginService.userLoadedEvent.subscribe(() => { // if there's any change in user, close connection
+      this._connection.close();
     });
+    this._connection.start();
   }
 
 }

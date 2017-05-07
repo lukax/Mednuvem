@@ -22,13 +22,13 @@ export class Connection {
       if(this.enableLogging) {
         console.log('Connected! connectionId: ' + this.connectionId);
       }
-    }
+    };
 
     this.connectionMethods['onDisconnected'] = () => {
       if(this.enableLogging) {
         console.log('Connection closed from: ' + this.url);
       }
-    }
+    };
 
     this.connectionMethods['onOpen'] = (socketOpenedEvent: any) => {
       if(this.enableLogging) {
@@ -63,17 +63,22 @@ export class Connection {
         this.connectionId = this.message.data;
         this.connectionMethods['onConnected'].apply(this);
       }
-    }
+    };
 
     this.socket.onclose = (event: CloseEvent) => {
       this.connectionMethods['onDisconnected'].apply(this);
-    }
+    };
 
     this.socket.onerror = (event: ErrorEvent) => {
       if(this.enableLogging) {
         console.log('Error data: ' + event.error);
       }
-    }
+    };
+  }
+
+  public close() {
+    console.log("Connection closed");
+    this.socket.close();
   }
 
   public invoke(methodName: string, ...args: any[]) {

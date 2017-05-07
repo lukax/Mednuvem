@@ -71,16 +71,6 @@ namespace server
             builder.Services.AddTransient<TeamRepository>();
             builder.Services.AddTransient<UserUtilService>();
             builder.Services.AddTransient<ChatHandler>();
-            services.AddTransient<User>(
-                s =>
-                {
-                    var httpContextUser = s.GetService<IHttpContextAccessor>()?.HttpContext?.User;
-                    if (httpContextUser != null && httpContextUser.IsAuthenticated())
-                    {
-                        return s.GetService<UserRepository>().GetUserById(httpContextUser.GetSubjectId());
-                    }
-                    return null;
-                });
 
 			services.AddCors(options =>
                 {
@@ -139,6 +129,8 @@ namespace server
             app.UseIdentityServerAuthentication(authenticationOptions);
 
             app.UseMvc();
+
+            app.UseJwtBearerAuthentication();
 
             app.UseWebSockets();
             app.MapWebSocketManager("/chat", serviceProvider.GetService<ChatHandler>());

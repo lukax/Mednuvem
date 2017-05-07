@@ -21,7 +21,7 @@ export class TeamPage implements OnInit, OnDestroy {
   constructor(private loadingCtrl: LoadingController,
               private teamSvc: TeamService,
               private alertCtrl: AlertController,
-              private teamChatSvc: TeamChatService) {
+              public teamChatSvc: TeamChatService) {
 
 
   }
