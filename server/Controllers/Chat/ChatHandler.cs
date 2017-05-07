@@ -11,9 +11,8 @@ namespace Server.Core.Controllers.Chat
 {
     public class ChatHandler : WebSocketHandler
     {
-        public ChatHandler(
-            User user,
-            WebSocketConnectionManager webSocketConnectionManager) : base(webSocketConnectionManager)
+        public ChatHandler(WebSocketConnectionManager webSocketConnectionManager) 
+            : base(webSocketConnectionManager)
         {
         }
 

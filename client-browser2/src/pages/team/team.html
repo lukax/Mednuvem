@@ -70,7 +70,7 @@
         <small item-right>{{msg.createdAt | amTimeAgo}}</small>
       </ion-item>
       <ion-item *ngIf="chatError">
-        <h2>Oops... não foi possível carregar mensagens. {{chatError}} <a href="#" (click)="get()">Tentar novamente.</a></h2>
+        <h2>Oops... não foi possível carregar mensagens. {{chatError}} <a href="#" (click)="connectTeamChat()">Tentar novamente.</a></h2>
       </ion-item>
     </ion-row>
 

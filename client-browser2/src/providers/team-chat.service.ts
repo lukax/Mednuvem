@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { LoginService } from './login.service';
@@ -10,13 +9,18 @@ import {Subject} from "rxjs/Subject";
 
 @Injectable()
 export class TeamChatService {
+  private chatMessageSubject: Subject<TeamChatMessage> = new Subject<TeamChatMessage>();
   private connection: Connection;
-  private chatMessageSubject = new Subject<TeamChatMessage>();
+  private isConnected: boolean = false;
 
   constructor(public loginService: LoginService) {
-    this.loginService.isLoggedIn().then(() => {
-      this.setup();
-    });
+    if(!this.isConnected){
+      this.loginService.isLoggedIn().then(() => {
+        this.setup();
+        this.connection.start();
+        this.isConnected = true;
+      });
+    }
   }
 
   getChatObservable(): Observable<TeamChatMessage> {
@@ -24,11 +28,9 @@ export class TeamChatService {
   }
 
   sendMessage(message: string) {
-    this.connection.invoke("SendMessage", this.connection.connectionId, message);
-  }
-
-  connectChat() {
-    this.connection.start();
+    if(this.connection != null) {
+      this.connection.invoke("SendMessage", this.connection.connectionId, message);
+    }
   }
 
   private setup() {

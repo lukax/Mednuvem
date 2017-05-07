@@ -80,13 +80,13 @@ export class MyApp {
   }
 
   openLogin() {
-    this.nav.setRoot(LoginPage);
+    this.menu.close().then(() => {
+      this.nav.setRoot(LoginPage);
+    });
   }
 
   logout() {
-    this.menu.close().then(() => {
       this.loginService.logout();
-    });
   }
 
   isLoggedIn() {

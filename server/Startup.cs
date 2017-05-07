@@ -116,8 +116,6 @@ namespace server
             app.UseCors("default");
             app.UseIdentityServer();
             app.UseStaticFiles();
-            app.UseWebSockets();
-            app.MapWebSocketManager("/chat", serviceProvider.GetService<ChatHandler>());
 
             var authenticationOptions = new IdentityServerAuthenticationOptions
             {
@@ -138,10 +136,13 @@ namespace server
                     };
                     return null;
                 };
-
             app.UseIdentityServerAuthentication(authenticationOptions);
 
             app.UseMvc();
+
+            app.UseWebSockets();
+            app.MapWebSocketManager("/chat", serviceProvider.GetService<ChatHandler>());
+
             //app.MapWebSocketManager("/notifications", serviceProvider.GetService<NotificationsMessageHandler>());
         }
     }

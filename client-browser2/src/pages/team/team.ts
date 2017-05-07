@@ -1,13 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {LoadingController, AlertController} from 'ionic-angular';
 import {Team, TeamMember, TeamChatMessage} from '../../providers/patient';
 import {TeamService} from '../../providers/team.service';
 import {TeamChatService} from "../../providers/team-chat.service";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
   templateUrl: 'team.html'
 })
-export class TeamPage implements OnInit {
+export class TeamPage implements OnInit, OnDestroy {
   team: Team = new Team();
   isLoading: boolean = false;
   isError: boolean = false;
@@ -15,6 +16,7 @@ export class TeamPage implements OnInit {
   teamMessages: TeamChatMessage[] = [];
   teamMessageText: string;
   chatError: string = null;
+  teamChatSubscription: Subscription;
 
   constructor(private loadingCtrl: LoadingController,
               private teamSvc: TeamService,
@@ -26,12 +28,16 @@ export class TeamPage implements OnInit {
 
   ngOnInit() {
     this.get();
-    this.teamChatSvc.getChatObservable().subscribe(
+    this.teamChatSubscription = this.teamChatSvc.getChatObservable().subscribe(
       (data) => {
         this.teamMessages.push(data);
         this.chatError = null;
       },
       err => this.chatError = err);
+  }
+
+  ngOnDestroy() {
+    this.teamChatSubscription.unsubscribe();
   }
 
   get(): void {
