@@ -20,10 +20,13 @@ namespace IdSvrHost.Models
         public bool IsActive { get; set; }
         public string HashedPassword { get; set; }
         public string Company { get; set; }
+
         public bool IsOnline { get; set; }
+        public string SocketId { get; set; }
 
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }
+
 
         public string GetFirstName() {
             return Name?.Split(' ')[0];

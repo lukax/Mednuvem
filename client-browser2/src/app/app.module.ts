@@ -30,6 +30,7 @@ import { PatientAutoCompleteService } from '../providers/patient-autocomplete.se
 import {PatientSearchbarComponent} from "../pages/patient-searchbar/PatientSearchbar";
 import {UserAvatarComponent} from "../pages/user-avatar/user-avatar";
 import {TeamChatService} from "../providers/team-chat.service";
+import {OrderByPipe} from "../util/OrderByPipe";
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import {TeamChatService} from "../providers/team-chat.service";
     TeamPage,
     ScheduleOptionsPage,
     PatientSearchbarComponent,
-    UserAvatarComponent
+    UserAvatarComponent,
+    OrderByPipe
   ],
   imports: [
     BrowserModule,

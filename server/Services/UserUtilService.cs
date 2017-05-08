@@ -23,8 +23,10 @@ namespace server.Services
 
         public string GetTeamId(ClaimsPrincipal user)
         {
-            if(user != null) {
-                return _teamRepository.FindOneByUserId(user.GetSubjectId()).Result?.Id;
+            if(user != null && user.IsAuthenticated())
+            {
+                string userId = user.GetSubjectId();
+                return _teamRepository.FindOneByUserIdAsync(userId).Result?.Id;
             }
             return null;
         }

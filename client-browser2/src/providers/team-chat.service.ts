@@ -3,7 +3,7 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { LoginService } from './login.service';
 import * as Constants from './constants';
-import {TeamChatMessage} from './patient';
+import {TeamChatMessage, TeamMember} from './patient';
 import {Connection} from "../websocket-manager/Connection";
 import {Subject} from "rxjs/Subject";
 import Timer = NodeJS.Timer;
@@ -11,6 +11,7 @@ import Timer = NodeJS.Timer;
 @Injectable()
 export class TeamChatService implements OnDestroy {
   private _chatMessageSubject: Subject<TeamChatMessage> = new Subject<TeamChatMessage>();
+  private _refreshSubject: Subject<any> = new Subject<any>();
   private _connection: Connection;
   private _isConnected: boolean = false;
   private _connectionRetryTimeout: Timer;
@@ -25,6 +26,10 @@ export class TeamChatService implements OnDestroy {
 
   getChatObservable(): Observable<TeamChatMessage> {
     return this._chatMessageSubject.asObservable();
+  }
+
+  getRefreshObservable(): Observable<any> {
+    return this._refreshSubject.asObservable();
   }
 
   sendMessage(message: string) {
@@ -52,6 +57,9 @@ export class TeamChatService implements OnDestroy {
     this._connection = new Connection(Constants.SERVER_URL_WS + '/chat?access_token=' + this.loginService.getAccessToken(), false);
     this._connection.clientMethods["receiveMessage"] = (socketId, teamChatMessage: TeamChatMessage) => {
       this._chatMessageSubject.next(teamChatMessage);
+    };
+    this._connection.clientMethods["refresh"] = (socketId) => {
+      this._refreshSubject.next();
     };
     this._connection.connectionMethods.onConnected = () => {
       console.log("[TeamChatService]: Connection ID: " + this._connection.connectionId);

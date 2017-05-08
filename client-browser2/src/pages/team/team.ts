@@ -6,17 +6,17 @@ import {TeamChatService} from "../../providers/team-chat.service";
 import {Subscription} from "rxjs/Subscription";
 
 @Component({
-  templateUrl: 'team.html'
+  templateUrl: 'team.html',
 })
 export class TeamPage implements OnInit, OnDestroy {
   team: Team = new Team();
   isLoading: boolean = false;
   isError: boolean = false;
   searchText: string = '';
-  teamMessages: TeamChatMessage[] = [];
   teamMessageText: string;
   chatError: string = null;
-  teamChatSubscription: Subscription;
+  private _teamChatSubscription: Subscription;
+  private _refreshSubscription: Subscription;
 
   constructor(private loadingCtrl: LoadingController,
               private teamSvc: TeamService,
@@ -28,16 +28,20 @@ export class TeamPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.get();
-    this.teamChatSubscription = this.teamChatSvc.getChatObservable().subscribe(
+    this._teamChatSubscription = this.teamChatSvc.getChatObservable().subscribe(
       (data) => {
-        this.teamMessages.push(data);
+        this.team.messages.push(data);
         this.chatError = null;
       },
       err => this.chatError = err);
+    this._refreshSubscription = this.teamChatSvc.getRefreshObservable().subscribe(() => {
+      this.get();
+    });
   }
 
   ngOnDestroy() {
-    this.teamChatSubscription.unsubscribe();
+    this._teamChatSubscription.unsubscribe();
+    this._refreshSubscription.unsubscribe();
   }
 
   get(): void {
@@ -57,8 +61,9 @@ export class TeamPage implements OnInit, OnDestroy {
     return this.team.members == null || this.team.members.length == 0;
   }
 
-  sendTeamMessage(){
-    if(this.teamMessageText){
+  sendTeamMessage($event: Event){
+    $event.preventDefault();
+    if(this.teamMessageText && this.teamChatSvc.isConnected()){
       this.teamChatSvc.sendMessage(this.teamMessageText);
       this.teamMessageText = '';
     }

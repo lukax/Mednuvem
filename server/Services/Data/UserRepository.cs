@@ -43,14 +43,23 @@ namespace IdSvrHost.Services
         {
             var collection = _db.GetCollection<User>(UsersCollectionName);
             var filter = Builders<User>.Filter.Eq(u => u.Id, id);
-            return collection.Find(filter).SingleOrDefaultAsync().Result;
+            return collection.Find(filter).SingleOrDefault();
         }
 
-        public bool SetOnlineStatus(string id, bool isOnline)
+        public async Task<List<User>> FindManyByUserIdAsync(string[] ids)
+        {
+            var collection = _db.GetCollection<User>(UsersCollectionName);
+            var filter = Builders<User>.Filter.In(u => u.Id, ids);
+            return await collection.Find(filter).ToListAsync();
+        }
+
+        public bool SetOnlineStatus(string id, bool isOnline, string sockedId)
         {
             var collection = _db.GetCollection<User>(UsersCollectionName);
             var filter = Builders<User>.Filter.Eq(u => u.Id, id);
-            return collection.UpdateOne(filter, Builders<User>.Update.Set(x => x.IsOnline, isOnline)).MatchedCount > 0;
+            return collection.UpdateOne(filter, 
+                Builders<User>.Update.Set(x => x.IsOnline, isOnline)
+                                     .Set(x => x.SocketId, sockedId)).MatchedCount > 0;
         }
 
         public async Task<List<User>> GetUserById(string[] id)

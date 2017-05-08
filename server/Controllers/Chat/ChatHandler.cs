@@ -7,6 +7,7 @@ using server.Models;
 using WebSocketManager;
 using WebSocketManager.Common;
 using System;
+using System.Linq;
 using IdentityServer4.Extensions;
 using IdSvrHost.Services;
 using Microsoft.AspNetCore.Http;
@@ -18,60 +19,97 @@ namespace Server.Core.Controllers.Chat
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserRepository _userRepository;
-        private string UserId => _httpContextAccessor?.HttpContext?.User?.GetSubjectId();
+        private readonly TeamRepository _teamRepository;
+        private string UserId
+        {
+            get
+            {
+                var user = _httpContextAccessor?.HttpContext?.User;
+                if (user != null && user.IsAuthenticated())
+                {
+                    string userId = user.GetSubjectId();
+                    return userId;
+                }
+                return null;
+            }
+        }
 
 
         public ChatHandler(
             IHttpContextAccessor httpContextAccessor,
             UserRepository userRepository,
+            TeamRepository teamRepository,
             WebSocketConnectionManager webSocketConnectionManager) 
             : base(webSocketConnectionManager)
         {
             _httpContextAccessor = httpContextAccessor;
             _userRepository = userRepository;
+            _teamRepository = teamRepository;
         }
 
         public override async Task OnConnected(WebSocket socket)
         {
-            if (UserId == null) return;
             await base.OnConnected(socket);
+            if (UserId == null) return;
 
-            var user = _userRepository.GetUserById(UserId);
+            _userRepository.SetOnlineStatus(UserId, true, WebSocketConnectionManager.GetId(socket));
 
-            var socketId = WebSocketConnectionManager.GetId(socket);
+            var team = await _teamRepository.FindOneByUserIdAsync(UserId);
+            var teamMembers = await _userRepository.FindManyByUserIdAsync(team.Members.Select(x => x.UserId).ToArray());
 
-            var message = new Message()
+            foreach (var member in teamMembers)
             {
-                MessageType = MessageType.Text,
-                Data = $"{socketId} is now connected"
-            };
-
-            await SendMessageToAllAsync(message);
+                if (!member.IsOnline) return;
+                await InvokeClientMethodToAllAsync("refresh", member.SocketId, new Message()
+                {
+                    MessageType = MessageType.Text,
+                    Data = "Update"
+                });
+            }
         }
 
         public async Task SendMessage(string socketId, string message)
         {
             if (UserId == null) return;
 
-            await InvokeClientMethodToAllAsync("receiveMessage", socketId, 
-                new TeamChatMessage {
-                    Message = message
+            var chatMessage = await _teamRepository.AddMessageToTeam(UserId, message);
+
+            var team = await _teamRepository.FindOneByUserIdAsync(UserId);
+            var teamMembers = await _userRepository.FindManyByUserIdAsync(team.Members.Select(x => x.UserId).ToArray());
+
+            foreach (var member in teamMembers)
+            {
+                if (!member.IsOnline) return;
+                await InvokeClientMethodToAllAsync("receiveMessage", socketId, new
+                {
+                    UserId = chatMessage.UserId,
+                    UserName = teamMembers.FirstOrDefault(usr => usr.Id == UserId)?.Name ?? "Desconhecido",
+                    UserEmail = teamMembers.FirstOrDefault(usr => usr.Id == UserId)?.Email,
+                    Message = chatMessage.Message,
+                    SentAt = chatMessage.SentAt,
                 });
-        }
+            }
+       }
 
         public override async Task OnDisconnected(WebSocket socket)
         {
-            if (UserId == null) return;
             await base.OnDisconnected(socket);
+            if (UserId == null) return;
 
-            var socketId = WebSocketConnectionManager.GetId(socket);
+            _userRepository.SetOnlineStatus(UserId, false, WebSocketConnectionManager.GetId(socket));
 
-            var message = new Message()
+            var team = await _teamRepository.FindOneByUserIdAsync(UserId);
+            var teamMembers = await _userRepository.FindManyByUserIdAsync(team.Members.Select(x => x.UserId).ToArray());
+
+            foreach (var member in teamMembers)
             {
-                MessageType = MessageType.Text,
-                Data = $"{socketId} disconnected"
-            };
-            await SendMessageToAllAsync(message);
+                if (!member.IsOnline) return;
+                await InvokeClientMethodToAllAsync("refresh", member.SocketId, new Message()
+                {
+                    MessageType = MessageType.Text,
+                    Data = "Update"
+                });
+            }
         }
     }
 }

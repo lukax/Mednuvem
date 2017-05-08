@@ -30,9 +30,22 @@ namespace IdSvrHost.Services
             return await Collection.Find(filter).FirstOrDefaultAsync();
         }
 
-        public async Task<Team> FindOneByUserId(string userId)
+        public async Task<Team> FindOneByUserIdAsync(string userId)
         {
             return await Collection.Find(x => x.Members.Any(m => m.UserId == userId)).FirstOrDefaultAsync();
+        }
+
+        public async Task<TeamChatMessage> AddMessageToTeam(string userId, string message)
+        {
+            var chatMessage = new TeamChatMessage
+            {
+                UserId = userId,
+                Message = message,
+                SentAt = DateTime.UtcNow,
+            };
+            var result = await Collection.UpdateOneAsync(x => x.Members.Any(m => m.UserId == userId),
+                Builders<Team>.Update.AddToSet(x => x.Messages, chatMessage));
+            return chatMessage;
         }
 
 		public async Task<OperationResult> InsertOne(Team entity)

@@ -33,24 +33,25 @@
             </button>
         </ion-item>
         <ion-item ion-item *ngFor="let member of team.members">
-            <ion-avatar item-left>
-                <img src="https://www.gravatar.com/avatar/{{member.emailHash}}?s=40&amp;d=mm">
-            </ion-avatar>
+            <user-avatar item-left [email]="member.email" size="40"></user-avatar>
             <h2>{{member.name}}</h2>
-            <p>{{member.email}} ({{member.role == 'owner' ? 'coordenador' : 'membro'}})</p>
+            <p>
+              <ion-icon name="{{member.isOnline ? 'checkmark-circle' : 'close-circle'}}" color="{{member.isOnline ? 'secondary' : 'dark'}}"></ion-icon>
+              {{member.email}} ({{member.role == 'owner' ? 'coordenador' : 'membro'}}) - {{member.isOnline ? 'online' : 'offline'}}
+            </p>
             <button ion-button icon-only clear item-right (click)="removeMember(member)" color="danger">
                 <ion-icon name="close"></ion-icon>
             </button>
         </ion-item>
         <ion-item *ngIf="!isLoading && !isError && isEmpty()">
-            <h2>Nenhuma equipe encontrada. <a href="#" (click)="createTeam()">Criar nova equipe.</a></h2>
+            <h2><ion-icon name="warning"></ion-icon> Nenhuma equipe encontrada. <a href="#" (click)="createTeam()">Criar nova equipe.</a></h2>
         </ion-item>
         <ion-item *ngIf="!isLoading && isError">
-            <h2>Oops... erro ao se comunicar com servidor. <a href="#" (click)="get()">Tentar novamente.</a></h2>
+            <h2><ion-icon name="warning"></ion-icon> Oops... erro ao se comunicar com servidor. <a href="#" (click)="get()">Tentar novamente.</a></h2>
         </ion-item>
     </ion-list>
 
-    <form (ngSubmit)="sendTeamMessage()">
+    <form (ngSubmit)="sendTeamMessage($event)">
       <ion-row>
         <ion-item class="button-section">
           <span class="text-title">Mensagens da Equipe</span>
@@ -58,19 +59,19 @@
       </ion-row>
       <ion-row>
         <ion-item col-12>
-          <ion-input type="text" name="teamMessageText" [(ngModel)]="teamMessageText" placeholder="Digitar mensagem..."></ion-input>
+          <ion-input name="teamMessageText" [(ngModel)]="teamMessageText" placeholder="Digitar mensagem..."></ion-input>
           <button type="submit" ion-button icon-only clear item-right><ion-icon name="send"></ion-icon></button>
         </ion-item>
       </ion-row>
     </form>
     <ion-row>
-      <ion-item *ngFor="let msg of teamMessages">
-        <user-avatar [email]="msg.email" size="32"></user-avatar>&nbsp;&nbsp;
-        <span>{{msg.message}}</span>
-        <small item-right>{{msg.createdAt | amTimeAgo}}</small>
-      </ion-item>
       <ion-item *ngIf="!teamChatSvc.isConnected()">
-        <h2>Chat desconectado.</h2>
+        <h2><ion-icon name="warning"></ion-icon> Chat desconectado.</h2>
+      </ion-item>
+      <ion-item *ngFor="let msg of team.messages | orderBy:'-sentAt' ">
+        <user-avatar [email]="msg.userEmail" size="24"></user-avatar>&nbsp;&nbsp;
+        <span>{{msg.userName}}: {{msg.message}}</span>
+        <small item-right>{{msg.createdAt | amTimeAgo}}</small>
       </ion-item>
     </ion-row>
 

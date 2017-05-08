@@ -14,6 +14,7 @@ using server.Services;
 using server.Models;
 using System.ComponentModel.DataAnnotations;
 using server;
+using WebSocketManager.Common;
 
 namespace Server.Core.Controllers
 {
@@ -150,7 +151,7 @@ namespace Server.Core.Controllers
         [Route("")]
         public async Task<IActionResult> GetAll()
         {
-            var team = await _teamRepository.FindOneByUserId(UserId);
+            var team = await _teamRepository.FindOneByUserIdAsync(UserId);
             if(team == null) {
                 return Ok();
             }
@@ -162,11 +163,20 @@ namespace Server.Core.Controllers
                 team.Name,
                 team.CreatedAt,
                 team.UpdatedAt,
+                Messages = team.Messages.Select(x => new
+                {
+                    UserId = x.UserId,
+                    UserName = usrs.FirstOrDefault(usr => usr.Id == x.UserId)?.Name ?? "Desconhecido",
+                    UserEmail = usrs.FirstOrDefault(usr => usr.Id == x.UserId)?.Email,
+                    Message = x.Message,
+                    SentAt = x.SentAt,
+                }),
                 Members = usrs.Select(x => new {
                         UserId = x.Id,
                         Name = x.Name,
                         Role = team.Members.First(m => m.UserId == x.Id).Role,
                         Email = x.Email,
+                        IsOnline = x.IsOnline,
                         EmailHash = MD5Util.CreateMD5(x.Email),
                     }).ToList()
             });

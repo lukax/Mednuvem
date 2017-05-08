@@ -14,6 +14,7 @@ namespace server.Models
 		public string Name { get; set; }
 
         public List<TeamMember> Members { get; set; } = new List<TeamMember>();
+        public List<TeamChatMessage> Messages { get; set; } = new List<TeamChatMessage>();
     }
 
     public class TeamMember 
@@ -24,9 +25,8 @@ namespace server.Models
 
     public class TeamChatMessage
     {
-        public string Message { get; set; }
         public string UserId { get; set; }
-        public string Email { get; set; }
         public DateTime SentAt { get; set; }
+        public string Message { get; set; }
     }
 }

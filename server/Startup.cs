@@ -107,11 +107,19 @@ namespace server
             app.UseIdentityServer();
             app.UseStaticFiles();
 
+
+            app.UseJwtBearerAuthentication(new JwtBearerOptions
+            {
+                RequireHttpsMetadata = false,
+                Authority = Config.ApiAuthority,
+                Audience = "api"
+            });
+
             var authenticationOptions = new IdentityServerAuthenticationOptions
             {
+                RequireHttpsMetadata = false,
                 Authority = Config.ApiAuthority,
                 AllowedScopes = { "api" },
-                RequireHttpsMetadata = false
             };
             var tokenRetriever = authenticationOptions.TokenRetriever;
             authenticationOptions.TokenRetriever = (req) => {
@@ -128,14 +136,11 @@ namespace server
                 };
             app.UseIdentityServerAuthentication(authenticationOptions);
 
-            app.UseMvc();
-
-            app.UseJwtBearerAuthentication();
 
             app.UseWebSockets();
             app.MapWebSocketManager("/chat", serviceProvider.GetService<ChatHandler>());
 
-            //app.MapWebSocketManager("/notifications", serviceProvider.GetService<NotificationsMessageHandler>());
+            app.UseMvc();
         }
     }
 }

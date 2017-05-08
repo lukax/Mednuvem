@@ -8,6 +8,7 @@ export class Team {
   userId: string;
   name: string;
   members: TeamMember[] = [];
+  messages: TeamChatMessage[] = [];
 }
 
 export class TeamMember {
@@ -15,13 +16,16 @@ export class TeamMember {
   role: string;
   name: string;
   email: string;
+  isOnline: boolean;
 }
 
 export class TeamChatMessage {
-  createdAt?: Date;
-  userId?: string;
-  email?: string;
+  sentAt: Date;
+  userId: string;
+  email: string;
   message: string;
+  userName: string;
+  userEmail: string;
 }
 
 export class BasicPerson {
