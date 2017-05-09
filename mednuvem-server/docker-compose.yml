@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  mednuvem-server:
+    image: mednuvem-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:5000"
+    environment:
+      "MongoDbRepository:ConnectionString": "mongodb://localhost:27017"
+      "MongoDbRepository:DatabaseName": "mednuvem"
+  mongo:
+    image: mongo
+    volumes:
+      - mongo-data:/data/db
+volumes:
+  mongo-data: {} # defaults to driver:local
