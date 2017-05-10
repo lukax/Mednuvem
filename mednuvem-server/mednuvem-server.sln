@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.10
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "server", "server.csproj", "{7890A7ED-E84C-4EE1-B74E-6B8E57FED0B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mednuvem-server", "mednuvem-server.csproj", "{7890A7ED-E84C-4EE1-B74E-6B8E57FED0B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

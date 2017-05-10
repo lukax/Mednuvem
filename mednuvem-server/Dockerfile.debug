@@ -1,11 +1,12 @@
-FROM microsoft/dotnet:1.0.0-preview2-sdk
+FROM microsoft/dotnet:1.1-sdk-msbuild
 ENV NUGET_XMLDOC_MODE skip
 ARG CLRDBG_VERSION=VS2015U2
-WORKDIR /clrdbg
-RUN curl -SL https://raw.githubusercontent.com/Microsoft/MIEngine/getclrdbg-release/scripts/GetClrDbg.sh --output GetClrDbg.sh \
-    && chmod 700 GetClrDbg.sh \
-    && ./GetClrDbg.sh $CLRDBG_VERSION \
-    && rm GetClrDbg.sh
+WORKDIR /vsdbg
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        unzip \
+    && rm -rf /var/lib/apt/lists/* \
+    && curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v latest -l /vsdbg 
 WORKDIR /app
 ENV ASPNETCORE_URLS http://*:5000
 EXPOSE 5000

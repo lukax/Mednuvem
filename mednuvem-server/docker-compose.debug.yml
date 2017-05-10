@@ -2,7 +2,7 @@ version: '2'
 
 services:
   mednuvem-server:
-    image: mednuvem-server:debug
+    image: espdlucas/mednuvem-server:debug
     build:
       context: .
       dockerfile: Dockerfile.debug

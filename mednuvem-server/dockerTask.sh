@@ -1,5 +1,5 @@
-imageName="mednuvem-server"
-projectName="mednuvemserver"
+imageName="espdlucas/mednuvem-server"
+projectName="mednuvem"
 serviceName="mednuvem-server"
 containerName="${projectName}_${serviceName}_1"
 publicPort=5000
@@ -81,7 +81,7 @@ startDebugging () {
   if [[ -z $containerId ]]; then
     echo "Could not find a container named $containerName"
   else
-    docker exec -i $containerId /clrdbg/clrdbg --interpreter=mi
+    docker exec -i $containerId /vsdbg/vsdbg --interpreter=vscode
   fi
 
 }
