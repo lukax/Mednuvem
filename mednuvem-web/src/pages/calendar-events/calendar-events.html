@@ -84,7 +84,7 @@
     </mwl-calendar-day-view>
   </div>
 
-  <br><br><br>
+  <br>
 
 
   <ion-item>
@@ -141,7 +141,7 @@
   </table>
 
   <ion-item *ngIf="!isError && isEmpty()">
-    <h2><ion-icon name="warning"></ion-icon> Nenhum evento encontrado. <a href="#" (click)="search()">Tentar novamente.</a></h2>
+    <h2><ion-icon name="warning"></ion-icon> Nenhum evento encontrado.</h2>
   </ion-item>
   <ion-item *ngIf="isError">
     <h2><ion-icon name="warning"></ion-icon> Oops... erro ao se comunicar com servidor. <a href="#" (click)="search()">Tentar novamente.</a></h2>

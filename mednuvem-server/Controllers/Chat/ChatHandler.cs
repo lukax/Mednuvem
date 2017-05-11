@@ -57,10 +57,10 @@ namespace Server.Core.Controllers.Chat
             var team = await _teamRepository.FindOneByUserIdAsync(UserId);
             var teamMembers = await _userRepository.FindManyByUserIdAsync(team.Members.Select(x => x.UserId).ToArray());
 
-            foreach (var member in teamMembers)
+            foreach (var memberSocketId in teamMembers.Select(x => x.SocketId).Distinct())
             {
-                if (!member.IsOnline) return;
-                await InvokeClientMethodToAllAsync("refresh", member.SocketId, new Message()
+                //if (!member.IsOnline) return;
+                await InvokeClientMethodToAllAsync("refresh", memberSocketId, new Message()
                 {
                     MessageType = MessageType.Text,
                     Data = "Update"
@@ -77,10 +77,10 @@ namespace Server.Core.Controllers.Chat
             var team = await _teamRepository.FindOneByUserIdAsync(UserId);
             var teamMembers = await _userRepository.FindManyByUserIdAsync(team.Members.Select(x => x.UserId).ToArray());
 
-            foreach (var member in teamMembers)
+            foreach (var memberSocketId in teamMembers.Select(x => x.SocketId).Distinct())
             {
-                if (!member.IsOnline) return;
-                await InvokeClientMethodToAllAsync("receiveMessage", socketId, new
+                //if (!member.IsOnline) return;
+                await InvokeClientMethodToAllAsync("receiveMessage", memberSocketId, new
                 {
                     UserId = chatMessage.UserId,
                     UserName = teamMembers.FirstOrDefault(usr => usr.Id == UserId)?.Name ?? "Desconhecido",
@@ -101,10 +101,10 @@ namespace Server.Core.Controllers.Chat
             var team = await _teamRepository.FindOneByUserIdAsync(UserId);
             var teamMembers = await _userRepository.FindManyByUserIdAsync(team.Members.Select(x => x.UserId).ToArray());
 
-            foreach (var member in teamMembers)
+            foreach (var memberSocketId in teamMembers.Select(x => x.SocketId).Distinct())
             {
-                if (!member.IsOnline) return;
-                await InvokeClientMethodToAllAsync("refresh", member.SocketId, new Message()
+                //if (!member.IsOnline) return;
+                await InvokeClientMethodToAllAsync("refresh", memberSocketId, new Message()
                 {
                     MessageType = MessageType.Text,
                     Data = "Update"

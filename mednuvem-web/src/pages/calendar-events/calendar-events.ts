@@ -89,6 +89,7 @@ export class CalendarEventsPage implements OnInit{
       }, err => {
         this.isLoading = false;
         this.isError = true;
+        this.refresh.next();
       });
   }
 

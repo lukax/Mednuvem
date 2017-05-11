@@ -17,6 +17,7 @@ export class TeamChatService implements OnDestroy {
   private _connectionRetryTimeout: Timer;
 
   constructor(public loginService: LoginService) {
+    this.setupConnection();
     this.retryConnection();
   }
 
